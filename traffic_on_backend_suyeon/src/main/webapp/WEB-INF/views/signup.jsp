@@ -71,22 +71,9 @@
                   <input type="text" name="phone" class="full-width-input" value="" />
                   <button type="button" class="clear-btn" onclick="clearValue('phone')">×</button>
                 </div>
-                <button type="button" class="btn-small">인증</button>
               </div>
             </div>
-
-            <div class="form-row-group">
-              <div class="form-label-with-icon">
-                <span class="label-icon">🔢</span>
-                <label>인증번호 <span class="label-hint">(6자리 입력)</span> <span class="required-mark">*</span></label>
-              </div>
-
-              <div class="input-with-clear">
-                <input type="text" name="verificationCode" class="full-width-input" maxlength="6" />
-                <button type="button" class="clear-btn" onclick="clearValue('verificationCode')">×</button>
-              </div>
-            </div>
-          </div>
+		</div>
 
           <!-- ID -->
           <div class="form-row-group">
@@ -204,19 +191,6 @@
                   <input type="text" name="phone" class="full-width-input" required />
                   <button type="button" class="clear-btn" onclick="clearValue('phone')">×</button>
                 </div>
-                <button type="button" class="btn-small">인증</button>
-              </div>
-            </div>
-
-            <div class="form-row-group">
-              <div class="form-label-with-icon">
-                <span class="label-icon">🔢</span>
-                <label>인증번호 <span class="label-hint">(6자리 입력)</span> <span class="required-mark">*</span></label>
-              </div>
-
-              <div class="input-with-clear">
-                <input type="text" name="verificationCode" class="full-width-input" maxlength="6" />
-                <button type="button" class="clear-btn" onclick="clearValue('verificationCode')">×</button>
               </div>
             </div>
 
