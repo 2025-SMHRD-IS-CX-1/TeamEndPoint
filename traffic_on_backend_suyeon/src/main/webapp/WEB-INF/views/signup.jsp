@@ -54,7 +54,7 @@
       </p>
 
       <!-- 실제로 DB 연결 전이니까 action은 임시로 signup -->
-      <form class="signup-form" method="post" action="${pageContext.request.contextPath}/signup">
+      <form class="signup-form" method="post" action="${pageContext.request.contextPath}/signup" autocomplete="off">
 
         <div class="input-group">
 
@@ -81,10 +81,15 @@
               <span class="label-icon">🆔</span>
               <label>아이디 <span class="required-mark">*</span></label>
             </div>
-            <div class="input-with-clear">
-              <input type="text" name="username" class="full-width-input" required />
-              <button type="button" class="clear-btn" onclick="clearValue('username')">×</button>
-            </div>
+			<div class="phone-input-row">
+			  <div class="input-with-clear">
+			    <input type="text" name="username" class="full-width-input" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
+			    <button type="button" class="clear-btn" onclick="clearValue('username')">×</button>
+			  </div>
+			  <button type="button" class="btn-small" onclick="checkUsername()">중복확인</button>
+			</div>
+
+			<p id="usernameMsg" class="field-msg"></p>
           </div>
 
           <!-- Password -->
@@ -188,7 +193,7 @@
 
               <div class="phone-input-row">
                 <div class="input-with-clear">
-                  <input type="text" name="phone" class="full-width-input" required />
+                  <input type="text" name="phone name" class="full-width-input" required />
                   <button type="button" class="clear-btn" onclick="clearValue('phone')">×</button>
                 </div>
               </div>
@@ -314,29 +319,11 @@
   // 선택된 가입 타입 저장
   let currentType = 'personal';
 
-  function selectType(type) {
-    currentType = type;
-
-    // 화면 토글
-    document.getElementById('selectionView').style.display = 'none';
-    document.getElementById('formView').style.display = 'flex';
-
-    // 제목 변경
-    document.getElementById('signupTitle').innerText = (type === 'personal') ? '일반 회원가입' : '관리자 회원가입';
-
-    // 힌트/블록 토글
-    document.getElementById('enterpriseHint').style.display = (type === 'enterprise') ? 'block' : 'none';
-    document.getElementById('enterpriseBlock').style.display = (type === 'enterprise') ? 'block' : 'none';
-    document.getElementById('personalBlock').style.display = (type === 'personal') ? 'block' : 'none';
-
-    // enterprise 상단 phone 블록 (React에서 enterprise일 때 위에 나오던 부분)
-    document.getElementById('entTopPhoneBlock').style.display = (type === 'enterprise') ? 'block' : 'none';
-  }
-
   function handleBack() {
     // 폼 화면이면 selection으로, selection이면 login으로
     const formViewVisible = document.getElementById('formView').style.display !== 'none';
     if (formViewVisible) {
+		resetForm();
       document.getElementById('formView').style.display = 'none';
       document.getElementById('selectionView').style.display = 'flex';
     } else {
@@ -396,6 +383,67 @@
     }
   });
   
+  function checkUsername(){
+    const v = document.querySelector('[name="username"]').value.trim();
+    const msg = document.getElementById('usernameMsg');
+
+    if(!v){
+      msg.textContent = '아이디를 입력해 주세요.';
+      msg.style.color = 'red';
+      return;
+    }
+
+    const used = ['admin','test'];
+
+    if(used.includes(v.toLowerCase())){
+      msg.textContent = '이미 사용 중인 아이디입니다.';
+      msg.style.color = 'red';
+    } else {
+      msg.textContent = '사용 가능한 아이디입니다.';
+      msg.style.color = 'green';
+    }
+  }
+  
+  function selectType(type) {
+    currentType = type;
+	// 1) 먼저 지우기
+	resetForm();
+	
+	// 2) 크롬 자동완성이 다시 넣는 타이밍이 있어서 "조금 뒤"에 또 지우기
+	setTimeout(resetForm, 0);
+	setTimeout(resetForm, 50);
+	 
+    // 3) 화면 토글
+    document.getElementById('selectionView').style.display = 'none';
+    document.getElementById('formView').style.display = 'flex';
+
+    // 4) 제목 변경
+    document.getElementById('signupTitle').innerText =
+      (type === 'personal') ? '일반 회원가입' : '관리자 회원가입';
+
+    // 5) 블록 토글
+    document.getElementById('enterpriseHint').style.display =
+      (type === 'enterprise') ? 'block' : 'none';
+
+    document.getElementById('enterpriseBlock').style.display =
+      (type === 'enterprise') ? 'block' : 'none';
+
+    document.getElementById('personalBlock').style.display =
+      (type === 'personal') ? 'block' : 'none';
+
+    document.getElementById('entTopPhoneBlock').style.display =
+      (type === 'enterprise') ? 'block' : 'none';
+  }  
+  
+  function resetForm() {
+    document.querySelectorAll('#formView input').forEach(i => {
+      if (i.type === 'checkbox' || i.type === 'radio') return;
+      i.value = '';
+    });
+
+    const msg = document.getElementById('usernameMsg');
+    if (msg) msg.textContent = '';
+  }
 </script>
 
 </body>
