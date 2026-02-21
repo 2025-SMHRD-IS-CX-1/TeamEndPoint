@@ -98,7 +98,7 @@ body {
 /* Tabs */
 .login-tabs {
     display: flex;
-    margin-bottom: -2px;
+    margin-bottom: -1px;
     /* Overlap with form area border */
     /* z-index removed to allow children stacking */
     /* padding-left removed to align with card edge */
@@ -129,17 +129,15 @@ body {
 }
 
 .tab:focus,
-.tab:focus-visible,
-.tab:hover {
+.tab:focus-visible{
     outline: none;
     border-color: transparent;
     /* Prevent blue border on hover */
 }
 
-/* Ensure active tab keeps its orange border even on hover, but NO bottom border */
-.tab.active:hover {
-    border: 2px solid var(--primary-orange);
-    border-bottom: none;
+.tab:hover:not(.active){
+	outline: none;
+	border-colcr: transparent;
 }
 
 .tab.active {
@@ -165,6 +163,7 @@ body {
     border-radius: 20px;
     /* Ensure rounded corners for the card */
     border-top-left-radius: 0;
+    border-top-right-radius: 0;    
     /* Connects with the active tab */
     padding: 30px 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -178,6 +177,7 @@ body {
     border: 2px solid var(--primary-orange);
     /* Add border to match tab */
     transition: border-radius 0.3s ease;
+    margin-top: 0px;
 }
 
 /* Dynamic rounding removed */

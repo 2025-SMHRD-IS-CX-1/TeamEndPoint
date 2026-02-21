@@ -48,13 +48,13 @@
 	    <groupId>org.glassfish.web</groupId>
 	    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
 	  </dependency>
-	
+	<!--
 	  <dependency>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-devtools</artifactId>
 	    <scope>runtime</scope>
 	    <optional>true</optional>
-	  </dependency>
+	  </dependency>-->
 	
 	  <dependency>
 	    <groupId>org.springframework.boot</groupId>
