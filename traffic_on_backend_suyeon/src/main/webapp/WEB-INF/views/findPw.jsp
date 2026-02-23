@@ -60,8 +60,7 @@
         <!-- STEP 3 -->
         <section id="step3" class="verification-container fade-in" style="display:none;">
           <div class="verification-title">
-            <h3>문자를 발송했어요</h3>
-            <p class="verification-subtitle">인증번호를 입력해 주세요</p>
+            <h3>인증번호를 입력해 주세요</h3>
           </div>
 
           <div class="input-wrapper">
@@ -151,17 +150,13 @@
 
       if (step === 1) {
         step12.style.display = "block";
-        document.getElementById("user-id").focus();
       } else if (step === 2) {
         step12.style.display = "block";
         contactBlock.style.display = "block";
-        document.getElementById("user-contact").focus();
       } else if (step === 3) {
         step3.style.display = "block";
-        document.getElementById("verificationCode").focus();
       } else if (step === 4) {
         step4.style.display = "block";
-        document.getElementById("newPassword").focus();
       }
     }
 

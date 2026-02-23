@@ -1,4 +1,7 @@
-:root { --primary-orange:#FF5722; }
+:root{
+  --primary-orange: #FF5722;
+  --page-bg: #eef2f6;   /* ✅ React/login 느낌의 밝은 회색(추천) */
+}
 
 .floating-input{
   width:100%;
