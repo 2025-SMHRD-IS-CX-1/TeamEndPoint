@@ -7,7 +7,7 @@
 .find-id-container {
   width: 100%;
   max-width: 420px;
-  min-height:auto;
+  margin: 0 auto;
   background: transparent;   /* ✅ 핵심 */
   display: flex;
   flex-direction: column;
@@ -16,14 +16,10 @@
 .find-id-header{
   background-color: #fff;
   border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.find-id-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 20px;
 }
 
 .logo-area {
@@ -353,20 +349,25 @@
 
 /* ✅ 메인 영역 가운데 + 카드가 위에서 조금 내려오게 */
 .find-id-main{
+  width: 100%;
+  background: #e6ebf0;         /* ✅ 회색은 여기! */
+  min-height: calc(100vh - 70px); /* ✅ 헤더 제외하고 아래로 길게 */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px 0;
+  padding: 20px;     /* 아래 여백도 줘야 길어 보임 */
+  box-sizing: border-box;
 }
 
 .find-id-card{
+  background-color: white;
   width: 100%;
-  max-width: 360px;
-  background: #ffffff;
-  border-radius: 24px;
-  padding: 36px 28px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,0,0,0.08);
+  max-width: 420px;           /* ✅ 비번찾기랑 동일 */
+  border-radius: 20px;        /* ✅ 24px -> 20px */
+  padding: 30px 25px;         /* ✅ 비번찾기랑 동일 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);  /* ✅ 그림자 약하게 */
+  border: none;               /* ✅ 필요없으면 제거 (비번찾기엔 없음) */
+  box-sizing: border-box;
 }
 
 /* ✅ 설명/타이틀 정리 */
