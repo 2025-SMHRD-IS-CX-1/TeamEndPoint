@@ -5,7 +5,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Login</title>
-  <link rel="stylesheet" href="/css/Login.css" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Login.css" />
 </head>
 
 <body>
@@ -62,7 +63,7 @@
           </button>
 
           <div class="login-links">
-            <a href="${pageContext.request.contextPath}/find-password">비밀번호 찾기</a>
+            <a href="${pageContext.request.contextPath}/findPw">비밀번호 찾기</a>
             <span class="divider">|</span>
             <a href="${pageContext.request.contextPath}/find-id">아이디 찾기</a>
             <span class="divider">|</span>
