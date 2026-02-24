@@ -1,0 +1,759 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-dashboard {
+    height: 100vh;         /* ✅ min-height → height */
+    overflow: hidden;      /* ✅ 바깥 스크롤 제거 */
+    background-color: #f1f3f6;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Header Styles */
+.dashboard-header {
+    height: 70px;
+    background-color: #313c4a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    color: white;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.header-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+.breadcrumb-user-icon {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.breadcrumb-text {
+    letter-spacing: -0.2px;
+}
+
+.menu-icon,
+.user-avatar {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-name {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.dashboard-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: default;
+}
+
+.mascot-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    transform: scaleX(-1);
+    /* Flip horizontally */
+}
+
+.logo-text {
+    font-size: 2.1rem;
+    font-weight: 900;
+    font-style: italic;
+    color: #ff4d17;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.mail-icon {
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.logout-icon {
+    font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+    opacity: 0.8;
+}
+
+.dashboard-main {
+  padding: 20px 30px 8px 30px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+
+  height: calc(100vh - 70px);
+  align-items: start;   /* ✅ start 말고 stretch */
+}
+
+/* ✅ 오른쪽 컬럼: 위카드(키워드) + 아래카드(성별/연령) */
+.right-column{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ✅ 위(키워드) 카드는 내용만큼 */
+.right-column > .dashboard-card:first-child{
+  flex: 0 0 auto;
+}
+
+.right-column > .dashboard-card:last-child{
+  flex: 1 1 auto;
+  height: auto;            /* ✅ 100% 말고 auto */
+  max-height: 380px;       /* ✅ 여기 숫자만 조절 (350~420 추천) */
+  overflow: hidden;        /* ✅ 안쪽 튀는거 방지 */
+}
+.dashboard-main.users-view {
+    display: block;
+}
+
+.dashboard-main.board-view {
+    display: block;
+}
+
+/* Card Common Styles */
+.dashboard-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 15px 24px 25px 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1a1a1a;
+}
+
+.map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.gwangju-map-wrapper {
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+}
+
+.gwangju-map-svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.1));
+}
+
+.district-path {
+    cursor: pointer;
+    stroke: #333;
+    stroke-width: 1;
+    transition: all 0.3s ease;
+    opacity: 0.85;
+}
+
+.district-path:hover {
+    opacity: 1;
+    stroke-width: 2;
+    transform: scale(1.01);
+    transform-origin: center;
+}
+
+.district-path.active {
+    opacity: 1;
+    stroke-width: 3;
+    stroke: #ff5722;
+    filter: drop-shadow(0 0 10px rgba(255, 87, 34, 0.4));
+    z-index: 10;
+}
+
+/* Heatmap Colors */
+.gwangsan {
+    fill: #ff7043;
+}
+
+/* High */
+.buk {
+    fill: #9ccc65;
+}
+
+/* Low */
+.seo {
+    fill: #ffa726;
+}
+
+/* Medium */
+.nam {
+    fill: #dce775;
+}
+
+/* Low-Medium */
+.dong {
+    fill: #fb8c00;
+}
+
+/* Medium-High */
+
+.map-label,
+.map-label-sm {
+    font-weight: 900;
+    fill: #333;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+}
+
+.map-label {
+    font-size: 26px;
+}
+
+.map-label-sm {
+    font-size: 20px;
+}
+
+
+.map-legend {
+    width: 180px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    background: #fcfcfc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    align-self: flex-start;
+    margin-top: 10px;
+}
+
+.legend-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.color-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+.color-high {
+    background-color: #ff5252;
+}
+
+.color-medium {
+    background-color: #fbc02d;
+}
+
+.color-low {
+    background-color: #4caf50;
+}
+
+/* Keywords Card */
+.keywords-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 20px;
+    column-gap: 30px;
+    flex: 1;
+    align-content: center;
+}
+
+.keyword-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.kw-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rank-num {
+    width: 28px;
+    height: 28px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* 성별/연령을 한 카드 안에서 좌우로 배치 */
+.stats-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* 👈 가로 2칸 */
+    gap: 30px;
+    align-items: center;
+}
+
+/* 아래에 혹시 grid-template-rows 쓰는 stats-container 있으면 지워 */
+
+.stat-sub-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.sub-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: #333;
+}
+
+/* Gender Chart (CSS Donut Chart) */
+.pie-chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px 0;
+    flex: 1;
+}
+
+.pie-chart {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(#5c85fd 0% 25%,
+            #ff8a65 25% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pie-inner {
+    width: 110px;
+    height: 110px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.label-item {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    z-index: 10;
+}
+
+.label-item.male {
+    top: 40px;
+    right: -50px;
+    color: #5c85fd;
+}
+
+.label-item.female {
+    bottom: 25px;
+    left: -50px;
+    color: #ff8a65;
+}
+
+.label-item .emoji {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+
+/* Age Distribution bar chart */
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 220px;
+    padding: 0 5px 10px 5px;
+    gap: 15px;
+}
+
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.bar {
+    width: 42px;
+    background-color: #adb5bd;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.bar.highlight {
+    background-color: #ff5722;
+}
+
+.bar-percent {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.kw-text {
+    font-size: 1.2rem;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.bar-label {
+    font-size: 0.85rem;
+    color: #333;
+    font-weight: 500;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Sidebar Styles */
+.dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background-color: #1e2128;
+    /* Darker navy background */
+    color: #ffffff;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-sidebar.open {
+    left: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 20px 0;
+    border-bottom: 1px solid #3d3f44;
+}
+
+.company-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 15px 20px;
+}
+
+.company-logo-icon {
+    font-size: 1.5rem;
+}
+
+.company-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #d1d1d1;
+}
+
+.site-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    background-color: #232529;
+    font-size: 0.95rem;
+}
+
+.site-name {
+    flex: 1;
+    color: #ffffff;
+}
+
+.badge-red {
+    background-color: #ff3b30;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+    color: #b0b0b0;
+    position: relative;
+}
+
+.nav-item:hover {
+    background-color: #383a3f;
+    color: #ffffff;
+}
+
+.nav-item.active {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    width: 30px;
+}
+
+.nav-text {
+    flex: 1;
+}
+
+.submenu-arrow {
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.badge-red-circle {
+    background-color: #ff3b30;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    margin-right: 10px;
+}
+
+.badge-black-circle {
+    background-color: #000000;
+    color: #ffffff;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    margin-right: 10px;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #3d3f44;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d1d1d1;
+    font-size: 0.95rem;
+}
+
+
+.sidebar-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-logo-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ff5722;
+    letter-spacing: 1px;
+}
+
+/* New Sidebar Profile Styles */
+.sidebar-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    background-color: #1a1d24;
+    /* Slightly darker than sidebar for depth */
+}
+
+.profile-avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: #1e2838;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 2px solid #2a3447;
+}
+
+.profile-icon-svg {
+    width: 60%;
+    height: 60%;
+}
+
+.profile-name-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.profile-name-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.profile-name-underline {
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff5722 50%, transparent);
+    opacity: 0.8;
+}
+
+.heatmap-card {
+    overflow: visible;      /* ✅ 레전드 절대 안 잘리게 */
+}
+
+/* ✅ 성별/연령 카드만 아래 padding 줄이기 */
+.right-column > .dashboard-card:last-child {
+  padding-bottom: 12px;   /* 25px → 12px (원하면 8~15로 조절) */
+}
+
+/* ✅ sidebar nav link reset */
+.sidebar-nav a {
+  display: flex;              /* 아이콘+텍스트 정렬 */
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: inherit;             /* li 색을 그대로 따라감 */
+  text-decoration: none;      /* 밑줄 제거 */
+}
+
+.sidebar-nav a:visited {
+  color: inherit;
+}
+
+.sidebar-nav a:hover {
+  color: inherit;
+}
+
+/* 로그아웃이 a 태그일 때 밑줄 제거 + 버튼처럼 */
+.logout-btn {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn:hover {
+  text-decoration: none;
+}
