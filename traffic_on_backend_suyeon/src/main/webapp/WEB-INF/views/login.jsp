@@ -15,7 +15,9 @@
     <!-- Header -->
     <header class="login-header">
       <!-- 이미지 경로는 일단 임시. 나중에 mascot.png 위치 맞추면 됨 -->
-      <img src="/images/mascot.png" alt="Mascot" class="mascot-img-login" />
+	  <img src="${pageContext.request.contextPath}/images/mascot.png"
+	       alt="Mascot"
+	       class="mascot-img-login" />
       <h1 class="login-logo-text">TRAFFIC:ON</h1>
     </header>
 
@@ -42,7 +44,7 @@
           <input type="hidden" name="activeTab" id="activeTab" value="user" />
 
           <div class="input-group">
-            <input type="text" name="id" id="id" placeholder="아이디" required />
+            <input type="text" name="username" id="id" placeholder="아이디" required />
           </div>
 
           <div class="input-group">
@@ -58,9 +60,9 @@
             </label>
           </div>
 
-          <button class="login-btn" type="submit">
-            로그인
-          </button>
+		  <button class="login-btn" type="submit">
+		    로그인
+		  </button>
 
           <div class="login-links">
             <a href="${pageContext.request.contextPath}/findPw">비밀번호 찾기</a>
@@ -106,9 +108,25 @@
       // 탭 값 서버로 전송
       activeTabInput.value = tab;
 
-      // 입력값 초기화(원래 JSX 동작 그대로)
+      // ✅ 여기서 찍어야 함!
+      console.log("activeTab now =", activeTabInput.value);
+
+      // 입력값 초기화
       document.getElementById("id").value = "";
       document.getElementById("password").value = "";
+    }
+
+    function goLogin() {
+      const tab = document.getElementById("activeTab").value;
+
+      // 관리자 탭일 때만 대시보드로 이동
+      if (tab === "admin") {
+        location.href = "${pageContext.request.contextPath}/admin/dashboard";
+        return;
+      }
+
+      // 일반회원 탭이면 로그인 제출
+      document.getElementById("loginForm").submit();
     }
   </script>
 </body>

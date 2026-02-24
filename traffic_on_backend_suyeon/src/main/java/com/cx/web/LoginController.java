@@ -37,10 +37,21 @@ public class LoginController {
 	}
 	
 	@PostMapping("/login")
-	public String loginProcess(@RequestParam String username, @RequestParam String password) {
-		System.out.println("로그인 username=" + username);
-		System.out.println("로그인 password=" + password);
-		return "login";
+	public String loginProcess(@RequestParam String username,
+	                           @RequestParam String password,
+	                           @RequestParam(required = false, defaultValue = "user") String activeTab) {
+
+	    System.out.println("로그인 username=" + username);
+	    System.out.println("로그인 password=" + password);
+	    System.out.println("activeTab=" + activeTab);
+
+	    // 관리자 탭이면 관리자 대시보드
+	    if ("admin".equals(activeTab)) {
+	        return "redirect:/admin/dashboard";
+	    }
+
+	    // 일반회원 메인 아직 없으니까 일단 로그인 페이지로 다시
+	    return "redirect:/login";
 	}
 	
 	@PostMapping("/signup")
