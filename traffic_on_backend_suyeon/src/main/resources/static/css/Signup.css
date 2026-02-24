@@ -495,25 +495,6 @@
     font-weight: bold;
 }
 
-/* Address Styles */
-.address-zip-row {
-    display: flex;
-    gap: 10px;
-}
-
-.zip-input {
-    flex: 2;
-}
-
-.search-btn {
-    flex: 1;
-}
-
-.address-main {
-    background-color: #f9f9f9;
-    cursor: default;
-}
-
 /* TOS Agreement Section (Naver Style) */
 .agreements-section {
     margin: 25px 0;
@@ -821,4 +802,35 @@
 .field-msg{
   margin-top:6px;
   font-size:0.85rem;
+}
+
+/* District (구) Selection */
+.district-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.district-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.district-options input[type="radio"] {
+  accent-color: var(--primary-orange);
+}
+
+.district-options label:hover {
+  border-color: var(--primary-orange);
+  background: rgba(255, 87, 34, 0.05);
 }

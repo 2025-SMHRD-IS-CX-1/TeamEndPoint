@@ -164,26 +164,21 @@
               </div>
             </div>
 
-            <!-- Address -->
-            <div class="form-row-group">
-              <div class="form-label-with-icon">
-                <span class="label-icon">📍</span>
-                <label>주소 <span class="required-mark">*</span></label>
-              </div>
+			<div class="form-row-group">
+			    <div class="form-label-with-icon">
+			        <span class="label-icon">📍</span>
+			        <label>거주 지역 <span class="required-mark">*</span></label>
+			    </div>
 
-              <div class="address-zip-row">
-                <input type="text" name="zipCode" class="full-width-input zip-input" placeholder="우편번호" readonly />
-                <button type="button" class="btn-small search-btn">검색</button>
-              </div>
-
-              <input type="text" name="address" class="full-width-input address-main" placeholder="주소" readonly style="margin-top:8px;" />
-
-              <div class="input-with-clear" style="margin-top:8px;">
-                <input type="text" name="detailAddress" class="full-width-input" placeholder="상세주소" />
-                <button type="button" class="clear-btn" onclick="clearValue('detailAddress')">×</button>
-              </div>
-            </div>
-
+			    <div class="district-options">
+			        <label><input type="radio" name="district" value="광산구" required> 광산구</label>
+			        <label><input type="radio" name="district" value="북구"> 북구</label>
+			        <label><input type="radio" name="district" value="서구"> 서구</label>
+			        <label><input type="radio" name="district" value="남구"> 남구</label>
+			        <label><input type="radio" name="district" value="동구"> 동구</label>
+			    </div>
+			</div>
+			
             <!-- Phone Verification (personal 아래쪽) -->
             <div class="form-row-group">
               <div class="form-label-with-icon">
