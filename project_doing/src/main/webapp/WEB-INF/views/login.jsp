@@ -60,9 +60,9 @@
         </form>
 
         <div class="login-links">
-  <a href="<%=ctx%>/findPassword.jsp">비밀번호 찾기</a>
+  <a href="<%=ctx%>/findPw">비밀번호 찾기</a>
   <span class="divider">|</span>
-  <a href="<%=ctx%>/findId.jsp">아이디 찾기</a>
+  <a href="<%=ctx%>/findId">아이디 찾기</a>
   <span class="divider">|</span>
   <a href="<%=ctx%>/signup">회원가입</a>
 </div>
