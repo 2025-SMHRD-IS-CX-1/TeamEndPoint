@@ -11,17 +11,17 @@
 
 <body>
   <div class="login-container">
+    <div id="toast" class="toast"></div>
 
     <!-- Header -->
     <header class="login-header">
-      <!-- 이미지 경로는 일단 임시. 나중에 mascot.png 위치 맞추면 됨 -->
-	  <img src="${pageContext.request.contextPath}/images/mascot.png"
-	       alt="Mascot"
-	       class="mascot-img-login" />
+      <img src="${pageContext.request.contextPath}/images/mascot.png"
+           alt="Mascot"
+           class="mascot-img-login" />
       <h1 class="login-logo-text">TRAFFIC:ON</h1>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="login-main">
       <div class="login-card">
 
@@ -38,9 +38,12 @@
           </button>
         </div>
 
-        <!-- Form Area -->
-        <!-- form submit 방식으로 만들었고, hidden으로 activeTab 같이 보냄 -->
-        <form class="login-form-area user" id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
+        <!-- Form -->
+        <form class="login-form-area user"
+              id="loginForm"
+              method="post"
+              action="${pageContext.request.contextPath}/login">
+
           <input type="hidden" name="activeTab" id="activeTab" value="user" />
 
           <div class="input-group">
@@ -51,7 +54,7 @@
             <input type="password" name="password" id="password" placeholder="비밀번호" required />
           </div>
 
-          <!-- user 탭에서만 보이기 -->
+          <!-- user 탭에서만 -->
           <div class="checkbox-group" id="keepBox">
             <label>
               <input type="checkbox" name="keepLoggedIn" id="keepLoggedIn" />
@@ -60,9 +63,9 @@
             </label>
           </div>
 
-		  <button class="login-btn" type="submit">
-		    로그인
-		  </button>
+          <button class="login-btn" type="submit">
+            로그인
+          </button>
 
           <div class="login-links">
             <a href="${pageContext.request.contextPath}/findPw">비밀번호 찾기</a>
@@ -72,17 +75,15 @@
             <a href="${pageContext.request.contextPath}/signup">회원가입</a>
           </div>
 
-          <!-- 서버에서 에러 메시지 내려줄 때 -->
-          <c:if test="${not empty error}">
-            <p style="color:red; text-align:center; margin-top:10px;">${error}</p>
-          </c:if>
         </form>
 
       </div>
     </main>
   </div>
 
+  <!-- 🔥 JS 정리본 -->
   <script>
+
     function setTab(tab) {
       const tabUser = document.getElementById("tab-user");
       const tabAdmin = document.getElementById("tab-admin");
@@ -105,29 +106,40 @@
         document.getElementById("keepLoggedIn").checked = false;
       }
 
-      // 탭 값 서버로 전송
       activeTabInput.value = tab;
-
-      // ✅ 여기서 찍어야 함!
-      console.log("activeTab now =", activeTabInput.value);
-
-      // 입력값 초기화
-      document.getElementById("id").value = "";
-      document.getElementById("password").value = "";
     }
 
-    function goLogin() {
-      const tab = document.getElementById("activeTab").value;
+    function showToast(message){
+      const t = document.getElementById("toast");
+      t.textContent = message;
+      t.classList.add("show");
 
-      // 관리자 탭일 때만 대시보드로 이동
-      if (tab === "admin") {
-        location.href = "${pageContext.request.contextPath}/admin/dashboard";
-        return;
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer =
+        setTimeout(() => t.classList.remove("show"), 2000);
+    }
+
+    // 🔥 서버 파라미터로 토스트 + 탭 유지
+    window.addEventListener("DOMContentLoaded", () => {
+
+      const error = "${param.error}";
+      const tab = "${param.tab}";
+
+      // 탭 유지
+      if (tab === "admin") setTab("admin");
+      else setTab("user");
+
+      // 토스트
+      if (error === "notAdmin") {
+        showToast("관리자 계정이 아닙니다.");
+        setTab("admin");
+      } else if (error === "true") {
+        showToast("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
 
-      // 일반회원 탭이면 로그인 제출
-      document.getElementById("loginForm").submit();
-    }
+    });
+
   </script>
+
 </body>
 </html>

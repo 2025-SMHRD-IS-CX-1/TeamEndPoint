@@ -834,3 +834,51 @@
   border-color: var(--primary-orange);
   background: rgba(255, 87, 34, 0.05);
 }
+
+.id-check-btn {
+  height: 44px;
+  padding: 0 16px;
+  margin-left: 8px;
+  border-radius: 10px;
+  border: 1px solid #FF5722;
+  background-color: white;
+  color: #FF5722;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.id-check-btn:hover {
+  background-color: #FF5722;
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+}
+
+.phone-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.phone-input-row .id-check-btn {
+  height: 42px;
+  min-width: 90px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-orange);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.phone-input-row .id-check-btn:hover {
+  background: #e64a19;
+}
+
+.phone-input-row .id-check-btn:active {
+  transform: scale(0.97);
+}
