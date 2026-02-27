@@ -1,3 +1,5 @@
+body { outline: 5px solid red !important; }
+
 .user-management {
     display: flex;
     flex-direction: column;
@@ -375,6 +377,155 @@
     color: white;
 }
 
+.user-popover {
+  position: fixed;
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+}
+
+.pop-close-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 2px solid #3b82f6;
+  border-radius: 10px;
+  background: white;
+  color: #3b82f6;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.pop-close-btn:hover {
+  background: #3b82f6;
+  color: white;
+}
+
 .popover-close:active {
     transform: translateY(1px);
+}
+
+.popover {
+  position: fixed;
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 900;
+}
+
+.popover-close {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 2px solid #3b82f6;
+  border-radius: 10px;
+  background: white;
+  color: #3b82f6;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.stat-sub{
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.status-badge.normal {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.status-badge.warned {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.blocked {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.active-warn {
+    background-color: #ff9800;
+    color: white;
+}
+
+.active-block {
+    background-color: #f44336;
+    color: white;
+}
+
+/* 테이블 기본 가운데 정렬 */
+.user-table th,
+.user-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+.user-table th,
+.user-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* 기존에 td에 padding: 14px 20px; 있지? 그거는 위아래만 유지 */
+.user-table td {
+    padding: 14px 0;
+}
+
+.user-table th {
+    padding: 16px 0;
+}
+/* 나머지는 완전 가운데 정렬 */
+.user-table td:not(:nth-child(2)),
+.user-table th:not(:nth-child(2)) {
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ✅ 테이블 영역만 스크롤, 페이지 길이 폭발 방지 */
+.table-scroll{
+  max-height: 420px;   /* 원하면 500px 등 조절 */
+  overflow-y: auto;
+}
+
+/* 스크롤 생겨도 헤더 고정 느낌(선택) */
+.user-table thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* ✅ 테이블만 스크롤 되게 (기존 overflow:hidden 덮어쓰기) */
+.table-container {
+  max-height: 420px;          /* 원하는 높이로 조절 */
+  overflow-y: auto !important; /* ★ 중요: hidden을 이김 */
+  overflow-x: hidden;
+}
+
+/* ✅ sticky header */
+.user-table {
+  border-collapse: separate;  /* sticky 잘 먹게 */
+  border-spacing: 0;
+}
+
+.user-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: #313c4a;  /* 헤더색 유지 */
 }

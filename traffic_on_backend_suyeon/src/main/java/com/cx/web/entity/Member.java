@@ -48,5 +48,18 @@ public class Member {
 	@Column(name = "joined_at", nullable = false)
 	private LocalDateTime joinedAt;
 	
+	@Column(name = "last_login_at", nullable = true)
+	private LocalDateTime lastLoginAt;
+	
+	@Column(name = "warn_cnt", nullable = false)
+	private Integer warnCnt;
+	
+	@Column(name = "status", length = 10, nullable = false)
+	private String status;
+	
+	public int getWarnCntSafe() {
+		return warnCnt == null ? 0 : warnCnt;
+	}
+	
 
 }
