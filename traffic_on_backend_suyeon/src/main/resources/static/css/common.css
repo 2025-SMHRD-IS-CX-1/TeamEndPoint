@@ -1,0 +1,111 @@
+body { background: hotpink !important; }
+:root {
+  --primary-orange: #FF5722;
+  --page-bg: #eef2f6;
+}
+.logo-text {
+  color: var(--primary-orange);
+  font-weight: 800;
+}
+
+.floating-input {
+  width: 100%;
+  height: 60px;
+  padding: 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  line-height: 60px;
+}
+.user-btn {
+  all: unset;                 /* 🔥 버튼 기본 스타일 제거 */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-btn img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+/* ===== Mobile Frame Force ===== */
+body {
+  margin: 0 !important;
+  background: #f5f6f8 !important;
+}
+
+.mobile-wrap {
+  width: 390px !important;       /* 모바일 고정 폭 */
+  min-height: 100vh !important;
+  margin: 0 auto !important;
+  background: #fff !important;
+  box-shadow: 0 0 24px rgba(0,0,0,0.12) !important;
+  overflow-x: hidden !important;
+  position: relative;
+}
+.mobile-wrap .v3-quick-btn-icon-only {
+  position: fixed; /* 기본값이면 아래 방식으로 바꿔야 함 */
+}
+
+/* mobile-wrap 안에서 레이아웃이 튀어나가지 않게 */
+.mobile-wrap .main-layout {
+  width: 100% !important;
+  max-width: 100% !important
+}
+/* ===== Mobile Top Header ===== */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 56px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.top-header .left,
+.top-header .right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 48px;
+}
+
+.top-header .center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.top-header .center img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.icon-btn:active {
+  background: #f4f6f8;
+}
