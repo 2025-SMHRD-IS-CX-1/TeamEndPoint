@@ -1,11 +1,7 @@
 package com.cx.web.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_traffic_on")
@@ -14,17 +10,32 @@ public class TrafficOn {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idx;
 
+    @Column(name = "l_category", length = 255)
     private String lCategory;
+
+    @Column(name = "m_category", length = 255)
     private String mCategory;
+
+    @Column(name = "s_category", length = 255)
     private String sCategory;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "minwon_content")
     private String minwonContent;
 
+    @Column(name = "img_1")
     private String img1;
+
+    @Column(name = "img_2")
     private String img2;
+
+    @Column(name = "img_3")
     private String img3;
 
-    private java.time.LocalDateTime createdAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "admin_id", length = 50)
     private String adminId;
+
+    // getter, setter
 }
