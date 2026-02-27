@@ -53,8 +53,11 @@
         (<span class="required-mark">*</span> 표시된 부분은 필수 입력 항목입니다.)
       </p>
 
-      <!-- 실제로 DB 연결 전이니까 action은 임시로 signup -->
-      <form class="signup-form" method="post" action="${pageContext.request.contextPath}/signup" autocomplete="off">
+	  <form class="signup-form" method="post" action="${pageContext.request.contextPath}/signup" autocomplete="off">
+
+	    <!-- 🔥 관리자/일반 구분용 hidden -->
+	    <input type="hidden" name="activeTab" id="activeTab" value="user">
+		<input type="hidden" name="memType" id="memType" value="USER">
 
         <div class="input-group">
 
@@ -68,12 +71,12 @@
 
               <div class="phone-input-row">
                 <div class="input-with-clear">
-                  <input type="text" name="phone" class="full-width-input" value="" />
-                  <button type="button" class="clear-btn" onclick="clearValue('phone')">×</button>
+                  <input type="text" name="memPhone" class="full-width-input" value="" />
+                  <button type="button" class="clear-btn" onclick="clearValue('memPhone')">×</button>
                 </div>
               </div>
             </div>
-		</div>
+          </div>
 
           <!-- ID -->
           <div class="form-row-group">
@@ -83,13 +86,30 @@
             </div>
 			<div class="phone-input-row">
 			  <div class="input-with-clear">
-			    <input type="text" name="username" class="full-width-input" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');"/>
-			    <button type="button" class="clear-btn" onclick="clearValue('username')">×</button>
+				<input type="text" name="memId" class="full-width-input"
+				  required autocomplete="off" readonly
+				  onfocus="this.removeAttribute('readonly');"
+				  oninput="resetIdCheck()" />
+			    <button type="button" class="clear-btn" onclick="clearValue('memId')">×</button>
 			  </div>
-			  <button type="button" class="btn-small" onclick="checkUsername()">중복확인</button>
+
+			  <button type="button" class="id-check-btn" onclick="checkUsername()">중복확인</button>
 			</div>
 
-			<p id="usernameMsg" class="field-msg"></p>
+			<!-- 🔥 여기로 빼기 -->
+			<small id="usernameMsg" class="field-msg"></small>
+			</div>
+
+          <!-- ✅✅✅ 이름 (ID 바로 아래에 추가!!) -->
+          <div class="form-row-group">
+            <div class="form-label-with-icon">
+              <span class="label-icon">👤</span>
+              <label>이름 <span class="required-mark">*</span></label>
+            </div>
+            <div class="input-with-clear">
+              <input type="text" name="memName" class="full-width-input" required />
+              <button type="button" class="clear-btn" onclick="clearValue('memName')">×</button>
+            </div>
           </div>
 
           <!-- Password -->
@@ -103,7 +123,7 @@
             </div>
 
             <div style="position:relative;">
-              <input type="password" name="password" class="full-width-input" required />
+              <input type="password" name="memPw" class="full-width-input" required />
               <div id="passwordHint" class="password-hint-tooltip" style="display:none; top:-60px;">
                 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.
               </div>
@@ -126,8 +146,8 @@
               <label>이메일 <span class="required-mark">*</span></label>
             </div>
             <div class="input-with-clear">
-              <input type="email" name="email" class="full-width-input" required />
-              <button type="button" class="clear-btn" onclick="clearValue('email')">×</button>
+              <input type="email" name="memEmail" class="full-width-input" required />
+              <button type="button" class="clear-btn" onclick="clearValue('memEmail')">×</button>
             </div>
           </div>
 
@@ -141,7 +161,7 @@
                 <label>생년월일 <span class="required-mark">*</span></label>
               </div>
               <div class="date-input-wrapper">
-                <input type="date" name="birthDate" class="full-width-input date-picker-input" required />
+                <input type="date" name="memBirthdate" class="full-width-input date-picker-input" required />
               </div>
             </div>
 
@@ -154,32 +174,32 @@
 
               <div class="gender-selection">
                 <label class="gender-option active" onclick="setGender('male')">
-                  <input type="radio" name="gender" value="male" checked />
+                  <input type="radio" name="memGender" value="M" checked />
                   남성
                 </label>
                 <label class="gender-option" onclick="setGender('female')">
-                  <input type="radio" name="gender" value="female" />
+                  <input type="radio" name="memGender" value="F" />
                   여성
                 </label>
               </div>
             </div>
 
-			<div class="form-row-group">
-			    <div class="form-label-with-icon">
-			        <span class="label-icon">📍</span>
-			        <label>거주 지역 <span class="required-mark">*</span></label>
-			    </div>
+            <div class="form-row-group">
+              <div class="form-label-with-icon">
+                <span class="label-icon">📍</span>
+                <label>거주 지역 <span class="required-mark">*</span></label>
+              </div>
 
-			    <div class="district-options">
-			        <label><input type="radio" name="district" value="광산구" required> 광산구</label>
-			        <label><input type="radio" name="district" value="북구"> 북구</label>
-			        <label><input type="radio" name="district" value="서구"> 서구</label>
-			        <label><input type="radio" name="district" value="남구"> 남구</label>
-			        <label><input type="radio" name="district" value="동구"> 동구</label>
-			    </div>
-			</div>
-			
-            <!-- Phone Verification (personal 아래쪽) -->
+              <div class="district-options">
+                <label><input type="radio" name="memAddr" value="광산구" required> 광산구</label>
+                <label><input type="radio" name="memAddr" value="북구"> 북구</label>
+                <label><input type="radio" name="memAddr" value="서구"> 서구</label>
+                <label><input type="radio" name="memAddr" value="남구"> 남구</label>
+                <label><input type="radio" name="memAddr" value="동구"> 동구</label>
+              </div>
+            </div>
+
+            <!-- Phone (personal 아래쪽) -->
             <div class="form-row-group">
               <div class="form-label-with-icon">
                 <span class="label-icon">📱</span>
@@ -188,8 +208,8 @@
 
               <div class="phone-input-row">
                 <div class="input-with-clear">
-                  <input type="text" name="phone name" class="full-width-input" required />
-                  <button type="button" class="clear-btn" onclick="clearValue('phone')">×</button>
+                  <input type="text" name="memPhone" class="full-width-input" required />
+                  <button type="button" class="clear-btn" onclick="clearValue('memPhone')">×</button>
                 </div>
               </div>
             </div>
@@ -311,18 +331,25 @@
 </div>
 
 <script>
-  // 선택된 가입 타입 저장
   let currentType = 'personal';
 
+  // ✅ 처음 로딩될 때, required였던 애들 표시(원복용)
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("#formView [required]").forEach(el => {
+      el.dataset.req = "1";
+    });
+
+    // 기본은 personal 기준으로 required 세팅
+    applyRequiredByType("personal");
+  });
+
   function handleBack() {
-    // 폼 화면이면 selection으로, selection이면 login으로
     const formViewVisible = document.getElementById('formView').style.display !== 'none';
     if (formViewVisible) {
-		resetForm();
+      resetForm();
       document.getElementById('formView').style.display = 'none';
       document.getElementById('selectionView').style.display = 'flex';
     } else {
-      // 로그인으로 돌아가기
       location.href = '${pageContext.request.contextPath}/login';
     }
   }
@@ -337,12 +364,15 @@
     hint.style.display = (hint.style.display === 'none' || hint.style.display === '') ? 'block' : 'none';
   }
 
+  // ✅ memGender 기준
   function setGender(val) {
-    const male = document.querySelector('input[name="gender"][value="male"]');
-    const female = document.querySelector('input[name="gender"][value="female"]');
+    const male = document.querySelector('input[name="memGender"][value="male"]');
+    const female = document.querySelector('input[name="memGender"][value="female"]');
 
-    male.checked = (val === 'male');
-    female.checked = (val === 'female');
+    if (male && female) {
+      male.checked = (val === 'male');
+      female.checked = (val === 'female');
+    }
 
     const labels = document.querySelectorAll('.gender-option');
     labels.forEach(l => l.classList.remove('active'));
@@ -350,7 +380,7 @@
     else labels[1].classList.add('active');
   }
 
-  // 전체동의 로직
+  // 전체동의
   const agreeAll = document.getElementById('agreeAll');
   const items = document.querySelectorAll('.agreeItem');
 
@@ -363,60 +393,123 @@
       agreeAll.checked = Array.from(items).every(x => x.checked);
     });
   });
-  
-  function togglePasswordHint() {
-    const hint = document.getElementById("passwordHint");
-    hint.style.display = hint.style.display === "block" ? "none" : "block";
-  }
 
   document.addEventListener("click", function(e) {
     const hint = document.getElementById("passwordHint");
     const button = document.querySelector(".help-icon-btn");
-
-    if (!button.contains(e.target) && !hint.contains(e.target)) {
+    if (hint && button && !button.contains(e.target) && !hint.contains(e.target)) {
       hint.style.display = "none";
     }
   });
-  
-  function checkUsername(){
-    const v = document.querySelector('[name="username"]').value.trim();
+
+  // ✅ memId 기준 (DB로 중복확인)
+  let idChecked = false;
+  let lastCheckedId = "";
+
+  function checkUsername() {
+    const v = document.querySelector('[name="memId"]').value.trim();
     const msg = document.getElementById('usernameMsg');
 
-    if(!v){
+    if (!v) {
       msg.textContent = '아이디를 입력해 주세요.';
       msg.style.color = 'red';
+      idChecked = false;   // 🔥 추가
       return;
     }
+	
+	// 영문 소문자 + 숫자만 허용 (4~16자)
+	const idRegex = /^[a-z0-9]{4,16}$/;
 
-    const used = ['admin','test'];
+	if (!idRegex.test(v)) {
+	  msg.textContent = "아이디는 영문 소문자와 숫자 4~16자만 가능합니다.";
+	  msg.style.color = "red";
+	  idChecked = false;
+	  return;
+	}
 
-    if(used.includes(v.toLowerCase())){
-      msg.textContent = '이미 사용 중인 아이디입니다.';
-      msg.style.color = 'red';
-    } else {
-      msg.textContent = '사용 가능한 아이디입니다.';
-      msg.style.color = 'green';
+    const ctx = '${pageContext.request.contextPath}';
+
+    fetch(`${ctx}/api/member/check-id?memId=` + encodeURIComponent(v))
+      .then(res => res.json())
+      .then(isDuplicated => {
+        if (isDuplicated) {
+          msg.textContent = '이미 사용 중인 아이디입니다.';
+          msg.style.color = 'red';
+          idChecked = false;        // 🔥 추가
+        } else {
+          msg.textContent = '사용 가능한 아이디입니다!';
+          msg.style.color = 'green';
+          idChecked = true;         // 🔥 추가
+          lastCheckedId = v;        // 🔥 추가
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        msg.textContent = '중복확인 중 오류가 발생했습니다.';
+        msg.style.color = 'red';
+        idChecked = false;          // 🔥 추가
+      });
+  }
+  
+  function resetIdCheck() {
+    idChecked = false;
+    lastCheckedId = "";
+    const msg = document.getElementById('usernameMsg');
+    if (msg) {
+      msg.textContent = '아이디 중복확인을 해주세요.';
+      msg.style.color = '#999';
     }
   }
   
+  // ✅✅✅ 핵심: 타입별 required 토글
+  function applyRequiredByType(type) {
+    const personalBlock = document.getElementById("personalBlock");
+    const enterpriseBlock = document.getElementById("enterpriseBlock");
+    const entTopPhoneBlock = document.getElementById("entTopPhoneBlock");
+
+    // 공통 필드(required 유지): memId, memName, memPw, confirmPassword, memEmail
+    // => 개인/관리자 상관없이 회원가입 기본정보는 받으니까 그대로 둠
+
+    // personal 관련 required 켜기/끄기
+    toggleBlockRequired(personalBlock, type === "personal");
+
+    // enterprise 관련 required 켜기/끄기
+    toggleBlockRequired(enterpriseBlock, type === "enterprise");
+
+    // enterprise 상단 phone block도 enterprise일 때만 required 켜기(지금은 required 없지만 안전)
+    toggleBlockRequired(entTopPhoneBlock, type === "enterprise");
+
+    // ⚠️ enterpriseBlock 안 openDate가 required라서 숨겨진 상태면 submit 막힘
+    // => 위 토글로 해결됨
+  }
+
+  // block 내부에서 원래 required였던 애들만(required였던 것만) 켜고 끄기
+  function toggleBlockRequired(blockEl, shouldRequire) {
+    if (!blockEl) return;
+
+    const fields = blockEl.querySelectorAll("input, select, textarea");
+    fields.forEach(el => {
+      // 원래 required였던 애들만 컨트롤(필요한 것만)
+      if (el.dataset.req === "1") {
+        if (shouldRequire) el.setAttribute("required", "");
+        else el.removeAttribute("required");
+      }
+    });
+  }
+
   function selectType(type) {
     currentType = type;
-	// 1) 먼저 지우기
-	resetForm();
-	
-	// 2) 크롬 자동완성이 다시 넣는 타이밍이 있어서 "조금 뒤"에 또 지우기
-	setTimeout(resetForm, 0);
-	setTimeout(resetForm, 50);
-	 
-    // 3) 화면 토글
+
+    resetForm();
+    setTimeout(resetForm, 0);
+    setTimeout(resetForm, 50);
+
     document.getElementById('selectionView').style.display = 'none';
     document.getElementById('formView').style.display = 'flex';
 
-    // 4) 제목 변경
     document.getElementById('signupTitle').innerText =
       (type === 'personal') ? '일반 회원가입' : '관리자 회원가입';
 
-    // 5) 블록 토글
     document.getElementById('enterpriseHint').style.display =
       (type === 'enterprise') ? 'block' : 'none';
 
@@ -428,17 +521,47 @@
 
     document.getElementById('entTopPhoneBlock').style.display =
       (type === 'enterprise') ? 'block' : 'none';
-  }  
-  
+	  
+	document.getElementById('activeTab').value =
+	  (type === 'enterprise') ? 'admin' : 'user';
+	
+	document.getElementById('memType').value = 
+	  (type === 'enterprise') ? 'ADMIN' : 'USER';
+
+    // ✅ 여기서 required 토글 적용
+    applyRequiredByType(type);
+  }
+
   function resetForm() {
     document.querySelectorAll('#formView input').forEach(i => {
-      if (i.type === 'checkbox' || i.type === 'radio') return;
+      if (i.type === 'checkbox' || i.type === 'radio' || i.type === 'hidden') return;
       i.value = '';
     });
 
     const msg = document.getElementById('usernameMsg');
     if (msg) msg.textContent = '';
   }
+  
+  // 🔥 가입 버튼 누를 때 hidden 값 최종 확정
+  document.querySelector(".signup-form").addEventListener("submit", function (e) {
+
+    const currentId = document.querySelector('[name="memId"]').value.trim();
+
+    // ✅ 중복확인 안 했거나, 확인한 뒤 아이디 바뀌었으면 막기
+    if (!idChecked || currentId !== lastCheckedId) {
+      alert("아이디 중복확인을 먼저 해주세요!");
+      e.preventDefault();
+      return;
+    }
+
+    // 🔥 가입 버튼 누를 때 hidden 값 최종 확정
+    document.getElementById("activeTab").value =
+      (currentType === "enterprise") ? "admin" : "user";
+
+    document.getElementById("memType").value =
+      (currentType === "enterprise") ? "ADMIN" : "USER";
+
+  });
 </script>
 
 </body>
