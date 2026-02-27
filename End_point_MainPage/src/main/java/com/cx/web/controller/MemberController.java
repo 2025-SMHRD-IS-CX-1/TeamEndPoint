@@ -1,25 +1,24 @@
 package com.cx.web.controller;
 
+import com.cx.web.entity.Member;
+import com.cx.web.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import com.cx.web.entity.Member;              // ✅ 소문자 entity
-import com.cx.web.repository.MemberRepository; // ✅ 소문자 repository
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 
-@RestController
-@RequestMapping("/members")
+@Controller
 public class MemberController {
 
     @Autowired
     private MemberRepository memberRepository;
 
-    @GetMapping
-    public List<Member> getAllMembers() {
-        return memberRepository.findAll();
-    }
-
-    @PostMapping
-    public Member createMember(@RequestBody Member member) {
-        return memberRepository.save(member);
+    @GetMapping("/members")
+    public String memberPage(Model model) {
+        List<Member> members = memberRepository.findAll();
+        model.addAttribute("members", members);
+        return "common/member"; // member.jsp
     }
 }

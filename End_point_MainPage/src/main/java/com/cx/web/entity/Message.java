@@ -1,11 +1,7 @@
 package com.cx.web.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_message")
@@ -14,13 +10,24 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idx;
 
-    private int croomIdx;
+    @ManyToOne
+    @JoinColumn(name = "croom_idx", nullable = false)
+    private ChatRoom chatRoom;
+
+    @Column(name = "chatter", length = 50)
     private String chatter;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "chat_content")
     private String chatContent;
 
+    @Column(name = "chat_emoticon")
     private String chatEmoticon;
+
+    @Column(name = "chat_file")
     private String chatFile;
-    private java.time.LocalDateTime createdAt;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    // getter, setter
 }

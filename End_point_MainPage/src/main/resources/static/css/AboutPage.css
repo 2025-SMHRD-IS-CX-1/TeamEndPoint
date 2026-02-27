@@ -1,24 +1,72 @@
 /* AboutPage.css */
+
+/* 기본 컨테이너 */
 .about-container {
     background-color: #f7fbff;
-    padding-bottom: 80px;
+    background-image: linear-gradient(180deg, #e6f3ff 0%, #f7fbff 300px);
+    min-height: 100vh;
+    font-family: 'Pretendard', sans-serif;
+    padding-bottom: 80px; /* React 버전에서 가져온 부분 */
 }
 
+/* 헤더 */
 .about-header {
     display: flex;
     align-items: center;
     padding: 15px 20px;
+    background-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
+.about-header h1 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #004a99;
+    margin: 0;
+    margin-left: 10px;
+    letter-spacing: -0.5px;
+}
+
+.back-btn {
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+/* 본문 */
 .about-body {
     padding: 20px;
 }
 
+/* 제목 섹션 */
 .about-title-section {
     text-align: center;
     margin-bottom: 30px;
 }
 
+.about-title-section h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.about-title-section p {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+}
+
+/* 말풍선 섹션 */
 .about-bubble-section {
     display: flex;
     align-items: flex-end;
@@ -26,14 +74,71 @@
     margin-bottom: 25px;
 }
 
+.about-bubble-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.character-box {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.character-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scaleX(-1);
+}
+
+.character-img.side {
+    transform: scaleX(1);
+}
+
 .speech-bubble {
     background: #fff;
     padding: 20px;
     border-radius: 24px;
+    border-bottom-left-radius: 4px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
     flex: 1;
 }
 
+.about-bubble-section.reverse .speech-bubble {
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 4px;
+}
+
+.speech-bubble h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.speech-bubble p {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+    margin: 0 0 5px 0;
+}
+
+.speech-bubble .sub {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+}
+
+.warning-bubble {
+    background: #fff;
+}
+
+/* 카드 */
+.about-card,
 .about-help-card {
     background: #fff;
     border-radius: 20px;
@@ -42,12 +147,117 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.user-icon-badge,
+.check-icon-badge {
+    padding: 6px;
+    background: #fff9ed;
+    border-radius: 8px;
+    display: flex;
+}
+
+.check-icon-badge {
+    background: #f0fff4;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.card-content p {
+    font-size: 0.95rem;
+    color: #444;
+    margin: 0 0 8px 0;
+    line-height: 1.6;
+}
+
+/* 도움말 리스트 */
 .help-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .help-list li {
-    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
     font-size: 0.9rem;
+    color: #444;
+    line-height: 1.4;
+}
+
+.li-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+/* 마무리 섹션 */
+.closing-card {
+    margin-top: 30px;
+}
+
+.closing-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.closing-text p {
+    font-size: 0.9rem;
+    color: #444;
+    margin: 0 0 4px 0;
+}
+
+/* 네비게이션 버튼 */
+.about-nav-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.nav-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 5px;
+    border-radius: 12px;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+.nav-btn.blue {
+    background: #eef6ff;
+    color: #007bff;
+}
+
+.nav-btn.teal {
+    background: #e6fffa;
+    color: #319795;
+}
+
+.nav-btn.green {
+    background: #f0fff4;
+    color: #38a169;
+}
+
+.bottom-spacing {
+    height: 100px;
 }

@@ -1,13 +1,15 @@
 /* QuickButton.css */
 .v3-quick-btn-icon-only {
     position: fixed;
-    right: 20px;
+    right: calc(50% - 280px);
     bottom: 85px;
     width: 65px;
     height: 65px;
     border-radius: 50%;
     background-color: #e0f4ff;
+    /* 하늘색 배경 */
     border: 2.5px solid #0056b3;
+    /* 진한 파란색 테두리 */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
@@ -44,10 +46,21 @@
     box-shadow: 0 8px 20px rgba(0, 86, 179, 0.25);
 }
 
+.v3-quick-btn-icon-only:active {
+    transform: scale(0.95);
+}
+
 .v3-quick-char-img-large {
     width: 48px;
     height: 48px;
     object-fit: contain;
     transform: scaleX(-1);
+    /* 살짝 위로 올려서 안정감 주기 */
     margin-bottom: 2px;
+}
+
+@media (max-width: 393px) {
+    .v3-quick-btn-icon-only {
+        right: 20px;
+    }
 }

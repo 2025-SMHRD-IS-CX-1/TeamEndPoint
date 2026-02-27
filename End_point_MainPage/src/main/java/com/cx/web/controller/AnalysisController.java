@@ -1,26 +1,24 @@
 package com.cx.web.controller;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.cx.web.entity.Analysis;
 import com.cx.web.repository.AnalysisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
-@RequestMapping("/analysis")
+import java.util.List;
+
+@Controller
 public class AnalysisController {
 
     @Autowired
     private AnalysisRepository analysisRepository;
 
-    @GetMapping
-    public List<Analysis> getAllAnalysis() {
-        return analysisRepository.findAll();
-    }
-
-    @PostMapping
-    public Analysis saveAnalysis(@RequestBody Analysis analysis) {
-        return analysisRepository.save(analysis);
+    @GetMapping("/analysis")
+    public String analysisPage(Model model) {
+        List<Analysis> analysisList = analysisRepository.findAll();
+        model.addAttribute("analysisList", analysisList);
+        return "common/analysis"; // analysis.jsp
     }
 }
