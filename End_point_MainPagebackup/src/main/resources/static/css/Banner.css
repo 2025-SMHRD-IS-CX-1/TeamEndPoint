@@ -1,0 +1,297 @@
+/* Banner.css */
+.banner-section {
+    width: 100%;
+    position: relative;
+    height: 630px; /* 충분히 높게 */
+    margin-bottom: 2.5rem;
+    padding-top: 40px; /* 상단 공간 확보 */
+    overflow: hidden;
+}
+
+.banner-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    height: 100%;
+    padding: 0 15px;
+    scroll-padding: 0 15px;
+    box-sizing: border-box;
+}
+
+.banner-slide {
+    flex: 0 0 calc(100% - 30px);
+    width: calc(100% - 30px);
+    margin-right: 15px;
+    height: calc(100% - 40px); /* 패딩 고려 */
+    scroll-snap-align: center;
+    position: relative;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+
+.banner-image-wrapper {
+    height: 300px;
+    width: 100%;
+    position: relative;
+    background-color: #000;
+    overflow: hidden;
+}
+
+.banner-image-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    filter: blur(25px) brightness(0.6);
+    transform: scale(1.1);
+    z-index: 0;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+.banner-top-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(15, 23, 42, 0.8);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+}
+
+.banner-info-box {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.banner-cat-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: #f0f7ff;
+    color: #007bff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    border: 1px solid #d0e7ff;
+}
+
+.banner-title-text {
+    margin: 0 0 6px 0;
+    font-size: 1.4rem;
+    color: #222;
+    font-weight: 800;
+}
+
+.banner-date-text {
+    margin: 0 0 10px 0;
+    font-size: 0.85rem;
+    color: #999;
+    font-weight: 500;
+}
+
+.banner-desc-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.banner-indicator {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+}
+
+.banner-nav-arrows {
+    position: absolute;
+    top: 150px; /* 이미지 중앙 */
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.nav-arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-arrow:hover {
+    background-color: white;
+    transform: scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.nav-arrow:active {
+    transform: scale(0.95);
+}
+
+/* Modal / Overlay Styles */
+.festival-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.festival-modal-content {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-poster-top {
+    height: 400px;
+    width: 100%;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-poster-top::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    filter: blur(25px) brightness(0.6);
+    z-index: 0;
+}
+
+.modal-top-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.modal-header {
+    padding: 1.5rem;
+}
+
+.modal-header h2 {
+    color: #333;
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+}
+
+.modal-subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.modal-info-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.festival-info-tag {
+    background: #f0f3ff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.modal-body {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    line-height: 1.6;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+}
+
+.close-action-btn {
+    width: 100%;
+    background: #a18cd1;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
