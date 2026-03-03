@@ -48,10 +48,13 @@ body {
   background: #fff !important;
   box-shadow: 0 0 24px rgba(0,0,0,0.12) !important;
   overflow-x: hidden !important;
-  position: relative;
+  position: relative !important;
 }
-.mobile-wrap .v3-quick-btn-icon-only {
-  position: fixed; /* 기본값이면 아래 방식으로 바꿔야 함 */
+.mobile-wrap .v3-quick-btn-icon-only{
+  position: absolute !important;   /* fixed -> absolute */
+  right: 18px;
+  bottom: 18px;
+  z-index: 3000;
 }
 
 /* mobile-wrap 안에서 레이아웃이 튀어나가지 않게 */
