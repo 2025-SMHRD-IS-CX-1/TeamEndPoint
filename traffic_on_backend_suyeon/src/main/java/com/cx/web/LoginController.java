@@ -1,6 +1,7 @@
 package com.cx.web;
 
 import java.time.LocalDate;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -63,7 +64,8 @@ public class LoginController {
     @PostMapping("/login")
     public String loginProcess(@RequestParam String username,
                                @RequestParam String password,
-                               @RequestParam(required = false, defaultValue = "user") String activeTab) {
+                               @RequestParam(required = false, defaultValue = "user") String activeTab,
+                               HttpSession session) {
 
         Optional<Member> opt = memberRepository.findByMemIDAndMemPW(username, password);
 
@@ -79,9 +81,14 @@ public class LoginController {
                 // 일반회원이 관리자탭으로 로그인 시도한 경우
                 return "redirect:/login?error=notAdmin&tab=admin";
             }
+            session.setAttribute("loginMember", loginMember);
+            session.setAttribute("loginRole", "ADMIN");  
+            
             return "redirect:/admin/dashboard";
         }
 
+        session.setAttribute("loginMember", loginMember);
+        session.setAttribute("loginRole", "USER");  
         return "redirect:/";
     }
 
