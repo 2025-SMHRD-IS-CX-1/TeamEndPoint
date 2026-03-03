@@ -49,11 +49,11 @@
         <!-- Bottom Input Area -->
         <div class="chat-input-wrapper">
             <div class="chat-input-bar">
-                <button class="chat-plus-btn">
+                <button class="chat-plus-btn" type="button">
                     <i data-lucide="plus" size="24"></i>
                 </button>
                 <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
-                <button class="chat-send-btn" disabled id="sendBtn">
+                <button class="chat-send-btn" disabled id="sendBtn" type="button">
                     <i data-lucide="arrow-up" size="24" color="#ccc"></i>
                 </button>
             </div>
@@ -64,33 +64,34 @@
         // 초기 아이콘 렌더링
         lucide.createIcons();
 
-        // 현재 로그인 상태 (서버에서 전달받은 값으로 제어 가능 - 여기선 임시 false)
+        // ✅ FastAPI 챗봇 API (JSON 응답: {answer: "..."} )
+        const API_URL = "http://localhost:8000/api/chat";
+        const ROOM_IDX = 2;
+
+        // ✅ 로그인 상태 (지금은 테스트용 false)
+        // 나중에 세션값으로 바꾸면 됨
         let isLoggedIn = false;
 
-        function handleKeywordClick(keyword) {
-            if (isLoggedIn) return;
+        // ✅ 로그인 상태에 따라 입력/전송 활성화
+        function applyLoginUI() {
+            const input = document.getElementById("chatInput");
+            const btn = document.getElementById("sendBtn");
 
-            const messagesArea = document.getElementById('messagesArea');
-            const keywordSection = document.getElementById('keywordSection');
+            if (isLoggedIn) {
+                input.disabled = false;
+                input.placeholder = "메시지를 입력하세요...";
+                btn.disabled = false;
+            } else {
+                input.disabled = true;
+                input.placeholder = "로그인 후 이용 가능합니다.";
+                btn.disabled = true;
+            }
+        }
+        applyLoginUI();
 
-            // 1. 키워드 섹션 숨기기
-            if (keywordSection) keywordSection.style.display = 'none';
-
-            // 2. 유저 메시지 추가
-            addMessage(keyword, 'user');
-
-            // 3. 1초 뒤 펭리미 답변 메시지 추가
-            setTimeout(() => {
-                const response = `'${keyword}'에 대해 궁금하시군요! 해당 민원 유형은 [민원유형] 탭에서 더 자세히 안내해 드리고 있어요.`;
-                addMessage(response, 'bot');
-
-                // 4. 로그인 유도 버튼 추가
-                showLoginNudge();
-                
-                // 스크롤 하단 이동
-                const chatContent = document.getElementById('chatContent');
-                chatContent.scrollTop = chatContent.scrollHeight;
-            }, 800);
+        function scrollToBottom() {
+            const chatContent = document.getElementById("chatContent");
+            chatContent.scrollTop = chatContent.scrollHeight;
         }
 
         function addMessage(text, sender) {
@@ -99,6 +100,7 @@
             bubble.className = `message-bubble ${sender}`;
             bubble.innerText = text;
             messagesArea.appendChild(bubble);
+            scrollToBottom();
         }
 
         function showLoginNudge() {
@@ -111,7 +113,90 @@
                 </button>
             `;
             messagesArea.appendChild(nudgeDiv);
+            scrollToBottom();
         }
+
+        // ✅ FastAPI 호출
+        async function sendToFastAPI(message) {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    text: message,
+                    room_idx: ROOM_IDX
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(`API ${res.status}: ${err}`);
+            }
+
+            const data = await res.json(); // {answer: "..."}
+            return data.answer ?? "⚠️ 응답이 비어있어.";
+        }
+
+        // ✅ 입력창 전송(로그인 상태에서만)
+        async function sendChat() {
+            if (!isLoggedIn) {
+                // 로그인 안 했으면 안내만
+                showLoginNudge();
+                return;
+            }
+
+            const input = document.getElementById("chatInput");
+            const text = (input.value || "").trim();
+            if (!text) return;
+
+            // 키워드 영역 숨김(필요 시)
+            const keywordSection = document.getElementById("keywordSection");
+            if (keywordSection) keywordSection.style.display = "none";
+
+            addMessage(text, "user");
+            input.value = "";
+
+            try {
+                const answer = await sendToFastAPI(text);
+                addMessage(answer, "bot");
+            } catch (e) {
+                console.error(e);
+                addMessage("⚠️ 챗봇 서버 호출 실패: " + e.message, "bot");
+            }
+        }
+
+        // ✅ 키워드 클릭: 비로그인이어도 FastAPI로 테스트 가능하게 해둠
+        // (원래 기획대로 "비회원은 로그인 유도만"으로 하고 싶으면, 아래 if 블록을 바꾸면 됨)
+        async function handleKeywordClick(keyword) {
+            const keywordSection = document.getElementById('keywordSection');
+            if (keywordSection) keywordSection.style.display = 'none';
+
+            addMessage(keyword, 'user');
+
+            try {
+                const answer = await sendToFastAPI(keyword);
+                addMessage(answer, 'bot');
+
+                if (!isLoggedIn) {
+                    // 비로그인이면 아래 버튼도 같이 띄움(기획 유지)
+                    showLoginNudge();
+                }
+            } catch (e) {
+                console.error(e);
+                addMessage("⚠️ 챗봇 서버 호출 실패: " + e.message, "bot");
+                if (!isLoggedIn) showLoginNudge();
+            }
+        }
+
+        // ✅ 전송 버튼 클릭
+        document.getElementById("sendBtn").addEventListener("click", sendChat);
+
+        // ✅ 엔터 전송
+        document.getElementById("chatInput").addEventListener("keydown", (e) => {
+            if (e.key === "Enter") sendChat();
+        });
+
+        // onclick에서 쓰는 함수 전역 노출
+        window.handleKeywordClick = handleKeywordClick;
     </script>
 </body>
 </html>
