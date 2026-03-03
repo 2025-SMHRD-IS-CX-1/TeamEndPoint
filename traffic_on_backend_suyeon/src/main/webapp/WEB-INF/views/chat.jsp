@@ -186,7 +186,7 @@
                 if (!isLoggedIn) showLoginNudge();
             }
         }
-
+//주석
         // ✅ 전송 버튼 클릭
         document.getElementById("sendBtn").addEventListener("click", sendChat);
 
