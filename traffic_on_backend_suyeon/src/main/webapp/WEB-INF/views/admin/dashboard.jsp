@@ -179,84 +179,7 @@
 <script>
   let selectedDistrict = "광산구";
   let isSidebarOpen = false;
-
-  const districtData = {
-    "광산구": {
-      keywords: [
-        { id: 1, text: "지하철 공사" }, { id: 6, text: "국토교통부" },
-        { id: 2, text: "불법주차" }, { id: 7, text: "킥보드헬멧" },
-        { id: 3, text: "장애인주차" }, { id: 8, text: "주차장" },
-        { id: 4, text: "버스우회" }, { id: 9, text: "보도블럭" },
-        { id: 5, text: "충장축제" }, { id: 10, text: "맨홀" }
-      ],
-      age: [
-        { label: "10대", value: 5 }, { label: "20대", value: 23 },
-        { label: "30대", value: 57 }, { label: "40대", value: 71, highlight: true },
-        { label: "50대 이상", value: 39 }
-      ],
-      gender: { male: 25, female: 75 }
-    },
-    "북구": {
-      keywords: [
-        { id: 1, text: "어린이 보호구역" }, { id: 6, text: "신호등 미작동" },
-        { id: 2, text: "과속 방지턱" }, { id: 7, text: "야간 도로 조명" },
-        { id: 3, text: "버스 전용 차로" }, { id: 8, text: "화물차 주차" },
-        { id: 4, text: "교량 보수" }, { id: 9, text: "중앙 분리대" },
-        { id: 5, text: "우회전 사고" }, { id: 10, text: "버스 정류장" }
-      ],
-      age: [
-        { label: "10대", value: 8 }, { label: "20대", value: 35, highlight: true },
-        { label: "30대", value: 42 }, { label: "40대", value: 45 },
-        { label: "50대 이상", value: 52 }
-      ],
-      gender: { male: 48, female: 52 }
-    },
-    "서구": {
-      keywords: [
-        { id: 1, text: "백화점 주변 정체" }, { id: 6, text: "유턴 구역 확보" },
-        { id: 2, text: "터미널 혼잡" }, { id: 7, text: "이륜차 폭주" },
-        { id: 3, text: "도로 파손" }, { id: 8, text: "가로수 정비" },
-        { id: 4, text: "빗물받이 막힘" }, { id: 9, text: "스마트 횡단보도" },
-        { id: 5, text: "택시 승강장" }, { id: 10, text: "좌회전 신호" }
-      ],
-      age: [
-        { label: "10대", value: 12 }, { label: "20대", value: 28 },
-        { label: "30대", value: 65, highlight: true }, { label: "40대", value: 52 },
-        { label: "50대 이상", value: 31 }
-      ],
-      gender: { male: 55, female: 45 }
-    },
-    "남구": {
-      keywords: [
-        { id: 1, text: "양림동 주차난" }, { id: 6, text: "일방통행 해제" },
-        { id: 2, text: "골목길 과속" }, { id: 7, text: "고령자 보호구역" },
-        { id: 3, text: "원룸촌 불법투기" }, { id: 8, text: "자전거 도로" },
-        { id: 4, text: "언덕길 낙상위험" }, { id: 9, text: "교통 안내판" },
-        { id: 5, text: "등굣길 안전" }, { id: 10, text: "CCTV 확충" }
-      ],
-      age: [
-        { label: "10대", value: 15 }, { label: "20대", value: 18 },
-        { label: "30대", value: 25 }, { label: "40대", value: 38 },
-        { label: "50대 이상", value: 68, highlight: true }
-      ],
-      gender: { male: 42, female: 58 }
-    },
-    "동구": {
-      keywords: [
-        { id: 1, text: "국립아시아문화전당" }, { id: 6, text: "대중교통 환승" },
-        { id: 2, text: "로터리 진입" }, { id: 7, text: "금남로 차 없는 거리" },
-        { id: 3, text: "지하상가 환기" }, { id: 8, text: "관광버스 주차" },
-        { id: 4, text: "보행자 우선도로" }, { id: 9, text: "전기차 충전소" },
-        { id: 5, text: "불법 적치물" }, { id: 10, text: "포트홀 신고" }
-      ],
-      age: [
-        { label: "10대", value: 4 }, { label: "20대", value: 52, highlight: true },
-        { label: "30대", value: 38 }, { label: "40대", value: 25 },
-        { label: "50대 이상", value: 21 }
-      ],
-      gender: { male: 50, female: 50 }
-    }
-  };
+  let reqId = 0;
 
   function setActiveDistrictPath(district) {
     document.querySelectorAll(".district-path").forEach(p => p.classList.remove("active"));
@@ -265,44 +188,76 @@
     if (id) document.getElementById(id).classList.add("active");
   }
 
-  function renderKeywords(data) {
+  function renderKeywords(list) {
     const el = document.getElementById("keywordsList");
     el.innerHTML = "";
-    data.keywords.forEach((kw, idx) => {
+
+    list.forEach((row, idx) => {
       const item = document.createElement("div");
       item.className = "keyword-item";
+
       item.innerHTML = `
         <div class="kw-left">
-          <span class="rank-num">${idx + 1}</span>
-          <span class="kw-text">${kw.text}</span>
+          <span class="rank-num">\${row.rank ?? (idx+1)}</span>
+          <span class="kw-text">\${row.keyword}</span>
         </div>
       `;
+
       el.appendChild(item);
     });
   }
 
   function renderGender(data) {
-    const male = data.gender.male;
-    const female = data.gender.female;
-    document.getElementById("malePct").textContent = male + "%";
-    document.getElementById("femalePct").textContent = female + "%";
+    const malePct = Number(data?.gender?.male ?? 0);
+    const femalePct = Number(data?.gender?.female ?? 0);
 
     const pie = document.getElementById("pieChart");
-    // 기존 CSS에서 conic-gradient 색상 쓰는 경우 이 부분만 유지하면 됨
-    pie.style.background = `conic-gradient(#5c85fd 0% ${male}%, #ff8a65 ${male}% 100%)`;
+
+    // ✅ 1) 매번 상태 초기화 (이게 핵심)
+    pie.classList.remove("empty");
+    pie.style.background = "";     // 이전 conic/transparent 제거
+    pie.style.border = "";         // empty에서 border 줬으면 초기화
+
+    // 라벨 갱신
+    document.getElementById("malePct").textContent = malePct + "%";
+    document.getElementById("femalePct").textContent = femalePct + "%";
+
+    // ✅ 2) 데이터 없으면 empty 모드
+    if (malePct === 0 && femalePct === 0) {
+      pie.classList.add("empty");
+      pie.style.background = "transparent";
+      return;
+    }
+
+    // ✅ 3) 데이터 있으면 conic-gradient로 그리기
+    pie.style.background =
+      `conic-gradient(#5c85fd 0% ${malePct}%, #ff8a65 ${malePct}% 100%)`;
   }
 
   function renderAge(data) {
     const el = document.getElementById("ageChart");
     el.innerHTML = "";
+
+    const maxH = 160; 
+    const maxVal = Math.max(...data.age.map(d => Number(d.value) || 0), 1);
+
     data.age.forEach(d => {
       const wrap = document.createElement("div");
       wrap.className = "bar-wrapper";
 
       const bar = document.createElement("div");
       bar.className = "bar" + (d.highlight ? " highlight" : "");
-      bar.style.height = (d.value * 2.5) + "px";
-      bar.innerHTML = `<span class="bar-percent">${d.value}%</span>`;
+
+	  const v = Number(d.value) || 0;
+
+	  const h = Math.round((v / maxVal) * maxH);
+	  bar.style.height = (v === 0 ? 2 : h) + "px";
+
+	  // ✅ percent span 직접 append
+	  const percent = document.createElement("span");
+	  percent.className = "bar-percent";
+	  percent.textContent = v + "%";
+	  bar.appendChild(percent);
 
       const label = document.createElement("span");
       label.className = "bar-label";
@@ -314,41 +269,60 @@
     });
   }
 
-  function renderAll() {
-    const data = districtData[selectedDistrict];
-    document.getElementById("kwTitle").textContent = `📍 ${selectedDistrict} 주요 교통불편 키워드`;
+  async function loadDistrict(district) {
+    selectedDistrict = district;
+    const myId = ++reqId; // ✅ 이번 요청 번호
+
+    document.getElementById("kwTitle").textContent =
+      "📍 " + selectedDistrict + " 주요 교통불편 키워드";
+
     setActiveDistrictPath(selectedDistrict);
-    renderKeywords(data);
-    renderGender(data);
-    renderAge(data);
+
+    const base = "${pageContext.request.contextPath}";
+
+    const [kwRes, statRes] = await Promise.all([
+      fetch(base + "/admin/dashboard/keywords?district=" + encodeURIComponent(selectedDistrict)),
+      fetch(base + "/admin/dashboard/stats?district=" + encodeURIComponent(selectedDistrict))
+    ]);
+
+    const keywords = await kwRes.json();
+    const stats = await statRes.json();
+
+    // ✅ 최신 클릭(요청)만 화면에 반영
+    if (myId !== reqId) return;
+
+    renderKeywords(keywords);
+    renderGender(stats);
+    renderAge(stats);
   }
 
   function openSidebar() {
     isSidebarOpen = true;
     document.getElementById("sidebar").classList.add("open");
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
+    document.getElementById("overlay").style.display = "block";
   }
+
   function closeSidebar() {
     isSidebarOpen = false;
     document.getElementById("sidebar").classList.remove("open");
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "none";
+    document.getElementById("overlay").style.display = "none";
   }
 
   document.getElementById("btnMenu").addEventListener("click", () => {
-    if (isSidebarOpen) closeSidebar(); else openSidebar();
+    if (isSidebarOpen) closeSidebar();
+    else openSidebar();
   });
+
   document.getElementById("overlay").addEventListener("click", closeSidebar);
 
   document.querySelectorAll(".district-path").forEach(path => {
     path.addEventListener("click", (e) => {
-      selectedDistrict = e.target.dataset.district;
-      renderAll();
+      loadDistrict(e.target.dataset.district);
     });
   });
 
-  renderAll();
+  // 최초 로딩
+  loadDistrict(selectedDistrict);
 </script>
 </body>
 </html>
