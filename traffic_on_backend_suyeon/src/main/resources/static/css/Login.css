@@ -1,0 +1,415 @@
+/* Global Reset / Variables */
+:root {
+    --primary-orange: #FF5722;
+    /* Approximate orange from screenshot */
+    --bg-color: #F0F4F8;
+    /* Light blue-gray */
+    --text-dark: #333;
+    --text-gray: #888;
+    --border-color: #ddd;
+}
+
+/* Login Container - Simulating Mobile Screen */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    /* Mobile width simulation */
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for mockup feel */
+    overflow: hidden;
+}
+
+/* Login Brand Header (Stacked - Image 4 Style) */
+.login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 0 30px 0;
+    margin-bottom: 20px;
+    background-color: transparent;
+    /* Ensure it blends with background */
+}
+
+.mascot-img-login {
+    height: 120px;
+    width: auto;
+    margin-bottom: -15px;
+    object-fit: contain;
+    transform: scaleX(-1);
+    /* Flip horizontally */
+}
+
+.login-logo-text {
+    font-size: 3.5rem;
+    font-weight: 950;
+    /* Extra bold */
+    color: #ff4d17;
+    font-style: italic;
+    letter-spacing: -2px;
+    line-height: 0.9;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+}
+
+.illustration {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.illustration-icon {
+    font-size: 3rem;
+}
+
+.illustration-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    color: var(--primary-orange);
+    margin-top: 5px;
+}
+
+/* Login Card */
+.login-card {
+    width: 100%;
+    background-color: transparent;
+    /* Card blends usually, but the screenshot has a white area */
+    /* The visible white "card" effect comes from the tabs and the form container */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tabs */
+.login-tabs {
+    display: flex;
+    margin-bottom: -1px;
+    /* Overlap with form area border */
+    /* z-index removed to allow children stacking */
+    /* padding-left removed to align with card edge */
+}
+
+.tab {
+    padding: 12px 20px;
+    background-color: #e0e0e0;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    /* Updated to 20px to match card */
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 1;
+    flex: 1;
+    /* Make tabs equal width */
+    justify-content: center;
+    /* Center content */
+}
+
+.tab:focus,
+.tab:focus-visible{
+    outline: none;
+    border-color: transparent;
+    /* Prevent blue border on hover */
+}
+
+.tab:hover:not(.active){
+	outline: none;
+	border-colcr: transparent;
+}
+
+.tab.active {
+    background-color: white;
+    color: var(--primary-orange);
+    /* Match theme */
+    border: 2px solid var(--primary-orange);
+    border-bottom: none;
+    /* Connect to content */
+    z-index: 3;
+    /* Sit on top of form area */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.tab-icon {
+    font-size: 1.1rem;
+}
+
+/* Form Area */
+/* Form Area */
+.login-form-area {
+    background-color: white;
+    border-radius: 20px;
+    /* Ensure rounded corners for the card */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;    
+    /* Connects with the active tab */
+    padding: 30px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+    /* Sit between inactive and active tabs */
+    position: relative;
+    /* To stack correctly */
+    border: 2px solid var(--primary-orange);
+    /* Add border to match tab */
+    transition: border-radius 0.3s ease;
+    margin-top: 0px;
+}
+
+/* Dynamic rounding removed */
+
+/* Add curved connection (concave) to the right of the active tab */
+/* Pseudo-element fillet removed */
+
+/* Second login-form-area block removed to prevent overwrite */
+
+/* Second login-form-area block removed to prevent overwrite */
+
+/* If first tab active, remove its bottom radius visual or connect it. 
+   css logic: .tab.active connects to .login-form-area. 
+   The screenshot shows the first tab connected. */
+
+
+
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ccc;
+    /* Default gray border */
+    border-radius: 30px;
+    /* Pill shape */
+    font-size: 1rem;
+    box-sizing: border-box;
+    /* Important for padding */
+    outline: none;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-orange);
+}
+
+.input-group input:focus::placeholder {
+    color: transparent;
+}
+
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centered in screenshot? Looks left-aligned but text near center? Actually left aligned under inputs */
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+    justify-content: flex-start;
+    margin-top: 5px;
+}
+
+.checkbox-group input {
+    margin-right: 8px;
+
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 30px;
+    background-color: var(--primary-orange);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+    box-shadow: 0 4px 6px rgba(255, 87, 34, 0.3);
+}
+
+.login-btn:hover {
+    background-color: #e64a19;
+}
+
+.login-links {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #888;
+    position: relative;
+    z-index: 10;
+}
+
+.login-links a {
+    text-decoration: none;
+    color: #888;
+    margin: 0 5px;
+}
+
+.login-links .divider {
+    color: #ddd;
+}
+
+/* ✅ 로그인 화면 강제 중앙 정렬 */
+.login-container{
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.toast{
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 9999;
+}
+
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast{
+  position: fixed;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.toast.show{
+  opacity: 1;
+}
+
+/* 로그인 비밀번호 input 오른쪽 공간 확보 */
+#password {
+  padding-right: 42px;
+}
+
+/* 눈 버튼 */
+.pw-toggle-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+}
+
+.pw-toggle-btn:focus {
+  outline: none;
+}
+
+.pw-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.pw-wrap input {
+  width: 100%;
+  padding-right: 50px; /* 버튼 공간 확보 */
+}
+
+.pw-toggle-btn {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+}
+
+/* ===== 비밀번호 input 안에 눈버튼 넣기 (로그인) ===== */
+.input-group .pw-wrap{
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;   /* flex 영향 차단 */
+}
+
+.input-group .pw-wrap #password{
+  width: 100% !important;
+  padding-right: 52px !important;  /* 버튼 공간 */
+  box-sizing: border-box;
+}
+
+.input-group .pw-wrap .pw-toggle-btn{
+  position: absolute !important;
+  right: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  z-index: 9999 !important;
+}
+
+/* ===== 비밀번호 왼쪽 정렬 균형 맞추기 ===== */
+.input-group .pw-wrap #password{
+  text-align: left !important;
+  padding-left: 18px !important;
+}
+
+/* ===== 로그인 input 높이 완전 통일 ===== */
+.input-group input {
+  height: 48px !important;
+  line-height: 48px !important;
+  padding: 0 20px !important;
+  box-sizing: border-box;
+}
+
+/* 비밀번호는 오른쪽 버튼 공간 유지 */
+.input-group .pw-wrap #password {
+  padding-right: 52px !important;
+}
+
+/* 비밀번호: 눈버튼 영역(52px) 때문에 생기는 착시 보정 */
+.input-group .pw-wrap #password{
+  text-align: center !important;
+  padding-right: 52px !important;  /* 버튼 공간 */
+  padding-left: 52px !important;   /* ← 왼쪽도 동일하게 줘서 "가운데" 착시 보정 */
+  box-sizing: border-box;
+}
+
+.input-group .pw-wrap #password::placeholder{
+  text-align: center;
+}

@@ -1,0 +1,389 @@
+/* FindId.css */
+:root {
+    --primary-orange: #FF5722;
+    /* Traffic On Orange */
+}
+
+.find-id-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: transparent;   /* ✅ 핵심 */
+  display: flex;
+  flex-direction: column;
+}
+
+.find-id-header{
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 20px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mascot-img-header {
+    height: 35px;
+    width: auto;
+    object-fit: contain;
+    transform: scaleX(-1);
+    /* Flip horizontally */
+}
+
+.logo-text {
+    font-weight: 900;
+    font-style: italic;
+    color: var(--primary-orange);
+    letter-spacing: -0.5px;
+    font-size: 1.1rem;
+}
+
+.description-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.find-id-description {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.info-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+}
+
+/* Tooltip Styles */
+.tooltip-bubble {
+    position: absolute;
+    top: 30px;
+    /* Position below the line */
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    font-size: 0.85rem;
+    color: #333;
+    line-height: 1.4;
+    box-sizing: border-box;
+}
+
+/* Tooltip Arrow */
+.tooltip-bubble::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 230px;
+    /* Approximate position under the ? icon */
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    transform: rotate(45deg);
+}
+
+/* Verification Step Styles */
+.verification-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.verification-title h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 5px 0;
+    text-align: center;
+}
+
+.verification-subtitle {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.timer-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+}
+
+.resend-link {
+    text-decoration: underline;
+    color: #999;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.timer-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.extend-time {
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 0.8rem;
+    color: #4A90E2;
+}
+
+/* Result Step Styles */
+.result-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.check-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.result-message {
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.user-highlight {
+    font-weight: bold;
+}
+
+.id-highlight {
+    color: #5C5CFF;
+    font-weight: bold;
+}
+
+.info-box {
+    background-color: #F5F5F5;
+    border-radius: 12px;
+    padding: 15px 20px;
+    width: 100%;
+    margin-bottom: 40px;
+    box-sizing: border-box;
+}
+
+.info-content {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.info-bullet {
+    background-color: #D6D6D6;
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-box p {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0;
+    line-height: 1.4;
+    word-break: keep-all;
+}
+
+.full-button {
+    width: 100%;
+}
+
+.tooltip-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+}
+
+.tooltip-bubble p {
+    margin: 0;
+    padding-right: 15px;
+    /* Space for close button */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Separate the boxes */
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.floating-input:focus {
+    border-color: var(--primary-orange);
+}
+
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #999;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+}
+
+/* Floating Label Logic */
+.input-wrapper:focus-within .floating-label,
+.floating-input:not(:placeholder-shown)~.floating-label {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) scale(0.8);
+}
+
+.floating-input:not(:placeholder-shown)~.floating-label {
+    color: #999;
+    /* Keep gray if just filled but not focused, or orange? User said "small up". Usually gray unless valid/focused. */
+}
+
+
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.link-text {
+    text-decoration: underline;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.next-btn {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.next-btn:hover {
+    background-color: #e64a19;
+}
+
+.bottom-link {
+    margin-top: 10px;
+}
+
+.back-btn {
+    margin-top: 30px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ✅ 메인 영역 가운데 + 카드가 위에서 조금 내려오게 */
+.find-id-main{
+  width: 100%;
+  background: #e6ebf0;         /* ✅ 회색은 여기! */
+  min-height: calc(100vh - 70px); /* ✅ 헤더 제외하고 아래로 길게 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;     /* 아래 여백도 줘야 길어 보임 */
+  box-sizing: border-box;
+}
+
+.find-id-card{
+  background-color: white;
+  width: 100%;
+  max-width: 420px;           /* ✅ 비번찾기랑 동일 */
+  border-radius: 20px;        /* ✅ 24px -> 20px */
+  padding: 30px 25px;         /* ✅ 비번찾기랑 동일 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);  /* ✅ 그림자 약하게 */
+  border: none;               /* ✅ 필요없으면 제거 (비번찾기엔 없음) */
+  box-sizing: border-box;
+}
+
+/* ✅ 설명/타이틀 정리 */
+.find-id-title{
+  text-align: center;
+}
+.find-id-description{
+  justify-content: center;
+}
+
+/* ✅ 버튼/링크 가운데 */
+.action-row.full-button{
+  justify-content: center;
+}
+.back-btn{
+  display: block;
+  margin: 18px auto 0;
+  text-align: center;
+}
