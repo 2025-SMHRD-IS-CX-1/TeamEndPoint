@@ -1,0 +1,45 @@
+/* MyPostsPage.css */
+.myposts-container {
+    padding: 20px 20px 100px 20px;
+    background-color: #f7f9fc;
+    min-height: 100vh;
+}
+
+.myposts-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.myposts-header h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #222;
+}
+
+.post-item-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f0f0f0;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.post-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.post-meta {
+    font-size: 0.75rem;
+    color: #888;
+    margin: 0;
+}
