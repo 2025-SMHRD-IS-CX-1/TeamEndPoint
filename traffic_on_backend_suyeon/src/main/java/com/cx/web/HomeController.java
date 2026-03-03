@@ -2,7 +2,7 @@ package com.cx.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
+//수정중
 @Controller
 public class HomeController {
 	
