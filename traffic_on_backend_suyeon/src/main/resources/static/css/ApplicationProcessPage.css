@@ -1,12 +1,32 @@
 /* ApplicationProcessPage.css */
+.v3-flow-map{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+}
+/* =========================
+   1) Page Wrapper
+   ========================= */
 .v3-process-container {
     background-color: #f6f9fc;
-    min-height: 100vh;
+    background: transparent; 
     font-family: 'Pretendard', sans-serif;
-    width: 100%;
+
+    display: block;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 0;      
+    box-sizing: border-box;
+
+    /* min-height: 100vh; */     
 }
 
-/* Tab Bar */
+
+/* =========================
+   2) Tab Bar (상단 탭) (사용 시)
+   ========================= */
 .v3-tab-bar {
     display: flex;
     justify-content: space-around;
@@ -54,7 +74,21 @@
     color: #1e3a8a;
 }
 
-/* Flow Map */
+
+/* =========================
+   3) Main Content Wrapper
+   ========================= */
+.v3-process-content {
+    width: 100%;
+    max-width: 520px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+
+/* =========================
+   4) Flow Map (사용 시)
+   ========================= */
 .v3-flow-map {
     display: flex;
     flex-direction: column;
@@ -62,12 +96,12 @@
     padding: 20px;
 }
 
-.v3-flow-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 20px;
+.v3-flow-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    margin-bottom:20px;
 }
 
 .v3-step-unit {
@@ -88,53 +122,201 @@
     width: 100%;
 }
 
-/* Guide Bubble Blur */
+
+/* =========================
+   5) Guide Bubble Blur
+   ========================= */
 .guide-bubble.is-blurred {
     filter: blur(5px) opacity(0.5);
     pointer-events: none;
 }
 
-/* Login Invitation Box */
+
+/* =========================
+   6) Login Invitation
+   ========================= */
 .v3-login-invitation {
-    margin-top: 40px;
+    margin-top: 24px; 
     display: flex;
     justify-content: center;
     width: 100%;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .invitation-box {
-    background-color: white;
+    background-color: #fff;
     border: 2px solid #007bff;
     border-radius: 25px;
-    padding: 2.5rem 1.5rem;
     text-align: center;
-    width: 100%;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+
+    width: 420px;
+    max-width: 100%;
+    padding: 35px 28px;
 }
 
 .invitation-box p {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #333;
 }
 
 .invitation-box h3 {
     margin: 0.8rem 0;
-    font-size: 2.2rem;
+    font-size: 2.0rem;
     font-weight: 900;
     color: #333;
 }
 
 .invitation-login-btn {
     margin-top: 1.5rem;
-    padding: 0.8rem 2.8rem;
-    background-color: white;
+    padding: 12px 22px;
+    background-color: #fff;
     color: #333;
     border: 1.5px solid #007bff;
     border-radius: 35px;
-    font-size: 1.1rem;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
+}
+
+
+/* =========================
+   7) Responsive
+   ========================= */
+@media (max-width: 768px) {
+    .v3-process-container {
+        padding: 16px 14px;     
+    }
+
+    .v3-process-content {
+        max-width: 100%;
+    }
+
+    .invitation-box {
+        width: 100%;
+        padding: 24px 18px;
+        border-radius: 18px;
+    }
+
+    .invitation-box h3 {
+        font-size: 1.7rem;
+    }
+    
+    
+    /* ===== bottom-nav 아이콘이 안 보일 때 강제 복구 ===== */
+	.bottom-nav .nav-item svg {
+	  display: block !important;
+	  width: 24px !important;
+	  height: 24px !important;
+	  min-width: 24px !important;
+	  min-height: 24px !important;
+	  visibility: visible !important;
+	  opacity: 1 !important;
+	}
+	
+	/* 아이콘 위, 텍스트 아래로 정렬 */
+	.bottom-nav .nav-item {
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  justify-content: center;
+	  gap: 6px;
+	}
+
+	/* 색상 통일 (svg stroke 하드코딩 없어도 작동) */
+	.bottom-nav .nav-item svg { stroke: #888 !important; }
+	.bottom-nav .nav-item.active svg { stroke: #007bff !important; }
+	.bottom-nav .nav-item { color: #888; }
+	.bottom-nav .nav-item.active { color: #007bff; }
+	
+	/* =========================
+   Flow Arrow (원본 느낌)
+   ========================= */
+	:root{
+	  --arrow-color:#ff6b35;
+	}
+	
+	/* row 정렬 유틸 */
+	.v3-flow-row.justify-start{ justify-content:flex-start; }
+	.v3-flow-row.justify-end{ justify-content:flex-end; }
+	.v3-flow-row.flow-reverse{ flex-direction: row-reverse; }
+	
+	/* 가로 화살표(점선 + 삼각형) */
+	.v3-arrow-horizontal{
+	  display:flex;
+	  align-items:center;
+	  justify-content:center;
+	  gap:6px;
+	  margin: 0 10px;
+	  min-width: 60px;
+	}
+	
+	.v3-h-dot{
+	  width: 6px;
+	  height: 6px;
+	  background: var(--arrow-color);
+	  border-radius: 2px;
+	  opacity: 0.95;
+	}
+	
+	.v3-h-triangle{
+	  width: 0;
+	  height: 0;
+	  border-top: 7px solid transparent;
+	  border-bottom: 7px solid transparent;
+	  border-left: 12px solid var(--arrow-color);
+	}
+	
+	/* reverse 가로 화살표 (왼쪽 방향) */
+	.v3-arrow-horizontal.reverse .v3-h-triangle{
+	  border-left: 0;
+	  border-right: 12px solid var(--arrow-color);
+	}
+	
+	/* 세로 화살표를 담는 줄 */
+	.v3-arrow-vertical-row{
+	  width:100%;
+	  display:flex;
+	  margin: 8px 0 14px;
+	}
+	
+	.v3-arrow-vertical-row.align-right{ justify-content:flex-end; padding-right: 26px; }
+	.v3-arrow-vertical-row.align-left{ justify-content:flex-start; padding-left: 26px; }
+	
+	/* 세로 화살표(라인 + 삼각형) */
+	.v3-v-arrow-unit{
+	  width: 22px;
+	  display:flex;
+	  flex-direction: column;
+	  align-items:center;
+	  color: var(--arrow-color);
+	}
+	
+	.v3-v-lines{
+	  width: 0;
+	  height: 22px;
+	  border-left: 4px solid var(--arrow-color);
+	  opacity: 0.95;
+	}
+	
+	.v3-v-triangle{
+	  width: 0;
+	  height: 0;
+	  border-left: 9px solid transparent;
+	  border-right: 9px solid transparent;
+	  border-top: 12px solid var(--arrow-color);
+	}
+	
+	/* 모바일에서 간격 살짝 줄이기 */
+	@media (max-width: 420px){
+	  .v3-arrow-vertical-row.align-right{ padding-right: 18px; }
+	  .v3-arrow-vertical-row.align-left{ padding-left: 18px; }
+	  .v3-arrow-horizontal{ min-width: 54px; gap:5px; }
+	}
+	
+    
 }
