@@ -249,7 +249,9 @@
       </div>
 
       <div class="profile-name-container">
-        <span class="profile-name-text" id="userName">펭리미 관리자님</span>
+		<span class="profile-name-text">
+		  ${sessionScope.loginMember.memName} 관리자님
+		</span>
         <div class="profile-name-underline"></div>
       </div>
     </div>
