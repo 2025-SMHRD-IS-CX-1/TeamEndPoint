@@ -1,4 +1,3 @@
-// 하라 수정중
 package com.cx.web;
 
 import jakarta.servlet.http.Cookie;
@@ -69,7 +68,7 @@ public class LoginController {
     public String loginProcess(@RequestParam String username,
                                @RequestParam String password,
                                @RequestParam(required = false, defaultValue = "user") String activeTab,
-                               @RequestParam(required = false) String keepLoggegIn,
+                               @RequestParam(required = false, name="keepLoggedIn") String keepLoggedIn, // ✅ 여기!
                                HttpSession session,
                                HttpServletResponse response) {
 
@@ -98,13 +97,12 @@ public class LoginController {
         session.setAttribute("loginRole", "USER");
         
      // ✅ 유저만 로그인 유지(자동로그인) 쿠키 저장
-        if ("user".equals(activeTab) && "on".equals(keepLoggegIn)) {
+        if ("user".equals(activeTab) && "on".equals(keepLoggedIn)) {
             Cookie c = new Cookie("keepLoginId", loginMember.getMemID());
-            c.setMaxAge(60 * 60 * 24 * 7); // 7일
+            c.setMaxAge(60 * 60 * 24 * 7);
             c.setPath("/");
             response.addCookie(c);
         } else {
-            // 체크 안 했으면 기존 쿠키 삭제(깔끔하게)
             Cookie c = new Cookie("keepLoginId", "");
             c.setMaxAge(0);
             c.setPath("/");
