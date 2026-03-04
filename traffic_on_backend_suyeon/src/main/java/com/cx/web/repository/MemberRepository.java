@@ -17,6 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 
 	Optional<Member> findByMemIDAndMemPW(String memID, String memPW);
 	boolean existsByMemID(String memID);
+	Optional<Member> findByMemID(String memID);
 	
 	@Query("SELECT COUNT(m) FROM Member m WHERE FUNCTION('MONTH',m.joinedAt) = FUNCTION('MONTH',CURRENT_DATE) AND FUNCTION('YEAR', m.joinedAt) = FUNCTION('YEAR', CURRENT_DATE)")
 	Long countThisMonth();

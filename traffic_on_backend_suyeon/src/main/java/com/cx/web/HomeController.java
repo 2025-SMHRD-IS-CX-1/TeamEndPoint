@@ -1,52 +1,96 @@
 package com.cx.web;
 
+import java.util.Optional;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.cx.web.entity.Member;
+import com.cx.web.repository.MemberRepository;
 
-//수정중
 @Controller
 public class HomeController {
-	
-    // 로그인 여부 체크 함수 (여러 페이지에서 재사용)
+
+    private final MemberRepository memberRepository;
+
+    public HomeController(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    // ✅ 쿠키 자동로그인: 세션 없을 때만 복구 (관리자는 절대 X)
+    private void tryAutoLogin(HttpSession session, HttpServletRequest request) {
+        if (session.getAttribute("loginMember") != null) return; // 이미 로그인 상태면 끝
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return;
+
+        String keepLoginId = null;
+        for (Cookie c : cookies) {
+            if ("keepLoginId".equals(c.getName())) {
+                keepLoginId = c.getValue();
+                break;
+            }
+        }
+
+        if (keepLoginId == null || keepLoginId.isBlank()) return;
+
+        Optional<Member> opt = memberRepository.findByMemID(keepLoginId);
+        if (opt.isEmpty()) return;
+
+        Member m = opt.get();
+
+        // ✅ 관리자 자동로그인 차단
+        if ("ADMIN".equalsIgnoreCase(m.getMemType())) return;
+
+        // (선택) 정지/비활성 계정이면 막고 싶으면 여기에 조건 추가
+        // 예: if (!"ACTIVE".equalsIgnoreCase(m.getStatus())) return;
+
+        session.setAttribute("loginMember", m);
+        session.setAttribute("loginRole", "USER");
+    }
+
+    // 로그인 여부 체크
     private boolean isLoggedIn(HttpSession session) {
         return session != null && session.getAttribute("loginMember") != null;
     }
-	
-	@GetMapping("/")
-	public String index(HttpSession session, Model model) {
-	    boolean isLoggedIn = (session.getAttribute("loginMember") != null);
-	    model.addAttribute("isLoggedIn", isLoggedIn);
-	    return "index";
-	}
-	
-	@GetMapping("/chat")
-	public String chatPage(HttpSession session, Model model) { // HttpSession, Model 추가
-        boolean isLoggedIn = (session.getAttribute("loginMember") != null);
-        model.addAttribute("isLoggedIn", isLoggedIn);
-		return "chat";   // chat.jsp
-	}
-	
+
+    @GetMapping("/")
+    public String index(HttpSession session, HttpServletRequest request, Model model) {
+        tryAutoLogin(session, request);
+        model.addAttribute("isLoggedIn", isLoggedIn(session));
+        return "index";
+    }
+
+    @GetMapping("/chat")
+    public String chatPage(HttpSession session, HttpServletRequest request, Model model) {
+        tryAutoLogin(session, request);
+        model.addAttribute("isLoggedIn", isLoggedIn(session));
+        return "chat";
+    }
+
     @GetMapping("/events")
-    public String eventsPage(HttpSession session, Model model) {
+    public String eventsPage(HttpSession session, HttpServletRequest request, Model model) {
+        tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
         return "events";
     }
-    
+
     @GetMapping("/about")
-    public String aboutPage(HttpSession session, Model model) {
+    public String aboutPage(HttpSession session, HttpServletRequest request, Model model) {
+        tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
         return "about";
     }
-    
-    // 신청절차 안내 페이지 (내 링크 : application-process)
+
     @GetMapping("/application-process")
-    public String applicationProcess(HttpSession session, Model model) {
+    public String applicationProcess(HttpSession session, HttpServletRequest request, Model model) {
+        tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
-        return "process"; // application-process.jsp
+        return "process";
     }
-    
 }

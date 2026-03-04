@@ -1,43 +1,69 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <!DOCTYPE html>
-    <html>
-
-    <head>
-        <meta charset="UTF-8">
-        <title>TRAFFIC:ON - ON! 교통 정보</title>
-        <link rel="stylesheet" href="/css/BoardPage.css">
-        <script src="https://unpkg.com/lucide@latest"></script>
-    </head>
-
-    <body>
-        <div class="board-container" id="boardContainer">
-            <div class="board-header-top">
-                <div class="board-title-section">
-                    <h1>ON! 교통 정보</h1>
-                    <span class="post-count">0</span>
-                </div>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TRAFFIC:ON - ON! 교통 정보</title>
+    <link rel="stylesheet" href="/css/BoardPage.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="board-container" id="boardContainer">
+        <div class="board-header-top">
+            <div class="board-title-section">
+                <h1>ON! 교통 정보</h1>
+                <span class="post-count">${boards.size()}</span>
             </div>
+        </div>
 
-            <!-- 로그인 상태에 따라 'is-blurred' 클래스 추가 제어 -->
-            <div class="board-table-wrapper" id="boardTableWrapper">
-                <table class="board-table-refined">
-                    <thead>
+        <!-- 게시판 테이블 (데스크톱용) -->
+        <div class="board-table-wrapper" id="boardTableWrapper">
+            <table class="board-table-refined">
+                <thead>
+                    <tr>
+                        <th class="col-no">No</th>
+                        <th class="col-title">제목</th>
+                        <th class="col-author">아이디</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="board" items="${boards}">
                         <tr>
-                            <th class="col-no">No</th>
-                            <th class="col-title">제목</th>
-                            <th class="col-author">아이디</th>
+                            <td>${board.boardId}</td>
+                            <td class="text-left">${board.title}</td>
+                            <td>${board.memId}</td>
                         </tr>
-                    </thead>
-                    <tbody>
+                    </c:forEach>
+                    <c:if test="${boards.size() == 0}">
                         <tr>
-                            <td colSpan="3" class="empty-row">
-                                등록된 게시물이 없습니다.
-                            </td>
+                            <td colSpan="3" class="empty-row">등록된 게시물이 없습니다.</td>
                         </tr>
-                    </tbody>
-                </table>
+                    </c:if>
+                </tbody>
+            </table>
+
+            <!-- 모바일 카드형 UI -->
+            <div class="board-card-list">
+                <c:forEach var="board" items="${boards}">
+                    <div class="board-card">
+                        <div class="board-card-title">${board.title}</div>
+                        <div class="board-card-meta">
+                            <span>No. ${board.boardId}</span>
+                            <span>${board.memId}</span>
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:if test="${boards.size() == 0}">
+                    <div class="board-card">
+                        <div class="board-card-title">등록된 게시물이 없습니다.</div>
+                    </div>
+                </c:if>
             </div>
+        </div>
 
+        <!-- 로그인 여부에 따라 조건부 렌더링 -->
+        <c:if test="${!isLoggedIn}">
             <!-- 비회원 전용 로그인 유도 박스 -->
             <div id="loginInvitation" class="board-login-invitation">
                 <div class="board-invitation-box">
@@ -49,9 +75,11 @@
                     </button>
                 </div>
             </div>
+        </c:if>
 
-            <!-- 회원 전용 푸터 (초기에는 숨김 처리 가능) -->
-            <div id="boardFooter" class="board-footer-refined" style="display: none;">
+        <c:if test="${isLoggedIn}">
+            <!-- 회원 전용 푸터 -->
+            <div id="boardFooter" class="board-footer-refined">
                 <div class="board-footer-divider"></div>
                 <button class="write-btn">글쓰기</button>
                 <div class="pagination">
@@ -60,24 +88,20 @@
                     <i data-lucide="chevron-right" class="pagi-arrow disabled"></i>
                 </div>
             </div>
-        </div>
+        </c:if>
+    </div>
 
-        <script>
-            lucide.createIcons();
+    <script>
+        lucide.createIcons();
 
-            // 서버 세션 등을 통해 결정될 로그인 상태
-            let isLoggedIn = false;
+        // Controller에서 전달된 로그인 여부를 JS에서도 활용 가능
+        let isLoggedIn = "${isLoggedIn}" === "true";
 
-            if (isLoggedIn) {
-                document.getElementById('boardTableWrapper').classList.remove('is-blurred');
-                document.getElementById('loginInvitation').style.display = 'none';
-                document.getElementById('boardFooter').style.display = 'flex';
-                document.getElementById('boardContainer').classList.remove('not-logged-in');
-            } else {
-                document.getElementById('boardTableWrapper').classList.add('is-blurred');
-                document.getElementById('boardContainer').classList.add('not-logged-in');
-            }
-        </script>
-    </body>
-
-    </html>
+        if (isLoggedIn) {
+            document.getElementById('boardTableWrapper').classList.remove('is-blurred');
+        } else {
+            document.getElementById('boardTableWrapper').classList.add('is-blurred');
+        }
+    </script>
+</body>
+</html>

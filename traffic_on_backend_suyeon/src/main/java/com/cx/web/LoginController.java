@@ -1,6 +1,7 @@
-// 하라 수정중
 package com.cx.web;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDate;
@@ -67,7 +68,9 @@ public class LoginController {
     public String loginProcess(@RequestParam String username,
                                @RequestParam String password,
                                @RequestParam(required = false, defaultValue = "user") String activeTab,
-                               HttpSession session) {
+                               @RequestParam(required = false, name="keepLoggedIn") String keepLoggedIn, // ✅ 여기!
+                               HttpSession session,
+                               HttpServletResponse response) {
 
         Optional<Member> opt = memberRepository.findByMemIDAndMemPW(username, password);
 
@@ -91,7 +94,21 @@ public class LoginController {
         }
 
         session.setAttribute("loginMember", loginMember);
-        session.setAttribute("loginRole", "USER");  
+        session.setAttribute("loginRole", "USER");
+        
+     // ✅ 유저만 로그인 유지(자동로그인) 쿠키 저장
+        if ("user".equals(activeTab) && "on".equals(keepLoggedIn)) {
+            Cookie c = new Cookie("keepLoginId", loginMember.getMemID());
+            c.setMaxAge(60 * 60 * 24 * 7);
+            c.setPath("/");
+            response.addCookie(c);
+        } else {
+            Cookie c = new Cookie("keepLoginId", "");
+            c.setMaxAge(0);
+            c.setPath("/");
+            response.addCookie(c);
+        }
+        
         return "redirect:/";
     }
 
