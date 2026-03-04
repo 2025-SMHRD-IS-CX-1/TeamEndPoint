@@ -68,30 +68,18 @@
             </g>
 
             <g class="district-labels" pointer-events="none">
-              <text x="130" y="220" class="map-label">광산구</text>
-              <text x="320" y="150" class="map-label">북구</text>
-              <text x="235" y="325" class="map-label-sm">서구</text>
-              <text x="230" y="420" class="map-label-sm">남구</text>
-              <text x="360" y="350" class="map-label-sm">동구</text>
+				<text x="150" y="240" class="map-label">광산구</text>
+				<text x="330" y="165" class="map-label">북구</text>
+				<text x="250" y="340" class="map-label-sm">서구</text>
+				<text x="240" y="435" class="map-label-sm">남구</text>
+				<text x="380" y="365" class="map-label-sm">동구</text>
             </g>
           </svg>
         </div>
       </div>
-
-      <div class="map-legend">
-        <div class="legend-title">민원 발생 현황</div>
-        <div class="legend-item">
-          <span class="color-box color-high"></span><span>높음</span>
-        </div>
-        <div class="legend-item">
-          <span class="color-box color-medium"></span><span>보통</span>
-        </div>
-        <div class="legend-item">
-          <span class="color-box color-low"></span><span>낮음</span>
-        </div>
-      </div>
-    </div>
-
+</div>
+	  
+	  
     <!-- RIGHT: 키워드 + 통계 -->
     <div class="right-column">
       <div class="dashboard-card">
@@ -213,25 +201,26 @@
 
     const pie = document.getElementById("pieChart");
 
-    // ✅ 1) 매번 상태 초기화 (이게 핵심)
+    // 상태 초기화
     pie.classList.remove("empty");
-    pie.style.background = "";     // 이전 conic/transparent 제거
-    pie.style.border = "";         // empty에서 border 줬으면 초기화
+    pie.style.background = "";
+    pie.style.border = "";
 
-    // 라벨 갱신
+    // 라벨
     document.getElementById("malePct").textContent = malePct + "%";
     document.getElementById("femalePct").textContent = femalePct + "%";
 
-    // ✅ 2) 데이터 없으면 empty 모드
+    // 둘 다 0이면 빈 도넛
     if (malePct === 0 && femalePct === 0) {
       pie.classList.add("empty");
       pie.style.background = "transparent";
       return;
     }
 
-    // ✅ 3) 데이터 있으면 conic-gradient로 그리기
+    // ✅ 남자 0이면 여자 100으로 꽉 차게 / 남자 100이면 남자만 꽉 차게
+    // JSP EL 방지: 문자열 더하기 방식 유지
     pie.style.background =
-      `conic-gradient(#5c85fd 0% ${malePct}%, #ff8a65 ${malePct}% 100%)`;
+      "conic-gradient(#5c85fd 0% " + malePct + "%, #ff8a65 " + malePct + "% 100%)";
   }
 
   function renderAge(data) {

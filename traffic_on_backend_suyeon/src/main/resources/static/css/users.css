@@ -499,8 +499,7 @@ body { outline: 5px solid red !important; }
 
 /* ✅ 테이블 영역만 스크롤, 페이지 길이 폭발 방지 */
 .table-scroll{
-  max-height: 420px;   /* 원하면 500px 등 조절 */
-  overflow-y: auto;
+  
 }
 
 /* 스크롤 생겨도 헤더 고정 느낌(선택) */
@@ -512,8 +511,6 @@ body { outline: 5px solid red !important; }
 
 /* ✅ 테이블만 스크롤 되게 (기존 overflow:hidden 덮어쓰기) */
 .table-container {
-  max-height: 420px;          /* 원하는 높이로 조절 */
-  overflow-y: auto !important; /* ★ 중요: hidden을 이김 */
   overflow-x: hidden;
 }
 
@@ -528,4 +525,12 @@ body { outline: 5px solid red !important; }
   top: 0;
   z-index: 5;
   background-color: #313c4a;  /* 헤더색 유지 */
+}
+
+.pagination{
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: #f1f3f6; /* 페이지 배경색이랑 맞춤 */
+  padding: 12px 0;
 }

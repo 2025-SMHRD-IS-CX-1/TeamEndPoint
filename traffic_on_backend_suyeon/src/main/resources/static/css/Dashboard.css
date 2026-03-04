@@ -835,3 +835,43 @@ html, body {
   border: 10px solid #e9edf3;  /* 도넛 링 느낌 */
   border-radius: 50%;
 }
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-container svg {
+  width: 650px;   /* ← 숫자 키우면 지도 커짐 */
+  height: auto;
+}
+
+svg text {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: 700;
+  font-size: 20px;  /* 조금 키우면 더 보기 좋음 */
+}
+
+.map-label,
+.map-label-sm {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: 800;
+  fill: #2f2f2f;
+}
+
+.district-map{
+  width: 520px;      /* 여기 숫자로 조절 */
+  height: auto;
+  display: block;
+  margin: 0 auto;    /* 가운데 정렬 */
+}
+
+.gwangju-map-svg {
+  width: 520px;   /* 숫자 조절해서 크기 맞추기 */
+  height: auto;
+  display: block;
+  margin: 0 auto; /* 가운데 정렬 */
+}

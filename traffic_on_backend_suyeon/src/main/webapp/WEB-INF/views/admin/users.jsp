@@ -149,7 +149,7 @@
       </form>
 
       <!-- ===== 테이블 ===== -->
-      <div class="table-container table-scroll">
+      <div class="table-container">
         <table class="user-table">
           <thead>
             <tr>
