@@ -15,7 +15,7 @@
 
     <!-- Header -->
     <header class="login-header">
-      <img src="${pageContext.request.contextPath}/images/mascot.png"
+      <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
            alt="Mascot"
            class="mascot-img-login" />
       <h1 class="login-logo-text">TRAFFIC:ON</h1>

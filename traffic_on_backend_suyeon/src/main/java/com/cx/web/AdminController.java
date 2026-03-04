@@ -25,6 +25,7 @@ import com.cx.web.entity.Member;
 import com.cx.web.repository.AdminRepository;
 import com.cx.web.repository.BoardRepository;
 import com.cx.web.repository.MemberRepository;
+import com.cx.web.service.DashboardKeywordService;
 
 import jakarta.transaction.Transactional;
 
@@ -35,13 +36,17 @@ public class AdminController {
     private final AdminRepository adminRepository;
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final DashboardKeywordService dashboardKeywordService;
 
     public AdminController(MemberRepository memberRepository, 
     					   AdminRepository adminRepository,
-    					   BoardRepository boardRepository) {
-        this.memberRepository = memberRepository;
+    					   BoardRepository boardRepository,
+    					   DashboardKeywordService dashboardKeywordService) {
+        
+    	this.memberRepository = memberRepository;
         this.adminRepository = adminRepository;
         this.boardRepository = boardRepository;
+        this.dashboardKeywordService = dashboardKeywordService;
     }
 
     @GetMapping("/dashboard")
@@ -52,10 +57,10 @@ public class AdminController {
     @GetMapping("/boards")
     public String boards(
             @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             Model model
     ) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+    	Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage;
 
@@ -378,15 +383,20 @@ public class AdminController {
     @ResponseBody
     public Map<String, Object> dashboardStats(@RequestParam String district) {
 
-        List<Member> members = memberRepository.findByMemTypeAndMemAddr("USER", district);
+    	List<Member> members = memberRepository.findByMemTypeAndMemAddrContaining("USER", district);
 
-        // 성별 퍼센트
+     // 성별 퍼센트
         long maleCnt = members.stream().filter(m -> "M".equals(m.getMemGender())).count();
         long femaleCnt = members.stream().filter(m -> "F".equals(m.getMemGender())).count();
         long genderTotal = maleCnt + femaleCnt;
 
-        int malePct = genderTotal == 0 ? 0 : (int) Math.round(maleCnt * 100.0 / genderTotal);
-        int femalePct = 100 - malePct;
+        int malePct = 0;
+        int femalePct = 0;
+
+        if (genderTotal > 0) {
+            malePct = (int) Math.round(maleCnt * 100.0 / genderTotal);
+            femalePct = 100 - malePct; // 합 100 보정
+        }
 
         Map<String, Object> gender = new HashMap<>();
         gender.put("male", malePct);
@@ -435,4 +445,13 @@ public class AdminController {
         result.put("age", age);
         return result;
     }
+    
+    @GetMapping("/dashboard/keywords")
+    @ResponseBody
+    public List<Map<String, Object>> dashboardKeywords(
+            @RequestParam String district) {
+
+        return dashboardKeywordService.getKeywordsByDistrict(district);
+    }
+    
    }
