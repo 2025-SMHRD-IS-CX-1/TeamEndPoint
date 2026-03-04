@@ -68,11 +68,11 @@
             </g>
 
             <g class="district-labels" pointer-events="none">
-				<text x="150" y="240" class="map-label">광산구</text>
-				<text x="330" y="165" class="map-label">북구</text>
-				<text x="250" y="340" class="map-label-sm">서구</text>
-				<text x="240" y="435" class="map-label-sm">남구</text>
-				<text x="380" y="365" class="map-label-sm">동구</text>
+				<text x="120" y="225" class="map-label">광산구</text>
+				<text x="315" y="170" class="map-label">북구</text>
+				<text x="235" y="305" class="map-label-sm">서구</text>
+				<text x="240" y="410" class="map-label-sm">남구</text>
+				<text x="395" y="345" class="map-label-sm">동구</text>
             </g>
           </svg>
         </div>
@@ -131,7 +131,8 @@
       </div>
 
       <div class="profile-name-container">
-        <span class="profile-name-text" id="userName">펭리미 관리자님</span>
+        <span class="profile-name-text">
+			${sessionScope.loginMember.memName} 관리자님</span>
         <div class="profile-name-underline"></div>
       </div>
     </div>

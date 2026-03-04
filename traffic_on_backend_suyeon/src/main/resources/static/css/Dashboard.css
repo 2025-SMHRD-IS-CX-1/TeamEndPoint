@@ -9,12 +9,12 @@ html, body {
 }
 
 .admin-dashboard {
-    height: 100vh;         /* ✅ min-height → height */
-    overflow: hidden;      /* ✅ 바깥 스크롤 제거 */
     background-color: #f1f3f6;
     display: flex;
     flex-direction: column;
     width: 100%;
+    min-height: 100vh;
+    overflow: visible;
 }
 
 /* Header Styles */
@@ -847,13 +847,6 @@ html, body {
   height: auto;
 }
 
-svg text {
-  text-anchor: middle;
-  dominant-baseline: middle;
-  font-weight: 700;
-  font-size: 20px;  /* 조금 키우면 더 보기 좋음 */
-}
-
 .map-label,
 .map-label-sm {
   text-anchor: middle;
@@ -874,4 +867,37 @@ svg text {
   height: auto;
   display: block;
   margin: 0 auto; /* 가운데 정렬 */
+}
+
+html, body {
+  height: 100%;
+}
+
+/* 관리자 전체 레이아웃 */
+.admin-dashboard {
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* 헤더 위, 본문 아래 */
+  overflow: hidden;       /* 내부에서만 스크롤 만들거라 */
+}
+
+/* 헤더는 고정 높이 */
+.dashboard-header {
+  flex: 0 0 64px;  /* 헤더 높이 맞춰 (지금 64px 추정) */
+}
+
+/* ✅ 오른쪽 본문(초록색 스크롤 담당) */
+.dashboard-main {
+  flex: 1;           /* 남은 높이 전부 */
+  min-height: 0;
+  overflow-y: auto;   /* ✅ 여기서만 스크롤 */
+}
+
+.map-label,
+.map-label-sm{
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: 900;
+  fill: #2f2f2f;
+  text-shadow: 0 2px 4px rgba(255,255,255,0.8);
 }

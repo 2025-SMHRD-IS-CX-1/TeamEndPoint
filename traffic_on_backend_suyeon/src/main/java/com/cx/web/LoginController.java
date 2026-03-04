@@ -84,7 +84,8 @@ public class LoginController {
                 return "redirect:/login?error=notAdmin&tab=admin";
             }
             session.setAttribute("loginMember", loginMember);
-            session.setAttribute("loginRole", "ADMIN");  
+            session.setAttribute("loginRole", "ADMIN");
+            session.setAttribute("loginAdminName", loginMember.getMemName());
             
             return "redirect:/admin/dashboard";
         }
