@@ -50,9 +50,19 @@
         <!-- Bottom Input Area -->
         <div class="chat-input-wrapper">
             <div class="chat-input-bar">
-                <button class="chat-plus-btn" type="button">
+
+                <!-- ✅ + 버튼 (이미지 업로드 트리거) -->
+                <button class="chat-plus-btn" id="plusBtn" type="button">
                     <i data-lucide="plus" size="24"></i>
                 </button>
+
+                <!-- ✅ 숨김 파일 선택 input (이미지 업로드용) -->
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/jpeg,image/jpg,image/png"
+                    style="display:none"
+                />
 
                 <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
 
@@ -74,16 +84,61 @@
             marked.setOptions({ breaks: true });
         }
 
+        // ✅ 방(room) idx (텍스트와 이미지 둘 다 동일하게 보냄)
+        const CROOM_IDX = 2;
+
         window.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
+
+            // ✅ 이미지 업로드 DOM
+            const plusBtn = document.getElementById('plusBtn');
+            const imageInput = document.getElementById('imageInput');
+
+            // ✅ + 버튼 클릭 → 파일 선택창
+            plusBtn.addEventListener('click', () => {
+                if (!isLoggedIn) {
+                    addMessage("이미지 분석 기능은 로그인 후 이용 가능합니다.", "bot");
+                    showLoginNudge();
+                    scrollToBottom();
+                    return;
+                }
+                imageInput.value = ""; // 같은 파일 재선택 가능
+                imageInput.click();
+            });
+
+            // ✅ 파일 선택 → 업로드/분석 요청
+            imageInput.addEventListener('change', async (e) => {
+                if (!isLoggedIn) return;
+
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+
+                // ✅ 타입 체크
+                const okTypes = ["image/jpeg", "image/png"];
+                if (!okTypes.includes(file.type)) {
+                    addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
+                    scrollToBottom();
+                    return;
+                }
+
+                // ✅ (선택) 너무 큰 파일 방지 (예: 10MB)
+                const MAX_MB = 10;
+                if (file.size > MAX_MB * 1024 * 1024) {
+                    addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
+                    scrollToBottom();
+                    return;
+                }
+
+                await sendImage(file);
+            });
 
             if (isLoggedIn) {
                 input.disabled = false;
                 input.placeholder = "교통 민원 내용을 입력해 주세요.";
                 sendBtn.disabled = false;
 
-                // 버튼 클릭 전송..
+                // 버튼 클릭 전송
                 sendBtn.addEventListener('click', () => sendMessage());
 
                 // Enter 전송 (한글 조합중이면 무시)
@@ -102,8 +157,6 @@
             const keywordSection = document.getElementById('keywordSection');
             if (keywordSection) keywordSection.style.display = 'none';
 
-            // ✅ 중복 방지: sendMessage에서 user. 메시지 추가하므로 여기서 addMessage 하지 않음
-
             if (!isLoggedIn) {
                 setTimeout(() => {
                     addMessage(`'${keyword}'에 대해 궁금하시군요! 로그인 후 더 자세히 안내해 드릴게요.`, 'bot');
@@ -116,7 +169,7 @@
             sendMessage(keyword);
         }
 
-        // ✅ 실제 Spring API 호출
+        // ✅ 실제 Spring API 호출 (텍스트)
         async function sendMessage(forcedText) {
             if (!isLoggedIn) return;
 
@@ -137,7 +190,7 @@
             scrollToBottom();
 
             try {
-                const payload = { text, croom_idx: 2 };
+                const payload = { text, croom_idx: CROOM_IDX };
 
                 const res = await fetch("/api/chat", {
                     method: "POST",
@@ -161,6 +214,7 @@
                     data.response ??
                     data.message ??
                     data.result ??
+                    data.analysis_result ??
                     (typeof data === "string" ? data : JSON.stringify(data));
 
                 replaceMessage(loadingEl, answer, "bot");
@@ -169,6 +223,65 @@
             } catch (err) {
                 console.error(err);
                 replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + err.message, "bot");
+                scrollToBottom();
+            }
+        }
+
+        // ✅ 이미지 업로드/분석 호출 (multipart/form-data)
+        async function sendImage(file) {
+            const keywordSection = document.getElementById('keywordSection');
+            if (keywordSection) keywordSection.style.display = 'none';
+
+            // ✅ 유저 이미지 버블(미리보기) 출력
+            addImageMessage(file, 'user');
+            scrollToBottom();
+
+            // ✅ 타이핑 표시
+            const loadingEl = showTyping();
+            scrollToBottom();
+
+            try {
+                const formData = new FormData();
+
+                // ✅ FastAPI docs 스펙: file(required), croom_idx(Integer), text(String)
+                formData.append("file", file);
+                formData.append("croom_idx", String(CROOM_IDX));
+
+                // text는 선택값이지만 스펙에 있으니 같이 보냄 (원하면 빈값 유지)
+                const input = document.getElementById('chatInput');
+                formData.append("text", (input.value || "").trim()); // 또는 "" 로 고정해도 됨
+
+                // ✅ Spring 이미지 업로드 API: POST /api/chat/image
+                const res = await fetch("/api/chat/image", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const raw = await res.text();
+
+                if (!res.ok) {
+                    replaceMessage(loadingEl, "❌ 이미지 분석 서버 오류: " + raw, "bot");
+                    scrollToBottom();
+                    return;
+                }
+
+                let data;
+                try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
+
+                const answer =
+                    data.analysis_result ??
+                    data.answer ??
+                    data.response ??
+                    data.message ??
+                    data.result ??
+                    (typeof data === "string" ? data : JSON.stringify(data));
+
+                replaceMessage(loadingEl, answer, "bot");
+                scrollToBottom();
+
+            } catch (err) {
+                console.error(err);
+                replaceMessage(loadingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
                 scrollToBottom();
             }
         }
@@ -202,6 +315,36 @@
             const bubble = document.createElement('div');
             bubble.className = "message-bubble user";
             bubble.innerText = text;
+            messagesArea.appendChild(bubble);
+            return bubble;
+        }
+
+        // ✅ 유저 이미지 메시지 추가
+        function addImageMessage(file, sender) {
+            const messagesArea = document.getElementById('messagesArea');
+            const url = URL.createObjectURL(file);
+
+            if (sender === "bot") {
+                const wrapper = document.createElement('div');
+                wrapper.className = "bot-wrapper";
+
+                const content = document.createElement('div');
+                content.className = "bot-content";
+
+                const bubble = document.createElement('div');
+                bubble.className = "message-bubble bot";
+                bubble.innerHTML = `<img src="${url}" class="chat-image-preview" alt="uploaded image" />`;
+
+                content.appendChild(bubble);
+                wrapper.appendChild(content);
+
+                messagesArea.appendChild(wrapper);
+                return bubble;
+            }
+
+            const bubble = document.createElement('div');
+            bubble.className = "message-bubble user";
+            bubble.innerHTML = `<img src="${url}" class="chat-image-preview" alt="uploaded image" />`;
             messagesArea.appendChild(bubble);
             return bubble;
         }
