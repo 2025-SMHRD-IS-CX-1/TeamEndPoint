@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/api")
 public class ChatApiController {
 
-    // FastAPI 서버 주소...
+    // FastAPI 서버 주소....
     private static final String FASTAPI_CHAT_URL = "http://localhost:8000/api/chat";
 
     private final RestTemplate restTemplate = new RestTemplate();

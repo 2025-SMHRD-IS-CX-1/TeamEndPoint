@@ -104,7 +104,7 @@
    Bubbles
 ======================= */
 
-/* 유저 말풍선  */
+/* 유저 말풍선   */
 #messagesArea .message-bubble.user {
   align-self: flex-end;
   max-width: 60%;

@@ -102,7 +102,7 @@
             const keywordSection = document.getElementById('keywordSection');
             if (keywordSection) keywordSection.style.display = 'none';
 
-            // ✅ 중복 방지: sendMessage에서 user 메시지 추가하므로 여기서 addMessage 하지 않음
+            // ✅ 중복 방지: sendMessage에서 user. 메시지 추가하므로 여기서 addMessage 하지 않음
 
             if (!isLoggedIn) {
                 setTimeout(() => {
