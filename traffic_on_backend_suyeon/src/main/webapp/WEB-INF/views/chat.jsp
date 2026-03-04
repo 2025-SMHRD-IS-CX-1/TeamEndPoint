@@ -141,7 +141,7 @@
                 // 버튼 클릭 전송
                 sendBtn.addEventListener('click', () => sendMessage());
 
-                // Enter 전송 (한글 조합중이면 무시)
+                // Enter 전송 (한글 조합중이면 무시.)
                 input.addEventListener('keydown', (e) => {
                     if (e.isComposing) return;
                     if (e.key === 'Enter') {

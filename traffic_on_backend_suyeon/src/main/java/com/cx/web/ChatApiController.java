@@ -18,7 +18,7 @@ public class ChatApiController {
     // ✅ FastAPI 서버 주소 (텍스트 채팅)
     private static final String FASTAPI_CHAT_URL = "http://localhost:8000/api/chat";
 
-    // ✅ FastAPI 이미지 분석 엔드포인트 (네 FastAPI docs 스샷 기준)
+    // ✅ FastAPI 이미지 분석 엔드포인트 (FastAPI docs 기준)
     // POST /api/media/image
     private static final String FASTAPI_IMAGE_URL = "http://localhost:8000/api/media/image";
 
@@ -54,18 +54,15 @@ public class ChatApiController {
     /**
      * ✅ 이미지 업로드/분석 -> Spring(/api/chat/image) -> FastAPI(/api/media/image)
      *
-     * FastAPI docs에 multipart/form-data 필드가:
-     * - file (required)
-     * - croom_idx (Integer)
-     * - text (String)
-     *
-     * 이걸 그대로 맞춰서 전달함.
+     * ✅ 400 invalid_image_format (Invalid MIME type) 해결 핵심:
+     * - FastAPI로 보낼 때 file 파트에 Content-Type(image/jpeg, image/png) + filename을 명확히 붙여서 전달
+     * - @RequestParam 사용 (415 이슈 방지)
      */
     @PostMapping(value = "/chat/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> analyzeImage(
-            @RequestPart("file") MultipartFile file,
-            @RequestPart(value = "croom_idx", required = false) Integer croomIdx,
-            @RequestPart(value = "text", required = false) String text
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "croom_idx", required = false) Integer croomIdx,
+            @RequestParam(value = "text", required = false) String text
     ) {
 
         if (file == null || file.isEmpty()) {
@@ -75,21 +72,42 @@ public class ChatApiController {
         }
 
         try {
-            // ✅ FastAPI로 multipart 전달용 body 구성
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-            ByteArrayResource fileAsResource = new ByteArrayResource(file.getBytes()) {
+            // ✅ 파일 파트 헤더(콘텐츠 타입 / 파일명) 강제 세팅
+            HttpHeaders fileHeaders = new HttpHeaders();
+
+            MediaType fileContentType = MediaType.APPLICATION_OCTET_STREAM;
+            if (file.getContentType() != null && !file.getContentType().isBlank()) {
+                fileContentType = MediaType.parseMediaType(file.getContentType());
+            } else {
+                // contentType이 비어있을 때 fallback
+                fileContentType = MediaType.IMAGE_JPEG;
+            }
+            fileHeaders.setContentType(fileContentType);
+
+            String filename = (file.getOriginalFilename() == null || file.getOriginalFilename().isBlank())
+                    ? "upload.jpg"
+                    : file.getOriginalFilename();
+
+            ContentDisposition cd = ContentDisposition.builder("form-data")
+                    .name("file")
+                    .filename(filename)
+                    .build();
+            fileHeaders.setContentDisposition(cd);
+
+            ByteArrayResource fileResource = new ByteArrayResource(file.getBytes()) {
                 @Override
                 public String getFilename() {
-                    // FastAPI에서 filename이 필요할 때 대비
-                    return file.getOriginalFilename();
+                    return filename;
                 }
             };
 
-            // ✅ FastAPI에서도 key 이름이 "file" 이어야 함
-            body.add("file", fileAsResource);
+            // ✅ "file" 파트를 HttpEntity로 감싸서 multipart에 넣기. (중요)
+            HttpEntity<ByteArrayResource> filePart = new HttpEntity<>(fileResource, fileHeaders);
+            body.add("file", filePart);
 
-            // ✅ FastAPI 스펙에 맞춰 추가 필드도 같이 전달 (없으면 생략)
+            // ✅ FastAPI 스펙 필드들도 전달
             if (croomIdx != null) body.add("croom_idx", String.valueOf(croomIdx));
             if (text != null && !text.trim().isEmpty()) body.add("text", text.trim());
 
