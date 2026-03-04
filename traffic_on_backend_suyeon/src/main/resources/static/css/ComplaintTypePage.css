@@ -49,3 +49,63 @@
     color: #777;
     margin: 0;
 }
+
+/* 헤더 내부 요소 정렬 */
+.back-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+/* h2 중앙 정렬하고 싶으면 */
+.page-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 18px;
+}
+
+/* 하단 네비 */
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+/* 하단 네비 버튼 */
+.bottom-nav button {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 활성 버튼 표시 */
+.bottom-nav button.active {
+  border-color: #0d6efd;
+  font-weight: 700;
+}
+
+/* 하단 네비 때문에 컨텐츠가 가려지는 것 방지 */
+.complaint-type-container {
+  padding-bottom: 80px;
+}
