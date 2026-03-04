@@ -1,4 +1,6 @@
+<!--하라 수정중-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html>
 <html>
 	<!--수정중-->
@@ -38,25 +40,42 @@
             <!-- 메시지가 추가될 영역 -->
             <div class="chat-messages-area" id="messagesArea">
                 <!-- 비회원 메시지가 없을 때 키워드 표시 -->
-                <div id="keywordSection" class="non-member-chat-keywords">
-                    <button class="chat-keyword-btn" onclick="handleKeywordClick('지하철 공사')">지하철 공사</button>
-                    <button class="chat-keyword-btn" onclick="handleKeywordClick('불법주정차')">불법주정차</button>
-                    <button class="chat-keyword-btn" onclick="handleKeywordClick('장애인주차')">장애인주차</button>
-                </div>
+				<c:if test="${!isLoggedIn}">
+				    <div id="keywordSection" class="non-member-chat-keywords">
+				        <button class="chat-keyword-btn" onclick="handleKeywordClick('지하철 공사')">지하철 공사</button>
+				        <button class="chat-keyword-btn" onclick="handleKeywordClick('불법주정차')">불법주정차</button>
+				        <button class="chat-keyword-btn" onclick="handleKeywordClick('장애인주차')">장애인주차</button>
+				    </div>
+				</c:if>
             </div>
         </div>
 
         <!-- Bottom Input Area -->
         <div class="chat-input-wrapper">
-            <div class="chat-input-bar">
-                <button class="chat-plus-btn" type="button">
-                    <i data-lucide="plus" size="24"></i>
-                </button>
-                <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
-                <button class="chat-send-btn" disabled id="sendBtn" type="button">
-                    <i data-lucide="arrow-up" size="24" color="#ccc"></i>
-                </button>
-            </div>
+			  <div class="chat-input-bar">
+			    <button class="chat-plus-btn" type="button">
+			      <i data-lucide="plus" size="24"></i>
+			    </button>
+
+			    <input
+			      type="text"
+			      id="chatInput"
+			      class="chat-main-input"
+			      placeholder="<c:choose><c:when test='${isLoggedIn}'>무엇이든 물어보세요.</c:when><c:otherwise>로그인 후 이용 가능합니다.</c:otherwise></c:choose>"
+			      <c:if test="${!isLoggedIn}">disabled="disabled"</c:if>
+			    />
+
+			    <button
+			      class="chat-send-btn"
+			      id="sendBtn"
+			      type="button"
+			      <c:if test="${!isLoggedIn}">disabled="disabled"</c:if>
+			    >
+			      <i data-lucide="arrow-up" size="24"></i>
+			    </button>
+			  </div>
+			</div>
+			
         </div>
     </div>
 
@@ -68,11 +87,12 @@
         const API_URL = "http://localhost:8000/api/chat";
         const ROOM_IDX = 2;
 
-        // ✅ 로그인 상태 (지금은 테스트용 false)
-        // 나중에 세션값으로 바꾸면 됨
-        let isLoggedIn = false;
+		// ✅ 서버에서 내려준 로그인 상태 (HomeController에서 model.addAttribute("isLoggedIn", ...))
+		const isLoggedIn = ${isLoggedIn ? "true" : "false"};
 
         // ✅ 로그인 상태에 따라 입력/전송 활성화
+		const isLoggedIn = <c:out value="${isLoggedIn}" default="false" />;
+		
         function applyLoginUI() {
             const input = document.getElementById("chatInput");
             const btn = document.getElementById("sendBtn");
@@ -108,7 +128,7 @@
             const nudgeDiv = document.createElement('div');
             nudgeDiv.className = 'login-nudge-msg';
             nudgeDiv.innerHTML = `
-                <button class="chat-login-nudge-btn" onclick="location.href='/login'">
+                <button class="chat-login-nudge-btn" onclick="location.href='${pageContext.request.contextPath}/login'">
                     로그인하고 서비스 이용하기
                 </button>
             `;
@@ -198,5 +218,8 @@
         // onclick에서 쓰는 함수 전역 노출
         window.handleKeywordClick = handleKeywordClick;
     </script>
+	<script>
+	  lucide.createIcons();
+	</script>
 </body>
 </html>

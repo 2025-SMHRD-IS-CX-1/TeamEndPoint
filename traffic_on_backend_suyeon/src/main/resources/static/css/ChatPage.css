@@ -1,3 +1,4 @@
+/*하라 수정중*/
 .chat-page-container {
     background-color: #ebf3f9;
     /* Light blue background from screenshot */
@@ -51,6 +52,19 @@
     flex: 1;
     padding: 30px 20px;
     overflow-y: auto;
+}
+
+/*뒤로가기 버튼 추가*/
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: #111;
 }
 
 .chat-intro {
