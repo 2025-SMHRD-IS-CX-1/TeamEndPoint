@@ -25,7 +25,9 @@
 
         <!-- Content Area -->
         <div class="chat-content" id="chatContent">
-            <div class="chat-intro">
+
+            <!-- ✅ (원복) 큰 인트로(펭귄/인삿말) 제거하고 싶으면 아예 숨김 -->
+            <div class="chat-intro" style="display:none;">
                 <div class="pengrimi-avatar">
                     <img src="/images/Pengrimi.png" alt="펭리미" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
@@ -64,7 +66,7 @@
     <script>
         lucide.createIcons();
 
-        // ✅ 정답: 세션 키는 loginMember
+        // ✅ 세션 키는 loginMember
         const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
 
         // ✅ marked 옵션(줄바꿈을 <br>로 반영)
@@ -95,18 +97,20 @@
             }
         });
 
+        // ✅ 키워드 클릭
         function handleKeywordClick(keyword) {
             const keywordSection = document.getElementById('keywordSection');
             if (keywordSection) keywordSection.style.display = 'none';
 
-            addMessage(keyword, 'user');
+            // ✅ (버그 수정) 여기서 user 메시지 addMessage 하면 sendMessage에서도 또 추가돼서 "2번 뜸"
+            // addMessage(keyword, 'user');  <-- 삭제!
 
             if (!isLoggedIn) {
                 setTimeout(() => {
                     addMessage(`'${keyword}'에 대해 궁금하시군요! 로그인 후 더 자세히 안내해 드릴게요.`, 'bot');
                     showLoginNudge();
                     scrollToBottom();
-                }, 300);
+                }, 200);
                 return;
             }
 
@@ -114,7 +118,7 @@
             sendMessage(keyword);
         }
 
-        // ✅ 핵심: async + fetch 로 실제 Spring API 호출
+        // ✅ 실제 Spring API 호출
         async function sendMessage(forcedText) {
             if (!isLoggedIn) return;
 
@@ -125,11 +129,12 @@
             const keywordSection = document.getElementById('keywordSection');
             if (keywordSection) keywordSection.style.display = 'none';
 
+            // ✅ 유저 메시지는 여기서 "한 번만"
             addMessage(text, 'user');
             if (!forcedText) input.value = "";
             scrollToBottom();
 
-            // ✅ 로딩 메시지 대신 "타이핑 말풍선(●●●)" + 펭리미 프로필
+            // ✅ 타이핑 표시
             const loadingEl = showTyping();
             scrollToBottom();
 
@@ -170,16 +175,15 @@
             }
         }
 
-        // ✅ 봇 메시지는 마크다운 렌더링(** 제거 + 말풍선 안에서 보기 좋게)
+        // ✅ 봇 메시지는 마크다운 렌더링(** 제거 + 보기 좋게)
         function renderBotHtml(text) {
             if (!window.marked) return (text || "").replace(/\*\*/g, "");
             return marked.parse(text || "");
         }
 
-        // ✅ 사용자/봇 메시지 추가
-        // - 봇: 펭리미 프로필(아바타+이름) + 말풍선
-        // - 유저: 기존처럼 말풍선만
-        // ✅ return: replaceMessage를 위해 "말풍선 element"를 반환
+        // ✅ 메시지 추가
+        // - 봇: bot-wrapper + bot-content (아바타 제거)
+        // - 유저: message-bubble user
         function addMessage(text, sender) {
             const messagesArea = document.getElementById('messagesArea');
 
@@ -187,25 +191,14 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = "bot-wrapper";
 
-                const avatar = document.createElement('div');
-                avatar.className = "bot-avatar";
-                avatar.innerHTML = `<img src="/images/Pengrimi.png" alt="펭리미">`;
-
                 const content = document.createElement('div');
                 content.className = "bot-content";
-
-                const name = document.createElement('div');
-                name.className = "bot-name";
-                name.innerText = "펭리미";
 
                 const bubble = document.createElement('div');
                 bubble.className = "message-bubble bot";
                 bubble.innerHTML = renderBotHtml(text);
 
-                content.appendChild(name);
                 content.appendChild(bubble);
-
-                wrapper.appendChild(avatar);
                 wrapper.appendChild(content);
 
                 messagesArea.appendChild(wrapper);
@@ -220,24 +213,15 @@
             return bubble;
         }
 
-        // ✅ 로딩도 같은 bot-wrapper 구조로 (아바타+이름+●●●)
-        // ✅ return: replaceMessage가 바꿀 "말풍선 element"
+        // ✅ 타이핑 표시 (아바타 제거)
         function showTyping() {
             const messagesArea = document.getElementById('messagesArea');
 
             const wrapper = document.createElement('div');
             wrapper.className = "bot-wrapper";
 
-            const avatar = document.createElement('div');
-            avatar.className = "bot-avatar";
-            avatar.innerHTML = `<img src="/images/Pengrimi.png" alt="펭리미">`;
-
             const content = document.createElement('div');
             content.className = "bot-content";
-
-            const name = document.createElement('div');
-            name.className = "bot-name";
-            name.innerText = "펭리미";
 
             const bubble = document.createElement('div');
             bubble.className = "message-bubble bot";
@@ -249,21 +233,17 @@
                 </div>
             `;
 
-            content.appendChild(name);
             content.appendChild(bubble);
-
-            wrapper.appendChild(avatar);
             wrapper.appendChild(content);
 
             messagesArea.appendChild(wrapper);
             return bubble;
         }
 
-        // ✅ replaceMessage는 "말풍선 element"만 바꿔치기하면 됨
+        // ✅ 말풍선 element만 바꿔치기
         function replaceMessage(el, newText, sender) {
             if (!el) return;
 
-            // 로딩 말풍선이 bot일 때만 들어올 예정(그래도 안전하게)
             el.className = `message-bubble ${sender}`;
 
             if (sender === "bot") {
@@ -279,7 +259,7 @@
             nudgeDiv.className = 'login-nudge-msg';
             nudgeDiv.innerHTML = `
                 <button class="chat-login-nudge-btn" onclick="location.href='/login'">
-                    로그인하고 서비스 이용하기
+                    로그인하고 서비스 이용하기.
                 </button>
             `;
             messagesArea.appendChild(nudgeDiv);

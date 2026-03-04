@@ -177,7 +177,7 @@
 }
 
 #messagesArea .bot-content br {
-    display: none; /* 🔧 불필요 줄 제거 */
+    display: none; /* 🔧 불필요 줄 제거. */
 }
 
 /* =======================
