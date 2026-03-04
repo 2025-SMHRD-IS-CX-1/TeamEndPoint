@@ -1,15 +1,14 @@
-<!--하라 수정중-->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <!DOCTYPE html>
 <html>
-	<!--수정중-->
 <head>
     <meta charset="UTF-8">
     <title>TRAFFIC:ON - 챗봇가이드</title>
-    <!-- CSS 불러오기 (경로는 프로젝트 설정에 맞춰 조정 가능) -->
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- ✅ 마크다운(**, 리스트, 줄바꿈 등) 렌더링용 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="chat-page-container">
@@ -37,90 +36,241 @@
                 </div>
             </div>
 
-            <!-- 메시지가 추가될 영역 -->
             <div class="chat-messages-area" id="messagesArea">
-                <!-- 비회원 메시지가 없을 때 키워드 표시 -->
-				<c:if test="${!isLoggedIn}">
-				    <div id="keywordSection" class="non-member-chat-keywords">
-				        <button class="chat-keyword-btn" onclick="handleKeywordClick('지하철 공사')">지하철 공사</button>
-				        <button class="chat-keyword-btn" onclick="handleKeywordClick('불법주정차')">불법주정차</button>
-				        <button class="chat-keyword-btn" onclick="handleKeywordClick('장애인주차')">장애인주차</button>
-				    </div>
-				</c:if>
+                <div id="keywordSection" class="non-member-chat-keywords">
+                    <button class="chat-keyword-btn" onclick="handleKeywordClick('지하철 공사')">지하철 공사</button>
+                    <button class="chat-keyword-btn" onclick="handleKeywordClick('불법주정차')">불법주정차</button>
+                    <button class="chat-keyword-btn" onclick="handleKeywordClick('장애인주차')">장애인주차</button>
+                </div>
             </div>
         </div>
 
         <!-- Bottom Input Area -->
         <div class="chat-input-wrapper">
-			  <div class="chat-input-bar">
-			    <button class="chat-plus-btn" type="button">
-			      <i data-lucide="plus" size="24"></i>
-			    </button>
+            <div class="chat-input-bar">
+                <button class="chat-plus-btn" type="button">
+                    <i data-lucide="plus" size="24"></i>
+                </button>
 
-			    <input
-			      type="text"
-			      id="chatInput"
-			      class="chat-main-input"
-			      placeholder="<c:choose><c:when test='${isLoggedIn}'>무엇이든 물어보세요.</c:when><c:otherwise>로그인 후 이용 가능합니다.</c:otherwise></c:choose>"
-			      <c:if test="${!isLoggedIn}">disabled="disabled"</c:if>
-			    />
+                <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
 
-			    <button
-			      class="chat-send-btn"
-			      id="sendBtn"
-			      type="button"
-			      <c:if test="${!isLoggedIn}">disabled="disabled"</c:if>
-			    >
-			      <i data-lucide="arrow-up" size="24"></i>
-			    </button>
-			  </div>
-			</div>
-			
+                <button class="chat-send-btn" disabled id="sendBtn" type="button">
+                    <i data-lucide="arrow-up" size="24" color="#ccc"></i>
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 초기 아이콘 렌더링
         lucide.createIcons();
 
-        // ✅ FastAPI 챗봇 API (JSON 응답: {answer: "..."} )
-        const API_URL = "http://localhost:8000/api/chat";
-        const ROOM_IDX = 2;
+        // ✅ 정답: 세션 키는 loginMember
+        const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
 
-		// ✅ 서버에서 내려준 로그인 상태 (HomeController에서 model.addAttribute("isLoggedIn", ...))
-		const isLoggedIn = ${isLoggedIn ? "true" : "false"};
+        // ✅ marked 옵션(줄바꿈을 <br>로 반영)
+        if (window.marked) {
+            marked.setOptions({ breaks: true });
+        }
 
-        // ✅ 로그인 상태에 따라 입력/전송 활성화
-		const isLoggedIn = <c:out value="${isLoggedIn}" default="false" />;
-		
-        function applyLoginUI() {
-            const input = document.getElementById("chatInput");
-            const btn = document.getElementById("sendBtn");
+        window.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
 
             if (isLoggedIn) {
                 input.disabled = false;
-                input.placeholder = "메시지를 입력하세요...";
-                btn.disabled = false;
-            } else {
-                input.disabled = true;
-                input.placeholder = "로그인 후 이용 가능합니다.";
-                btn.disabled = true;
+                input.placeholder = "교통 민원 내용을 입력해 주세요.";
+                sendBtn.disabled = false;
+
+                // 버튼 클릭 전송
+                sendBtn.addEventListener('click', () => sendMessage());
+
+                // Enter 전송 (한글 조합중이면 무시)
+                input.addEventListener('keydown', (e) => {
+                    if (e.isComposing) return;
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        function handleKeywordClick(keyword) {
+            const keywordSection = document.getElementById('keywordSection');
+            if (keywordSection) keywordSection.style.display = 'none';
+
+            addMessage(keyword, 'user');
+
+            if (!isLoggedIn) {
+                setTimeout(() => {
+                    addMessage(`'${keyword}'에 대해 궁금하시군요! 로그인 후 더 자세히 안내해 드릴게요.`, 'bot');
+                    showLoginNudge();
+                    scrollToBottom();
+                }, 300);
+                return;
+            }
+
+            // ✅ 로그인 상태면 키워드도 실제 API로 전송
+            sendMessage(keyword);
+        }
+
+        // ✅ 핵심: async + fetch 로 실제 Spring API 호출
+        async function sendMessage(forcedText) {
+            if (!isLoggedIn) return;
+
+            const input = document.getElementById('chatInput');
+            const text = (forcedText ?? input.value ?? "").trim();
+            if (!text) return;
+
+            const keywordSection = document.getElementById('keywordSection');
+            if (keywordSection) keywordSection.style.display = 'none';
+
+            addMessage(text, 'user');
+            if (!forcedText) input.value = "";
+            scrollToBottom();
+
+            // ✅ 로딩 메시지 대신 "타이핑 말풍선(●●●)" + 펭리미 프로필
+            const loadingEl = showTyping();
+            scrollToBottom();
+
+            try {
+                const payload = { text, croom_idx: 2 };
+
+                const res = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const raw = await res.text();
+
+                if (!res.ok) {
+                    replaceMessage(loadingEl, "❌ 서버 오류: " + raw, "bot");
+                    scrollToBottom();
+                    return;
+                }
+
+                let data;
+                try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
+
+                const answer =
+                    data.answer ??
+                    data.response ??
+                    data.message ??
+                    data.result ??
+                    (typeof data === "string" ? data : JSON.stringify(data));
+
+                replaceMessage(loadingEl, answer, "bot");
+                scrollToBottom();
+
+            } catch (err) {
+                console.error(err);
+                replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + err.message, "bot");
+                scrollToBottom();
             }
         }
-        applyLoginUI();
 
-        function scrollToBottom() {
-            const chatContent = document.getElementById("chatContent");
-            chatContent.scrollTop = chatContent.scrollHeight;
+        // ✅ 봇 메시지는 마크다운 렌더링(** 제거 + 말풍선 안에서 보기 좋게)
+        function renderBotHtml(text) {
+            if (!window.marked) return (text || "").replace(/\*\*/g, "");
+            return marked.parse(text || "");
         }
 
+        // ✅ 사용자/봇 메시지 추가
+        // - 봇: 펭리미 프로필(아바타+이름) + 말풍선
+        // - 유저: 기존처럼 말풍선만
+        // ✅ return: replaceMessage를 위해 "말풍선 element"를 반환
         function addMessage(text, sender) {
             const messagesArea = document.getElementById('messagesArea');
+
+            if (sender === "bot") {
+                const wrapper = document.createElement('div');
+                wrapper.className = "bot-wrapper";
+
+                const avatar = document.createElement('div');
+                avatar.className = "bot-avatar";
+                avatar.innerHTML = `<img src="/images/Pengrimi.png" alt="펭리미">`;
+
+                const content = document.createElement('div');
+                content.className = "bot-content";
+
+                const name = document.createElement('div');
+                name.className = "bot-name";
+                name.innerText = "펭리미";
+
+                const bubble = document.createElement('div');
+                bubble.className = "message-bubble bot";
+                bubble.innerHTML = renderBotHtml(text);
+
+                content.appendChild(name);
+                content.appendChild(bubble);
+
+                wrapper.appendChild(avatar);
+                wrapper.appendChild(content);
+
+                messagesArea.appendChild(wrapper);
+                return bubble;
+            }
+
+            // user
             const bubble = document.createElement('div');
-            bubble.className = `message-bubble ${sender}`;
+            bubble.className = "message-bubble user";
             bubble.innerText = text;
             messagesArea.appendChild(bubble);
-            scrollToBottom();
+            return bubble;
+        }
+
+        // ✅ 로딩도 같은 bot-wrapper 구조로 (아바타+이름+●●●)
+        // ✅ return: replaceMessage가 바꿀 "말풍선 element"
+        function showTyping() {
+            const messagesArea = document.getElementById('messagesArea');
+
+            const wrapper = document.createElement('div');
+            wrapper.className = "bot-wrapper";
+
+            const avatar = document.createElement('div');
+            avatar.className = "bot-avatar";
+            avatar.innerHTML = `<img src="/images/Pengrimi.png" alt="펭리미">`;
+
+            const content = document.createElement('div');
+            content.className = "bot-content";
+
+            const name = document.createElement('div');
+            name.className = "bot-name";
+            name.innerText = "펭리미";
+
+            const bubble = document.createElement('div');
+            bubble.className = "message-bubble bot";
+            bubble.innerHTML = `
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+
+            content.appendChild(name);
+            content.appendChild(bubble);
+
+            wrapper.appendChild(avatar);
+            wrapper.appendChild(content);
+
+            messagesArea.appendChild(wrapper);
+            return bubble;
+        }
+
+        // ✅ replaceMessage는 "말풍선 element"만 바꿔치기하면 됨
+        function replaceMessage(el, newText, sender) {
+            if (!el) return;
+
+            // 로딩 말풍선이 bot일 때만 들어올 예정(그래도 안전하게)
+            el.className = `message-bubble ${sender}`;
+
+            if (sender === "bot") {
+                el.innerHTML = renderBotHtml(newText);
+            } else {
+                el.innerText = newText;
+            }
         }
 
         function showLoginNudge() {
@@ -128,98 +278,17 @@
             const nudgeDiv = document.createElement('div');
             nudgeDiv.className = 'login-nudge-msg';
             nudgeDiv.innerHTML = `
-                <button class="chat-login-nudge-btn" onclick="location.href='${pageContext.request.contextPath}/login'">
+                <button class="chat-login-nudge-btn" onclick="location.href='/login'">
                     로그인하고 서비스 이용하기
                 </button>
             `;
             messagesArea.appendChild(nudgeDiv);
-            scrollToBottom();
         }
 
-        // ✅ FastAPI 호출
-        async function sendToFastAPI(message) {
-            const res = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    text: message,
-                    room_idx: ROOM_IDX
-                })
-            });
-
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error(`API ${res.status}: ${err}`);
-            }
-
-            const data = await res.json(); // {answer: "..."}
-            return data.answer ?? "⚠️ 응답이 비어있어.";
+        function scrollToBottom() {
+            const chatContent = document.getElementById('chatContent');
+            chatContent.scrollTop = chatContent.scrollHeight;
         }
-
-        // ✅ 입력창 전송(로그인 상태에서만)
-        async function sendChat() {
-            if (!isLoggedIn) {
-                // 로그인 안 했으면 안내만
-                showLoginNudge();
-                return;
-            }
-
-            const input = document.getElementById("chatInput");
-            const text = (input.value || "").trim();
-            if (!text) return;
-
-            // 키워드 영역 숨김(필요 시)
-            const keywordSection = document.getElementById("keywordSection");
-            if (keywordSection) keywordSection.style.display = "none";
-
-            addMessage(text, "user");
-            input.value = "";
-
-            try {
-                const answer = await sendToFastAPI(text);
-                addMessage(answer, "bot");
-            } catch (e) {
-                console.error(e);
-                addMessage("⚠️ 챗봇 서버 호출 실패: " + e.message, "bot");
-            }
-        }
-
-        // ✅ 키워드 클릭: 비로그인이어도 FastAPI로 테스트 가능하게 해둠
-        // (원래 기획대로 "비회원은 로그인 유도만"으로 하고 싶으면, 아래 if 블록을 바꾸면 됨)
-        async function handleKeywordClick(keyword) {
-            const keywordSection = document.getElementById('keywordSection');
-            if (keywordSection) keywordSection.style.display = 'none';
-
-            addMessage(keyword, 'user');
-
-            try {
-                const answer = await sendToFastAPI(keyword);
-                addMessage(answer, 'bot');
-
-                if (!isLoggedIn) {
-                    // 비로그인이면 아래 버튼도 같이 띄움(기획 유지)
-                    showLoginNudge();
-                }
-            } catch (e) {
-                console.error(e);
-                addMessage("⚠️ 챗봇 서버 호출 실패: " + e.message, "bot");
-                if (!isLoggedIn) showLoginNudge();
-            }
-        }
-//주석
-        // ✅ 전송 버튼 클릭
-        document.getElementById("sendBtn").addEventListener("click", sendChat);
-
-        // ✅ 엔터 전송
-        document.getElementById("chatInput").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") sendChat();
-        });
-
-        // onclick에서 쓰는 함수 전역 노출
-        window.handleKeywordClick = handleKeywordClick;
     </script>
-	<script>
-	  lucide.createIcons();
-	</script>
 </body>
 </html>
