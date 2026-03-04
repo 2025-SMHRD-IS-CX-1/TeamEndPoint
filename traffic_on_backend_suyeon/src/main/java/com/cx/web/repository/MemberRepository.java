@@ -100,5 +100,6 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 		);
 	
 	List<Member> findByMemTypeAndMemAddr(String memType, String memAddr);
+	List<Member> findByMemTypeAndMemAddrContaining(String memType, String district);
 }
 
