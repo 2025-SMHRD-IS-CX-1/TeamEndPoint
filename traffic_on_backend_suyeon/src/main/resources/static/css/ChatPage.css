@@ -153,7 +153,7 @@
   color: #111827;
   font-size: 13.6px;
 
-  /* ✅ 핵심: 기본 줄간격 더 압축 */
+  /* ✅ 핵심: 기본 줄간격 더 압축. */
   line-height: 1.16;
 
   font-weight: 500;

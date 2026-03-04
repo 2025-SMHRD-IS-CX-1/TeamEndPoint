@@ -83,7 +83,7 @@
                 input.placeholder = "교통 민원 내용을 입력해 주세요.";
                 sendBtn.disabled = false;
 
-                // 버튼 클릭 전송
+                // 버튼 클릭 전송.
                 sendBtn.addEventListener('click', () => sendMessage());
 
                 // Enter 전송 (한글 조합중이면 무시)
