@@ -1,219 +1,330 @@
-/*하라 수정중*/
 /* LOADED: ChatPage.css */
 
 /* =======================
    Layout
 ======================= */
 .chat-page-container {
-    background-color: #ebf3f9;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 393px;
-    z-index: 2000;
-    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  background-color: #ebf3f9;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 393px;
+  z-index: 2000;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
 }
 
 /* Header */
 .chat-header {
-    background-color: #fff;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.chat-logo {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+.chat-logo { display: flex; align-items: center; gap: 5px; }
 
 .logo-text {
-    font-weight: 900;
-    font-size: 18px;
-    color: #ff5722;
-    letter-spacing: -0.5px;
+  font-weight: 900;
+  font-size: 18px;
+  color: #ff5722;
+  letter-spacing: -0.5px;
 }
 
 .back-btn,
 .header-spacer {
-    width: 28px;
-    background: none;
-    border: none;
-    cursor: pointer;
+  width: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-/*뒤로가기 버튼 */
-.back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-btn svg {
-  width: 24px;
-  height: 24px;
-  stroke: #111;
-}
+.back-btn { display:flex; align-items:center; justify-content:center; }
+.back-btn svg { width: 24px; height: 24px; stroke: #111; }
 
 /* Content Area */
 .chat-content {
-    flex: 1;
-    padding: 14px 12px; /* 🔧 줄임 */
-    overflow-y: auto;
+  flex: 1;
+  padding: 14px 12px;
+  overflow-y: auto;
+
+  /* ✅ 하단 추천질문 영역(고정) 때문에 내용이 가려지지 않게 여유 확보 */
+  padding-bottom: 140px;
+}
+
+/* =======================
+   Intro
+======================= */
+.chat-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.pengrimi-avatar { width: 80px; height: 80px; }
+
+.pengrimi-message {
+  background: #fff;
+  padding: 14px 16px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  text-align: center;
+  max-width: 92%;
+}
+
+.pengrimi-message p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.45;
+  font-weight: 600;
 }
 
 /* =======================
    Chat Area
 ======================= */
-
 .chat-messages-area {
-    margin-top: 8px; /* 🔧 줄임 */
-    display: flex;
-    flex-direction: column;
-    gap: 6px; /* 🔧 말풍선 간격 줄임 */
-    width: 100%;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
 }
 
 /* =======================
-   말풍선
+   Bubbles
 ======================= */
 
 /* 유저 말풍선 */
 #messagesArea .message-bubble.user {
-    align-self: flex-end;
-    max-width: 66%; /* 🔧 살짝 줄임 */
-    padding: 8px 11px; /* 🔧 줄임 */
-    border-radius: 18px;
-    border-bottom-right-radius: 8px;
-    background: #2f6bff;
-    color: #fff;
-    font-size: 13.8px;
-    line-height: 1.35; /* 🔧 줄 간격 줄임 */
-    font-weight: 600;
-    letter-spacing: -0.25px;
-    box-shadow: 0 8px 22px rgba(47,107,255,0.22);
-    position: relative;
-    white-space: pre-wrap;
-    word-break: break-word;
+  align-self: flex-end;
+  max-width: 60%;
+  padding: 7px 10px;
+  border-radius: 18px;
+  border-bottom-right-radius: 8px;
+  background: #2f6bff;
+  color: #fff;
+  font-size: 13.6px;
+  line-height: 1.22;
+  font-weight: 700;
+  letter-spacing: -0.25px;
+  box-shadow: 0 8px 22px rgba(47,107,255,0.22);
+  position: relative;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* 유저 꼬리 */
+/* ✅ 유저 꼬리(깨짐 방지: 삼각형 방식) */
 #messagesArea .message-bubble.user::after {
-    content: "";
-    position: absolute;
-    right: -6px;
-    top: 12px;
-    width: 10px;
-    height: 10px;
-    background: #2f6bff;
-    transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid #2f6bff;
 }
 
 /* 봇 래퍼 */
 #messagesArea .bot-wrapper {
-    display: flex;
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
 }
 
-/* 봇 말풍선 */
+/* 봇 말풍선 컨테이너 */
 #messagesArea .bot-content {
-    align-self: flex-start;
-    max-width: 70%;
-    padding: 8px 11px; /* 🔧 줄임 */
-    border-radius: 18px;
-    border-bottom-left-radius: 8px;
-    background: #fff;
-    color: #111827;
-    font-size: 13.8px;
-    line-height: 1.32; /* 🔧 핵심 줄 간격 */
-    font-weight: 500;
-    letter-spacing: -0.25px;
-    border: 1px solid rgba(0,0,0,0.08);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.06);
-    position: relative;
-    white-space: pre-wrap;
-    word-break: keep-all;
+  align-self: flex-start;
+  max-width: 64%;
+  padding: 7px 10px;
+  border-radius: 18px;
+  border-bottom-left-radius: 8px;
+  background: #fff;
+  color: #111827;
+  font-size: 13.6px;
+
+  /* ✅ 핵심: 기본 줄간격 더 압축 */
+  line-height: 1.16;
+
+  font-weight: 500;
+  letter-spacing: -0.25px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+  position: relative;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* 봇 꼬리 */
+/* ✅ 봇 꼬리(깨짐 방지: 삼각형 방식) */
 #messagesArea .bot-content::before {
-    content: "";
-    position: absolute;
-    left: -6px;
-    top: 12px;
-    width: 10px;
-    height: 10px;
-    background: #fff;
-    border-left: 1px solid rgba(0,0,0,0.08);
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid #fff;
 }
 
 /* =======================
-   🔧 글 간격 강제 압축
+   ✅ 봇 답변(마크다운) 간격 강제 압축
+   - 지금 네 화면에서 "높이" 커지는 주범이 기본 margin임
 ======================= */
 
-#messagesArea .bot-content p {
-    margin: 2px 0; /* 🔧 줄임 */
+/* 문단/제목/리스트/인용/코드블록 기본 margin 전부 제어 */
+#messagesArea .bot-content p,
+#messagesArea .bot-content ul,
+#messagesArea .bot-content ol,
+#messagesArea .bot-content li,
+#messagesArea .bot-content h1,
+#messagesArea .bot-content h2,
+#messagesArea .bot-content h3,
+#messagesArea .bot-content h4,
+#messagesArea .bot-content h5,
+#messagesArea .bot-content h6,
+#messagesArea .bot-content blockquote,
+#messagesArea .bot-content pre {
+  margin: 0 !important;
 }
 
+/* 리스트는 "블록 위아래"만 아주 살짝 */
 #messagesArea .bot-content ul,
 #messagesArea .bot-content ol {
-    margin: 4px 0; /* 🔧 줄임 */
-    padding-left: 14px;
+  margin: 2px 0 !important;
+  padding-left: 14px !important;
 }
 
+/* li 간격을 진짜로 붙임 */
 #messagesArea .bot-content li {
-    margin: 1px 0; /* 🔧 핵심 */
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.16 !important;
 }
 
-#messagesArea .bot-content br {
-    display: none; /* 🔧 불필요 줄 제거. */
+/* 제목류가 커보이면(굵게) 높이 먹으니 축소 */
+#messagesArea .bot-content h1,
+#messagesArea .bot-content h2,
+#messagesArea .bot-content h3,
+#messagesArea .bot-content h4,
+#messagesArea .bot-content h5,
+#messagesArea .bot-content h6 {
+  font-size: 13.6px !important;
+  font-weight: 800 !important;
+  line-height: 1.16 !important;
+}
+
+/* strong는 그대로 */
+#messagesArea .bot-content strong { font-weight: 800; }
+
+/* =======================
+   ✅ 추천질문(키워드) 하단 고정 영역
+   - JSP에서 keywordSection을 .keyword-dock으로 감싸면 완벽히 동작
+======================= */
+.keyword-dock {
+  position: sticky;
+  bottom: 10px;
+  z-index: 5;
+  margin-top: 10px;
+}
+
+.non-member-chat-keywords {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 10px 10px;
+  background: rgba(235, 243, 249, 0.92);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* 키워드 버튼 */
+.chat-keyword-btn {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 999px;
+  padding: 9px 12px;
+  font-size: 13.2px;
+  font-weight: 800;
+  color: #111;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.chat-keyword-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.10);
 }
 
 /* =======================
    Bottom Input
 ======================= */
-
-.chat-input-wrapper {
-    padding: 10px 10px 22px 10px;
-}
+.chat-input-wrapper { padding: 10px 10px 22px 10px; }
 
 .chat-input-bar {
-    background-color: #fff;
-    height: 50px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    padding: 0 6px 0 14px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
-    border: 1px solid rgba(0,0,0,0.08);
+  background-color: #fff;
+  height: 50px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px 0 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.chat-plus-btn {
+  background: none;
+  border: none;
+  margin-right: 8px;
+  cursor: pointer;
 }
 
 .chat-main-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 14px;
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
 }
 
 .chat-send-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
-/* Animation */
-@keyframes popIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+/* Typing */
+.typing-indicator {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px 2px;
+}
+.typing-dot {
+  width: 5px;
+  height: 5px;
+  background-color: #9aa3ad;
+  border-radius: 50%;
+  animation: typingBlink 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBlink {
+  0% { opacity: 0.2; transform: translateY(0); }
+  20% { opacity: 1; transform: translateY(-2px); }
+  100% { opacity: 0.2; transform: translateY(0); }
 }

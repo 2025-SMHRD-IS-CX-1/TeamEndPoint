@@ -26,8 +26,8 @@
         <!-- Content Area -->
         <div class="chat-content" id="chatContent">
 
-            <!-- ✅ (원복) 큰 인트로(펭귄/인삿말) 제거하고 싶으면 아예 숨김 -->
-            <div class="chat-intro" style="display:none;">
+            <!-- ✅ 원래 화면 복구: display:none 제거 -->
+            <div class="chat-intro">
                 <div class="pengrimi-avatar">
                     <img src="/images/Pengrimi.png" alt="펭리미" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
@@ -102,8 +102,7 @@
             const keywordSection = document.getElementById('keywordSection');
             if (keywordSection) keywordSection.style.display = 'none';
 
-            // ✅ (버그 수정) 여기서 user 메시지 addMessage 하면 sendMessage에서도 또 추가돼서 "2번 뜸"
-            // addMessage(keyword, 'user');  <-- 삭제!
+            // ✅ 중복 방지: sendMessage에서 user 메시지 추가하므로 여기서 addMessage 하지 않음
 
             if (!isLoggedIn) {
                 setTimeout(() => {
@@ -114,7 +113,6 @@
                 return;
             }
 
-            // ✅ 로그인 상태면 키워드도 실제 API로 전송
             sendMessage(keyword);
         }
 
@@ -175,15 +173,11 @@
             }
         }
 
-        // ✅ 봇 메시지는 마크다운 렌더링(** 제거 + 보기 좋게)
         function renderBotHtml(text) {
             if (!window.marked) return (text || "").replace(/\*\*/g, "");
             return marked.parse(text || "");
         }
 
-        // ✅ 메시지 추가
-        // - 봇: bot-wrapper + bot-content (아바타 제거)
-        // - 유저: message-bubble user
         function addMessage(text, sender) {
             const messagesArea = document.getElementById('messagesArea');
 
@@ -205,7 +199,6 @@
                 return bubble;
             }
 
-            // user
             const bubble = document.createElement('div');
             bubble.className = "message-bubble user";
             bubble.innerText = text;
@@ -213,7 +206,6 @@
             return bubble;
         }
 
-        // ✅ 타이핑 표시 (아바타 제거)
         function showTyping() {
             const messagesArea = document.getElementById('messagesArea');
 
@@ -240,7 +232,6 @@
             return bubble;
         }
 
-        // ✅ 말풍선 element만 바꿔치기
         function replaceMessage(el, newText, sender) {
             if (!el) return;
 
@@ -259,7 +250,7 @@
             nudgeDiv.className = 'login-nudge-msg';
             nudgeDiv.innerHTML = `
                 <button class="chat-login-nudge-btn" onclick="location.href='/login'">
-                    로그인하고 서비스 이용하기.
+                    로그인하고 서비스 이용하기
                 </button>
             `;
             messagesArea.appendChild(nudgeDiv);
