@@ -74,7 +74,7 @@ public class ChatApiController {
         try {
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-            // ✅ 파일. 파트 헤더(콘텐츠 타입 / 파일명) 강제 세팅
+            // ✅ 파일.. 파트 헤더(콘텐츠 타입 / 파일명) 강제 세팅
             HttpHeaders fileHeaders = new HttpHeaders();
 
             MediaType fileContentType = MediaType.APPLICATION_OCTET_STREAM;

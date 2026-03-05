@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="chat-page-container">
-    <!-- Header -->
+    <!-- Header. -->
     <header class="chat-header">
         <button class="back-btn" onclick="history.back()">
             <i data-lucide="chevron-left"></i>
