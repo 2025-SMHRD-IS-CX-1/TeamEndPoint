@@ -50,6 +50,47 @@
             font-size: 20px;
             line-height: 40px;
         }
+
+        /* ✅ 이미지 말풍선(파란 배경 완전 제거) + 삭제버튼 */
+        .user-image-bubble {
+            align-self: flex-end;
+            max-width: 75%;
+            position: relative;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+        }
+        .user-image-bubble .chat-image-preview {
+            display: block;
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+            cursor: zoom-in;
+        }
+        .user-image-bubble .img-remove-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.20);
+            font-size: 18px;
+            line-height: 34px;
+            font-weight: 900;
+        }
+        .user-image-bubble .img-remove-btn:active { transform: scale(0.98); }
+
+        /* ✅ 전송된 이미지는 X 숨김(버블은 그대로 유지) */
+        .user-image-bubble.sent .img-remove-btn { display: none; }
+
+        /* ✅ 전송 중에는 살짝 흐리게(선택) */
+        .user-image-bubble.sending { opacity: 0.78; }
     </style>
 </head>
 <body>
@@ -133,6 +174,10 @@
 
     const CROOM_IDX = 2;
 
+    // ✅ 선택만 해두고 "전송"할 때 같이 보내기
+    // item: { id, file, url, bubbleEl, removeBtnEl }
+    let pendingImages = [];
+
     const GUEST_KEYWORD_ANSWERS = {
         "지하철 공사": `
 **지하철 공사**
@@ -147,7 +192,6 @@
 
 ※ 더욱 자세한 안내와 서비스 이용은 로그인 후 이용 가능합니다.
         `.trim(),
-
         "불법주정차": `
 **불법 주정차 신고 방법**
 
@@ -167,7 +211,6 @@
 
 ※ 더욱 자세한 안내와 서비스 이용은 로그인 후 이용 가능합니다.
         `.trim(),
-
         "장애인주차": `
 **장애인 전용 주차구역 위반 신고**
 
@@ -208,30 +251,34 @@
             imageInput.click();
         });
 
-        // ✅ 여러 장 선택 처리
-        imageInput.addEventListener('change', async (e) => {
+        // ✅ 여러 장 선택: "미리보기만" 보여주고 pendingImages에 쌓기
+        imageInput.addEventListener('change', (e) => {
             if (!isLoggedIn) return;
 
             const files = Array.from(e.target.files || []);
             if (!files.length) return;
 
+            // 같은 파일 재선택 가능
+            imageInput.value = "";
+
+            const okTypes = ["image/jpeg", "image/png"];
+            const MAX_MB = 10;
+
             for (const file of files) {
-                const okTypes = ["image/jpeg", "image/png"];
                 if (!okTypes.includes(file.type)) {
                     addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
-                    scrollToBottom();
                     continue;
                 }
-
-                const MAX_MB = 10;
                 if (file.size > MAX_MB * 1024 * 1024) {
                     addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
-                    scrollToBottom();
                     continue;
                 }
 
-                await sendImage(file);
+                // ✅ 미리보기 추가 + pending에 저장
+                addPendingImageBubble(file);
             }
+
+            scrollToBottom();
         });
 
         if (isLoggedIn) {
@@ -281,15 +328,75 @@
 
         const input = document.getElementById('chatInput');
         const text = (forcedText ?? input.value ?? "").trim();
-        if (!text) return;
+
+        // ✅ 텍스트도 없고, 첨부 이미지도 없으면 전송 X
+        if (!text && pendingImages.length === 0) return;
 
         const keywordSection = document.getElementById('keywordSection');
         if (keywordSection) keywordSection.style.display = 'none';
 
-        addMessage(text, 'user');
+        // ✅ 유저 텍스트는 있을 때만 표시
+        if (text) addMessage(text, 'user');
+
         if (!forcedText) input.value = "";
         scrollToBottom();
 
+        // ✅ 이미지가 있으면: 이미지 분석 API로 전송(한 장씩)
+        if (pendingImages.length > 0) {
+            let typingEl = showTyping();
+            scrollToBottom();
+
+            // ✅ 현재 큐 스냅샷
+            const queue = pendingImages.slice();
+
+            // ✅ 전송 중 표시 + X 비활성화(버블은 유지)
+            queue.forEach(item => {
+                if (item?.bubbleEl) item.bubbleEl.classList.add('sending');
+                if (item?.removeBtnEl) item.removeBtnEl.disabled = true;
+            });
+
+            // ✅ 중복 전송 방지: pending에서 먼저 제거(버블은 그대로 둠)
+            pendingImages = pendingImages.filter(x => !queue.includes(x));
+
+            try {
+                for (let i = 0; i < queue.length; i++) {
+                    const item = queue[i];
+                    const answer = await sendImageOnlyAPI(item.file, text);
+
+                    if (i === 0) {
+                        replaceMessage(typingEl, answer, "bot");
+                    } else {
+                        const t2 = showTyping();
+                        replaceMessage(t2, answer, "bot");
+                    }
+                    scrollToBottom();
+                }
+
+                // ✅ 전송 완료: sending 제거 + sent 처리(버블 유지, X는 숨김)
+                queue.forEach(item => {
+                    if (item?.bubbleEl) {
+                        item.bubbleEl.classList.remove('sending');
+                        item.bubbleEl.classList.add('sent');
+                    }
+                    if (item?.removeBtnEl) item.removeBtnEl.style.display = "none";
+                });
+
+            } catch (err) {
+                console.error(err);
+                replaceMessage(typingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
+                scrollToBottom();
+
+                // ✅ 실패 시: 다시 pending으로 복구 + X 다시 활성화(버블 유지)
+                pendingImages = queue.concat(pendingImages);
+                queue.forEach(item => {
+                    if (item?.bubbleEl) item.bubbleEl.classList.remove('sending');
+                    if (item?.removeBtnEl) item.removeBtnEl.disabled = false;
+                });
+            }
+            return;
+        }
+
+        // ✅ 이미지 없으면: 일반 채팅 API
         const loadingEl = showTyping();
         scrollToBottom();
 
@@ -314,11 +421,11 @@
             try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
 
             const answer =
+                data.analysis_result ??
                 data.answer ??
                 data.response ??
                 data.message ??
                 data.result ??
-                data.analysis_result ??
                 (typeof data === "string" ? data : JSON.stringify(data));
 
             replaceMessage(loadingEl, answer, "bot");
@@ -331,57 +438,36 @@
         }
     }
 
-    async function sendImage(file) {
-        const keywordSection = document.getElementById('keywordSection');
-        if (keywordSection) keywordSection.style.display = 'none';
+    // ✅ 이미지 API만 호출(미리보기/typing은 sendMessage에서 처리)
+    async function sendImageOnlyAPI(file, text) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("croom_idx", String(CROOM_IDX));
+        formData.append("text", (text || "").trim());
 
-        // ✅ 파란 말풍선 대신: 이미지 전용 말풍선
-        addUserImageBubble(file);
-        scrollToBottom();
+        const res = await fetch("/api/chat/image", {
+            method: "POST",
+            body: formData
+        });
 
-        const loadingEl = showTyping();
-        scrollToBottom();
+        const raw = await res.text();
 
-        try {
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("croom_idx", String(CROOM_IDX));
-
-            const input = document.getElementById('chatInput');
-            formData.append("text", (input.value || "").trim());
-
-            const res = await fetch("/api/chat/image", {
-                method: "POST",
-                body: formData
-            });
-
-            const raw = await res.text();
-
-            if (!res.ok) {
-                replaceMessage(loadingEl, "❌ 이미지 분석 서버 오류: " + raw, "bot");
-                scrollToBottom();
-                return;
-            }
-
-            let data;
-            try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
-
-            const answer =
-                data.analysis_result ??
-                data.answer ??
-                data.response ??
-                data.message ??
-                data.result ??
-                (typeof data === "string" ? data : JSON.stringify(data));
-
-            replaceMessage(loadingEl, answer, "bot");
-            scrollToBottom();
-
-        } catch (err) {
-            console.error(err);
-            replaceMessage(loadingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
-            scrollToBottom();
+        if (!res.ok) {
+            throw new Error(raw);
         }
+
+        let data;
+        try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
+
+        const answer =
+            data.analysis_result ??
+            data.answer ??
+            data.response ??
+            data.message ??
+            data.result ??
+            (typeof data === "string" ? data : JSON.stringify(data));
+
+        return answer;
     }
 
     // ✅ 텍스트 전처리: DB 메타/불필요 문단 제거
@@ -449,18 +535,15 @@
         return bubble;
     }
 
-    /**
-     * ✅ 핵심 수정:
-     * - 파란 말풍선(.message-bubble.user) 규칙을 아예 타지 않도록
-     *   "user-image-bubble" 클래스를 별도로 씀
-     *
-     * ⚠️ 이거 적용하려면 CSS에도 #messagesArea .user-image-bubble 규칙이 있어야 함
-     */
-    function addUserImageBubble(file) {
+    // ✅ 이미지 미리보기 + X 삭제 버튼 + pendingImages 저장
+    function addPendingImageBubble(file) {
         const messagesArea = document.getElementById('messagesArea');
 
+        const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random());
+
         const bubble = document.createElement('div');
-        bubble.className = "user-image-bubble"; // ✅ 핵심 (message-bubble user 제거)
+        bubble.className = "user-image-bubble";
+        bubble.dataset.pid = id;
 
         const img = document.createElement('img');
         img.className = "chat-image-preview";
@@ -469,15 +552,37 @@
         const url = URL.createObjectURL(file);
         img.src = url;
 
-        // ✅ 클릭 확대 (모달에는 같은 objectURL 사용)
+        // 클릭 확대
         img.addEventListener('click', () => openImageModal(url));
 
-        img.onerror = () => {
-            bubble.textContent = "⚠️ 이미지 미리보기를 불러오지 못했어요.";
-        };
+        // 삭제 버튼
+        const removeBtn = document.createElement('button');
+        removeBtn.type = "button";
+        removeBtn.className = "img-remove-btn";
+        removeBtn.setAttribute("aria-label", "remove image");
+        removeBtn.textContent = "×";
+
+        removeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // pendingImages에서 제거
+            pendingImages = pendingImages.filter(x => x.id !== id);
+
+            // DOM 제거
+            if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
+
+            // objectURL 해제
+            try { URL.revokeObjectURL(url); } catch (err) {}
+
+            scrollToBottom();
+        });
 
         bubble.appendChild(img);
+        bubble.appendChild(removeBtn);
         messagesArea.appendChild(bubble);
+
+        pendingImages.push({ id, file, url, bubbleEl: bubble, removeBtnEl: removeBtn });
         return bubble;
     }
 

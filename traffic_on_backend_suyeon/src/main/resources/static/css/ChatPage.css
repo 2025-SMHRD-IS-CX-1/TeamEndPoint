@@ -157,16 +157,12 @@
   background: #fff;
   color: #111827;
   font-size: 13.6px;
-
-  /* ✅ 가독성 */
   line-height: 1.46;
-
   font-weight: 500;
   letter-spacing: -0.25px;
   border: 1px solid rgba(0,0,0,0.08);
   box-shadow: 0 10px 26px rgba(0,0,0,0.06);
   position: relative;
-
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -185,17 +181,12 @@
 }
 
 /* =======================
-   ✅ 봇 답변(마크다운) 간격/스타일 완전 통제 (균형 버전)
+   ✅ 봇 답변(마크다운) 간격/스타일
 ======================= */
-#messagesArea .bot-content * {
-  margin: 0;
-  padding: 0;
-}
-
+#messagesArea .bot-content * { margin: 0; padding: 0; }
 #messagesArea .bot-content p { margin: 6px 0; }
 #messagesArea .bot-content > :first-child { margin-top: 0; }
 #messagesArea .bot-content > :last-child  { margin-bottom: 0; }
-
 #messagesArea .bot-content br { line-height: 1.15; }
 
 #messagesArea .bot-content ul,
@@ -203,12 +194,10 @@
   margin: 6px 0;
   padding-left: 18px;
 }
-
 #messagesArea .bot-content li {
   margin: 4px 0;
   line-height: 1.46;
 }
-
 #messagesArea .bot-content li > p { margin: 0; }
 
 #messagesArea .bot-content h1,
@@ -354,9 +343,7 @@
   cursor: pointer;
 }
 
-.chat-login-nudge-btn:hover {
-  transform: translateY(-1px);
-}
+.chat-login-nudge-btn:hover { transform: translateY(-1px); }
 
 /* Typing */
 .typing-indicator {
@@ -382,10 +369,12 @@
 }
 
 /* =========================================================
-   ✅✅✅ [추가] 이미지 업로드 말풍선 전용 (파란 말풍선 제거)
-   - JSP에서 이미지 말풍선 class를 "user-image-bubble"로 써야 함
-   - 기존 .message-bubble.user 규칙을 완전히 피함
+   ✅✅✅ 이미지 업로드 말풍선 전용 (파란 말풍선 완전 회피)
+   - JSP에서 이미지 버블 class: "user-image-bubble"
+   - 전송 후에도 이미지 남김: .sent / .sending 상태 지원
 ========================================================= */
+
+/* ✅ 이미지 버블 자체(파란 말풍선 스타일 절대 적용 X) */
 #messagesArea .user-image-bubble {
   align-self: flex-end;
   max-width: 75%;
@@ -397,18 +386,53 @@
   position: relative;
 }
 
+/* ✅ 꼬리 제거 */
 #messagesArea .user-image-bubble::after {
   display: none !important;
   content: none !important;
 }
 
-/* ✅ 이미지 자체만 보이게 */
+/* ✅ 이미지 */
 #messagesArea .user-image-bubble .chat-image-preview {
   display: block;
   width: 100%;
   max-width: 260px;
+  height: auto;
   border-radius: 14px;
   object-fit: cover;
   box-shadow: 0 10px 26px rgba(0,0,0,0.10);
   cursor: zoom-in;
+}
+
+/* ✅ X 삭제 버튼 */
+#messagesArea .user-image-bubble .img-remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.20);
+  font-size: 18px;
+  line-height: 34px;
+  font-weight: 900;
+  padding: 0;
+}
+
+#messagesArea .user-image-bubble .img-remove-btn:active {
+  transform: scale(0.98);
+}
+
+/* ✅ 전송 완료: X 숨김(이미지는 유지) */
+#messagesArea .user-image-bubble.sent .img-remove-btn {
+  display: none !important;
+}
+
+/* ✅ 전송 중: 살짝 흐리게 + 클릭 막고 싶으면 pointer-events 주석 해제 */
+#messagesArea .user-image-bubble.sending {
+  opacity: 0.78;
+  /* pointer-events: none; */
 }
