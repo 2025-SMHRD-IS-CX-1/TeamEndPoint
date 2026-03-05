@@ -426,7 +426,7 @@
   transform: scale(0.98);
 }
 
-/* ✅ 전송 완료: X 숨김(이미지는 유지) */
+/* ✅ 전송 완료: X 숨김(이미지는. 유지) */
 #messagesArea .user-image-bubble.sent .img-remove-btn {
   display: none !important;
 }
