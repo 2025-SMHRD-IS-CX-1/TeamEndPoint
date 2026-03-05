@@ -55,8 +55,8 @@
   padding: 14px 12px;
   overflow-y: auto;
 
-  /* ✅ 하단 추천질문 영역(고정) 때문에 내용이 가려지지 않게 여유 확보 */
-  padding-bottom: 140px;
+  /* ✅ 하단 입력바 + 로그인 버튼 고려 */
+  padding-bottom: 210px;
 }
 
 /* =======================
@@ -104,10 +104,15 @@
    Bubbles
 ======================= */
 
+/* ✅ 공통: 말풍선 최대 폭(가독성) */
+#messagesArea .message-bubble.bot,
+#messagesArea .message-bubble.user {
+  max-width: 75%;
+}
+
 /* 유저 말풍선 */
 #messagesArea .message-bubble.user {
   align-self: flex-end;
-  max-width: 60%;
   padding: 7px 10px;
   border-radius: 18px;
   border-bottom-right-radius: 8px;
@@ -123,16 +128,16 @@
   word-break: break-word;
 }
 
-/* ✅ 유저 꼬리(깨짐 방지: 삼각형 방식) */
+/* ✅ 유저 꼬리 */
 #messagesArea .message-bubble.user::after {
   content: "";
   position: absolute;
-  right: -6px;
-  top: 10px;
+  right: -4px;
+  top: 11px;
   width: 0;
   height: 0;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
   border-left: 6px solid #2f6bff;
 }
 
@@ -145,93 +150,128 @@
 /* 봇 말풍선 컨테이너 */
 #messagesArea .bot-content {
   align-self: flex-start;
-  max-width: 64%;
-  padding: 7px 10px;
+  max-width: 75%;
+  padding: 9px 11px;
   border-radius: 18px;
   border-bottom-left-radius: 8px;
   background: #fff;
   color: #111827;
   font-size: 13.6px;
 
-  /* ✅ 핵심: 기본 줄간격 더 압축.. */
-  line-height: 1.16;
+  /* ✅ 가독성: 너무 촘촘/너무 넓음 사이(추천) */
+  line-height: 1.46;
 
   font-weight: 500;
   letter-spacing: -0.25px;
   border: 1px solid rgba(0,0,0,0.08);
   box-shadow: 0 10px 26px rgba(0,0,0,0.06);
   position: relative;
-  white-space: pre-wrap;
+
+  /* ✅ marked가 만든 요소들의 여백이 삐져나오는 걸 방지 */
+  overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-/* ✅ 봇 꼬리(깨짐 방지: 삼각형 방식) */
+/* ✅ 봇 꼬리 */
 #messagesArea .bot-content::before {
   content: "";
   position: absolute;
-  left: -4px;
-  top: 12px;
+  left: -5px;
+  top: 13px;
   width: 0;
   height: 0;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-right: 7px solid #fff;
-  filter: drop-shadow(-1px 0 rgba(0,0,0,0.05));
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 6px solid #fff;
 }
 
 /* =======================
-   ✅ 봇 답변(마크다운) 간격 강제 압축
-   - 지금 네 화면에서 "높이" 커지는 주범이 기본 margin임
+   ✅ 봇 답변(마크다운) 간격/스타일 완전 통제 (균형 버전)
+   - 너무 좁지 않게 "채팅 느낌" 유지
 ======================= */
 
-/* 문단/제목/리스트/인용/코드블록 기본 margin 전부 제어 */
-#messagesArea .bot-content p,
-#messagesArea .bot-content ul,
-#messagesArea .bot-content ol,
-#messagesArea .bot-content li,
-#messagesArea .bot-content h1,
-#messagesArea .bot-content h2,
-#messagesArea .bot-content h3,
-#messagesArea .bot-content h4,
-#messagesArea .bot-content h5,
-#messagesArea .bot-content h6,
-#messagesArea .bot-content blockquote,
-#messagesArea .bot-content pre {
-  margin: 0 !important;
+/* ✅ 말풍선 안 모든 요소: 기본 margin/padding 초기화 */
+#messagesArea .bot-content * {
+  margin: 0;
+  padding: 0;
 }
 
-/* 리스트는 "블록 위아래"만 아주 살짝 */
+/* ✅ 문단 간격 */
+#messagesArea .bot-content p {
+  margin: 6px 0;
+}
+
+/* ✅ 첫/마지막 요소 여백 정리 */
+#messagesArea .bot-content > :first-child { margin-top: 0; }
+#messagesArea .bot-content > :last-child  { margin-bottom: 0; }
+
+/* ✅ br 과다로 생기는 빈 공간 완화 */
+#messagesArea .bot-content br {
+  line-height: 1.15;
+}
+
+/* ✅ 리스트(ul/ol) */
 #messagesArea .bot-content ul,
 #messagesArea .bot-content ol {
-  margin: 2px 0 !important;
-  padding-left: 14px !important;
+  margin: 6px 0;
+  padding-left: 18px;
 }
 
-/* li 간격을 진짜로 붙임 */
+/* ✅ li 간격 */
 #messagesArea .bot-content li {
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.16 !important;
+  margin: 4px 0;
+  line-height: 1.46;
 }
 
-/* 제목류가 커보이면(굵게) 높이 먹으니 축소 */
+/* ✅ li 내부 p로 2배 벌어짐 방지 */
+#messagesArea .bot-content li > p {
+  margin: 0;
+}
+
+/* ✅ 제목류 */
 #messagesArea .bot-content h1,
 #messagesArea .bot-content h2,
 #messagesArea .bot-content h3,
 #messagesArea .bot-content h4,
 #messagesArea .bot-content h5,
 #messagesArea .bot-content h6 {
-  font-size: 13.6px !important;
-  font-weight: 800 !important;
-  line-height: 1.16 !important;
+  margin: 8px 0 6px 0;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.28;
 }
 
-/* strong는 그대로 */
-#messagesArea .bot-content strong { font-weight: 800; }
+/* ✅ strong */
+#messagesArea .bot-content strong { font-weight: 900; }
+
+/* ✅ pre/code */
+#messagesArea .bot-content pre {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(17, 24, 39, 0.05);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+#messagesArea .bot-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12.5px;
+}
+
+/* ✅ blockquote */
+#messagesArea .bot-content blockquote {
+  margin: 8px 0;
+  padding-left: 10px;
+  border-left: 3px solid rgba(0,0,0,0.12);
+  color: rgba(17, 24, 39, 0.85);
+}
+
+/* ✅ 취소선 안전장치 */
+#messagesArea .bot-content del { text-decoration: none !important; }
 
 /* =======================
-   ✅ 추천질문(키워드) 하단 고정 영역
-   - JSP에서 keywordSection을 .keyword-dock으로 감싸면 완벽히 동작
+   ✅ 추천질문(키워드) 영역
 ======================= */
 .keyword-dock {
   position: sticky;
@@ -242,17 +282,19 @@
 
 .non-member-chat-keywords {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 10px;
   padding: 10px 10px;
+  width: 100%;
   background: rgba(235, 243, 249, 0.92);
   backdrop-filter: blur(6px);
   border-radius: 16px;
   border: 1px solid rgba(0,0,0,0.06);
 }
 
-/* 키워드 버튼 */
 .chat-keyword-btn {
   background: #fff;
   border: 1px solid rgba(0,0,0,0.10);
@@ -305,6 +347,37 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+/* =======================
+   ✅ 로그인 하러가기 버튼(뼈대만)
+======================= */
+.login-nudge-msg {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 100%;
+  max-width: 393px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.chat-login-nudge-btn {
+  pointer-events: auto;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.18);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 900;
+  font-size: 14px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+  cursor: pointer;
+}
+
+.chat-login-nudge-btn:hover {
+  transform: translateY(-1px);
 }
 
 /* Typing */
