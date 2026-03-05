@@ -81,27 +81,33 @@ body {
   justify-content: space-between;
   padding: 0 14px;
   border-bottom: 1px solid #eef0f3;
+
+  position: relative;   /* ⭐ 이거 추가 */
 }
 
 .top-header .left,
-.top-header .right {
+.top-header .right{
+  flex: 0 0 56px;
+  min-width: 56px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  min-width: 48px;
 }
 
-.top-header .center {
+.top-header .center{
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: 800;
   letter-spacing: 0.2px;
+  line-height: 1;
 }
 
-.top-header .center img {
-  width: 32px;
-  height: 32px;
+.top-header .center img{
+  display: block;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
 }
 
@@ -202,4 +208,45 @@ body {
   width: 1px;
   height: 32px;
   background: #eef0f3;
+}
+
+/* ===== Top Header ===== */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 56px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid #eef0f3;
+
+  position: relative;   /* ⭐ 이것만 여기 추가 */
+}
+
+/* ===== 아래 2,3,4번은 CSS 맨 아래에 추가 ===== */
+
+.logo-container{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-container img{
+  width: 32px !important;
+  height: 32px !important;
+  display: block;
+  object-fit: contain;
+}
+
+.logo-text{
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  line-height: 1;
 }
