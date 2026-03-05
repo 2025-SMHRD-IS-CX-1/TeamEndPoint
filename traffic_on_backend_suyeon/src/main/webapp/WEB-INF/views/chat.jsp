@@ -9,7 +9,7 @@
     <!-- ✅ 마크다운 렌더링 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- ✅ 사진. 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
+    <!-- ✅ 사진.. 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
     <style>
         .image-modal-overlay {
             position: fixed;
