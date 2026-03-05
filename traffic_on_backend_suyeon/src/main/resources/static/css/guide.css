@@ -1,0 +1,198 @@
+/* ========== 기존 유지 ========== */
+.guide-container{
+  max-width:420px;
+  margin:0 auto;
+  background:#fff;
+  min-height:100vh;
+  /* 하단 네비 가리면 여유 */
+  padding-bottom:90px;
+}
+
+/* 상단 */
+.page-header{
+  display:flex;
+  align-items:center;
+  padding:15px;
+  border-bottom:1px solid #eee;
+  background:#fff;
+}
+
+.page-header h2{
+  flex:1;
+  text-align:center;
+  margin:0;
+  font-size:18px;
+  font-weight:700;
+}
+
+/* 가로 아이콘 메뉴 */
+.category-scroll{
+  display:flex;
+  overflow-x:auto;
+  gap:18px;
+  padding:16px 16px 10px;
+  background:#f6f8fb;   /* 팀 화면 느낌 */
+  border-bottom:1px solid #eee;
+}
+
+/* 스크롤바 얇게 (선택) */
+.category-scroll::-webkit-scrollbar{
+  height:6px;
+}
+.category-scroll::-webkit-scrollbar-thumb{
+  background:#d9d9d9;
+  border-radius:10px;
+}
+
+.category-item{
+  text-align:center;
+  min-width:80px;
+  flex:0 0 auto;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  padding:0;
+}
+
+.circle{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  margin:0 auto 6px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  border:2px solid transparent;
+}
+
+.category-item.active .circle{
+  border-color:#ff6b00;
+}
+
+.category-item .label{
+  display:block;
+  font-size:12px;
+  color:#666;
+  line-height:1.1;
+  word-break:keep-all;
+}
+
+.category-item.active .label{
+  color:#111;
+  font-weight:700;
+}
+
+
+/* ========== 여기부터 “추가” (핵심) ========== */
+
+/* 내용 영역 */
+.guide-content{
+  padding:18px 16px 0;
+  background:#fff;
+}
+
+/* 큰 섹션 타이틀 (교통안전 같은 거) */
+.section-title{
+  text-align:center;
+  margin:18px 0 8px;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-0.3px;
+}
+
+/* 소제목 (신호·표지 안전 같은 거) */
+.sub-title{
+  margin:18px 0 12px;
+  padding-bottom:8px;
+  border-bottom:1px solid #ddd;
+  font-size:16px;
+  font-weight:800;
+  color:#111;
+}
+
+/* 카드 2열 grid */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:26px;
+}
+
+/* 카드 */
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* 제목 + 주황 점(● 대신) */
+.card-title{
+  position:relative;
+  padding-left:14px;
+  margin:0 0 6px;
+  font-size:14px;
+  font-weight:800;
+  color:#111;
+  line-height:1.25;
+}
+
+.card-title::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:7px;
+  width:6px;
+  height:6px;
+  background:#ff6b00;
+  border-radius:50%;
+}
+
+/* 설명 */
+.card-desc{
+  margin:0;
+  font-size:12px;
+  color:#555;
+  line-height:1.35;
+  min-height:44px; /* 카드 높이 균형 */
+}
+
+/* 이미지 (팀 화면처럼 가로 꽉 + 라운드) */
+.card-img{
+  width:100%;
+  height:92px;          /* 팀 화면 느낌 */
+  object-fit:cover;      /* 사진 꽉 채우기 */
+  border-radius:10px;
+  margin-top:10px;
+  display:block;
+}
+
+/* 화면이 아주 작을 때(모바일) 카드 간격 조정 */
+@media (max-width:360px){
+  .grid{ gap:12px; }
+  .card{ padding:10px; }
+  .card-img{ height:86px; }
+}
+
+.guide-container{
+  width:100%;
+  padding:0 16px;
+  box-sizing:border-box;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.category-scroll{
+  padding: 18px 16px;   /* 좌우 여백 */
+}
+
+.category-item{
+  flex: 0 0 auto;       /* 버튼이 찌그러지지 않게 */
+}

@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -140,7 +139,7 @@
 
       <div class="nav-divider"></div>
 
-      <a class="nav-item" href="${pageContext.request.contextPath}/complaint-type">
+      <a class="nav-item" href="${pageContext.request.contextPath}/guide">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
              viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round"
