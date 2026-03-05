@@ -6,13 +6,54 @@
     <title>TRAFFIC:ON - 챗봇가이드</title>
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <!-- ✅ 마크다운 렌더링 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- ✅ 사진. 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
+    <style>
+        .image-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            padding: 18px;
+        }
+        .image-modal-overlay.open { display: flex; }
+
+        .image-modal {
+            max-width: min(920px, 96vw);
+            max-height: 92vh;
+            position: relative;
+        }
+        .image-modal img {
+            display: block;
+            max-width: 100%;
+            max-height: 92vh;
+            border-radius: 14px;
+            background: #fff;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+            font-size: 20px;
+            line-height: 40px;
+        }
+    </style>
 </head>
 <body>
 <div class="chat-page-container">
-    <!-- Header. -->
+    <!-- Header -->
     <header class="chat-header">
         <button class="back-btn" onclick="history.back()">
             <i data-lucide="chevron-left"></i>
@@ -60,7 +101,8 @@
                 <i data-lucide="plus" size="24"></i>
             </button>
 
-            <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png" style="display:none"/>
+            <!-- ✅ 여러 장 업로드: multiple 추가 -->
+            <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png" multiple style="display:none"/>
 
             <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
 
@@ -71,16 +113,21 @@
     </div>
 </div>
 
+<!-- ✅ 이미지 확대 모달 -->
+<div class="image-modal-overlay" id="imageModalOverlay" aria-hidden="true">
+    <div class="image-modal" role="dialog" aria-modal="true">
+        <button class="image-modal-close" id="imageModalClose" type="button" aria-label="close">×</button>
+        <img id="imageModalImg" src="" alt="">
+    </div>
+</div>
+
 <script>
     lucide.createIcons();
 
     const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
 
     if (window.marked) {
-        marked.setOptions({
-            breaks: true,
-            gfm: true
-        });
+        marked.setOptions({ breaks: true, gfm: true });
     }
 
     const CROOM_IDX = 2;
@@ -148,6 +195,7 @@
         const plusBtn = document.getElementById('plusBtn');
         const imageInput = document.getElementById('imageInput');
 
+        // ✅ + 버튼 → file input 트리거
         plusBtn.addEventListener('click', () => {
             if (!isLoggedIn) {
                 addMessage("이미지 분석 기능은 로그인 후 이용 가능합니다.", "bot");
@@ -155,31 +203,35 @@
                 scrollToBottom();
                 return;
             }
-            imageInput.value = "";
+            imageInput.value = ""; // 같은 파일 재선택 가능하게
             imageInput.click();
         });
 
+        // ✅ 여러 장 선택 처리
         imageInput.addEventListener('change', async (e) => {
             if (!isLoggedIn) return;
 
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
 
-            const okTypes = ["image/jpeg", "image/png"];
-            if (!okTypes.includes(file.type)) {
-                addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
-                scrollToBottom();
-                return;
+            // ✅ 여러장: 순서대로 업로드/분석
+            for (const file of files) {
+                const okTypes = ["image/jpeg", "image/png"];
+                if (!okTypes.includes(file.type)) {
+                    addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
+                    scrollToBottom();
+                    continue;
+                }
+
+                const MAX_MB = 10;
+                if (file.size > MAX_MB * 1024 * 1024) {
+                    addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
+                    scrollToBottom();
+                    continue;
+                }
+
+                await sendImage(file);
             }
-
-            const MAX_MB = 10;
-            if (file.size > MAX_MB * 1024 * 1024) {
-                addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
-                scrollToBottom();
-                return;
-            }
-
-            await sendImage(file);
         });
 
         if (isLoggedIn) {
@@ -199,6 +251,9 @@
         }
 
         window.addEventListener('resize', () => updateLoginNudgePosition());
+
+        // ✅ 모달 이벤트
+        setupImageModal();
     });
 
     function handleKeywordClick(keyword) {
@@ -280,7 +335,8 @@
         const keywordSection = document.getElementById('keywordSection');
         if (keywordSection) keywordSection.style.display = 'none';
 
-        addImageMessage(file, 'user');
+        // ✅ 텍스트(Uploaded image) 같은 거 없이, 유저 이미지 말풍선만 추가
+        addUserImageBubble(file);
         scrollToBottom();
 
         const loadingEl = showTyping();
@@ -328,48 +384,42 @@
         }
     }
 
-    // ✅ [핵심] 텍스트 전처리: "DB 메타데이터" 제거 + (차량기지 건설공사 문단 제거)
+    // ✅ 텍스트 전처리: "DB 메타데이터" 제거 + (차량기지 건설공사 문단 제거)
     function normalizeBotText(text) {
         let t = (text || "");
 
-        // 1) 개행 통일
         t = t.replace(/\r\n/g, "\n");
-
-        // 2) 틸드(~) 취소선 방지
         t = t.replace(/(\S)~(\S)/g, "$1 ~ $2");
 
-        // ✅ [추가] "또한, 광주도시철도2호선 차량기지 건설공사..." 문단 제거
-        // - 줄바꿈/문장 길이 상관없이 해당 문단만 통째로 삭제
+        // "또한, 광주도시철도2호선 차량기지 건설공사..." 문단 제거
         t = t.replace(
             /(^|\n)\s*또한,\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
             "\n"
         );
-
-        // ✅ (선택) "또한," 없이 시작하는 변형까지 제거하고 싶으면 유지
         t = t.replace(
             /(^|\n)\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
             "\n"
         );
 
-        // 3) (id=2, row_no=2) 제거
+        // (id=2, row_no=2) 제거
         t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
 
-        // 4) 쉼표/공백 찌꺼기 정리
+        // 쉼표/공백 찌꺼기 정리
         t = t.replace(/,\s*,+/g, ", ");
         t = t.replace(/\s+,/g, ",");
         t = t.replace(/,\s*\n/g, "\n");
         t = t.replace(/,\s*$/g, "");
 
-        // 5) 공백 정리는 "스페이스/탭만" (줄바꿈은 절대 건드리지 않음)
+        // 공백 정리는 스페이스/탭만
         t = t.replace(/[ \t]{2,}/g, " ");
 
-        // 6) 빈 줄 폭발 제거 (3줄 이상 -> 2줄)
+        // 빈 줄 폭발 제거
         t = t.replace(/\n{3,}/g, "\n\n");
 
-        // 7) "라벨:\n\n- " -> "라벨:\n- "
+        // "라벨:\n\n- " -> "라벨:\n- "
         t = t.replace(/:\n\n(?=[-*\+])/g, ":\n");
 
-        // 8) 리스트 앞 공백 정리
+        // 리스트 앞 공백 정리
         t = t.replace(/\n[ \t]+([-*+])[ \t]+/g, "\n$1 ");
 
         return t.trim();
@@ -409,13 +459,33 @@
         return bubble;
     }
 
-    function addImageMessage(file, sender) {
+    // ✅ 유저 이미지 말풍선: 파란 배경 없애려면 class에 "image" 추가가 핵심
+    function addUserImageBubble(file) {
         const messagesArea = document.getElementById('messagesArea');
-        const url = URL.createObjectURL(file);
 
         const bubble = document.createElement('div');
-        bubble.className = sender === "bot" ? "message-bubble bot" : "message-bubble user";
-        bubble.innerHTML = `<img src="${url}" class="chat-image-preview" alt="uploaded image" />`;
+        bubble.className = "message-bubble user image"; // ✅ 핵심
+
+        const img = document.createElement('img');
+        img.className = "chat-image-preview";
+        img.alt = "";
+
+        const url = URL.createObjectURL(file);
+        img.src = url;
+
+        // ✅ 클릭하면 확대
+        img.addEventListener('click', () => openImageModal(url));
+
+        img.onerror = () => {
+            bubble.innerText = "⚠️ 이미지 미리보기를 불러오지 못했어요.";
+            URL.revokeObjectURL(url);
+        };
+
+        // ✅ 모달에서 쓰는 url 때문에 여기서 revoke하면 안 됨.
+        // 모달/버블이 제거될 일이 거의 없어서, 메모리 신경 쓰면 아래처럼 처리 가능:
+        // img.onload = () => { /* no revoke here */ };
+
+        bubble.appendChild(img);
         messagesArea.appendChild(bubble);
         return bubble;
     }
@@ -489,6 +559,43 @@
     function scrollToBottom() {
         const chatContent = document.getElementById('chatContent');
         chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
+    /* =========================
+       ✅ 이미지 확대 모달
+    ========================= */
+    function setupImageModal() {
+        const overlay = document.getElementById('imageModalOverlay');
+        const closeBtn = document.getElementById('imageModalClose');
+
+        closeBtn.addEventListener('click', closeImageModal);
+
+        // 바깥 클릭 닫기
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeImageModal();
+        });
+
+        // ESC 닫기
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
+    }
+
+    function openImageModal(src) {
+        const overlay = document.getElementById('imageModalOverlay');
+        const img = document.getElementById('imageModalImg');
+        img.src = src;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeImageModal() {
+        const overlay = document.getElementById('imageModalOverlay');
+        const img = document.getElementById('imageModalImg');
+        if (!overlay.classList.contains('open')) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        img.src = "";
     }
 </script>
 </body>
