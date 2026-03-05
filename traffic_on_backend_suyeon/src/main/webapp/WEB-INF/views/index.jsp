@@ -37,7 +37,9 @@
     <!-- ✅ 상단 헤더 -->
     <header class="top-header">
       <div class="left">
-        <button class="icon-btn" aria-label="menu">☰</button>
+		<button class="icon-btn" aria-label="menu" onclick="openSideMenu()">
+		  <i data-lucide="menu"></i>
+		</button>
       </div>
 
       <div class="center">
@@ -166,6 +168,7 @@
         <span>신청절차 안내</span>
       </a>
     </nav>
+	  <%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
   </div>
   <!-- ✅ 모바일 화면 래퍼 끝 -->
@@ -173,5 +176,6 @@
   <script>
     lucide.createIcons();
   </script>
+
 </body>
 </html>

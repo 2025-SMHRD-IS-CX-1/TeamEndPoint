@@ -6,7 +6,7 @@
         <div class="sidemenu-content">
             <div class="sidemenu-header">
                 <div class="user-status-section">
-                    <!-- isLoggedIn value should be passed from the host page or session -->
+                    <!-- isLoggedIn value should be passed from the host page or session --> 
                     <% Boolean isLoggedIn=(Boolean) session.getAttribute("isLoggedIn"); if (isLoggedIn !=null &&
                         isLoggedIn) { %>
                         <div class="user-logged-in">
