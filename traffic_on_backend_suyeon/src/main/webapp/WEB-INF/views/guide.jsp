@@ -62,7 +62,7 @@
       <div class="card">
         <h4 class="card-title">신호등 고장 / 점멸 오류</h4>
         <p class="card-desc">신호등이 작동하지 않거나 비정상적으로 점멸되어 교차로 안전을 위협하는 경우</p>
-        <img class="card-img" src="${pageContext.request.contextPath}/images/signal_error.png" alt="signal_error">
+        <img class="card-img" src="${pageContext.request.contextPath}/images/traffic_light_error.png" alt="signal_error">
       </div>
 
       <div class="card">
@@ -402,7 +402,7 @@
       <div class="card">
         <h4 class="card-title">점자블록 미설치·훼손</h4>
         <p class="card-desc">시각장애인을 위한 점자블록이 없거나 파손된 경우</p>
-        <img class="card-img" src="${pageContext.request.contextPath}/images/braile_block_issue.png" alt="braile_block_issue">
+        <img class="card-img" src="${pageContext.request.contextPath}/images/braille_block_issue.png" alt="braille_block_issue">
       </div>
 
       <div class="card">
@@ -431,13 +431,13 @@
       <div class="card">
         <h4 class="card-title">오토바이 소음</h4>
         <p class="card-desc">이륜차 배기음 등으로 생활 소음 피해가 발생하는 경우</p>
-        <img class="card-img" src="${pageContext.request.contextPath}/images/motorcycle_noise.png" alt="motorcycle_noise">
+        <img class="card-img" src="${pageContext.request.contextPath}/images/motorcyle_noise.png" alt="motorcycle_noise">
       </div>
 
       <div class="card">
         <h4 class="card-title">배기가스</h4>
         <p class="card-desc">차량 매연으로 인한 냄새·시야 방해 등 시민 불편이 발생하는 경우</p>
-        <img class="card-img" src="${pageContext.request.contextPath}/images/vehicle_exhaust.png" alt="vehicle_exhaust">
+        <img class="card-img" src="${pageContext.request.contextPath}/images/vhicle_exhaust.png" alt="vehicle_exhaust">
       </div>
     </div>
 
