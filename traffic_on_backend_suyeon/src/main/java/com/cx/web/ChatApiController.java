@@ -52,7 +52,7 @@ public class ChatApiController {
     }
 
     /**
-     * ✅ 이미지 업로드/분석 -> Spring(/api/chat/image) -> FastAPI(/api/media/image)
+     * ✅ 이미지 업로드/분석. -> Spring(/api/chat/image) -> FastAPI(/api/media/image)
      *
      * ✅ 400 invalid_image_format (Invalid MIME type) 해결 핵심:
      * - FastAPI로 보낼 때 file 파트에 Content-Type(image/jpeg, image/png) + filename을 명확히 붙여서 전달

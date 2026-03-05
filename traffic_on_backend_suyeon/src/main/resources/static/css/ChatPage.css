@@ -1,7 +1,7 @@
 /* LOADED: ChatPage.css */
 
 /* =======================
-   Layout...
+   Layout.
 ======================= */
 .chat-page-container {
   background-color: #ebf3f9;
@@ -158,7 +158,7 @@
   color: #111827;
   font-size: 13.6px;
 
-  /* ✅ 가독성: 너무 촘촘/너무 넓음 사이(추천) */
+  /* ✅ 가독성 */
   line-height: 1.46;
 
   font-weight: 500;
@@ -167,7 +167,6 @@
   box-shadow: 0 10px 26px rgba(0,0,0,0.06);
   position: relative;
 
-  /* ✅ marked가 만든 요소들의 여백이 삐져나오는 걸 방지 */
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -187,48 +186,31 @@
 
 /* =======================
    ✅ 봇 답변(마크다운) 간격/스타일 완전 통제 (균형 버전)
-   - 너무 좁지 않게 "채팅 느낌" 유지
 ======================= */
-
-/* ✅ 말풍선 안 모든 요소: 기본 margin/padding 초기화 */
 #messagesArea .bot-content * {
   margin: 0;
   padding: 0;
 }
 
-/* ✅ 문단 간격 */
-#messagesArea .bot-content p {
-  margin: 6px 0;
-}
-
-/* ✅ 첫/마지막 요소 여백 정리 */
+#messagesArea .bot-content p { margin: 6px 0; }
 #messagesArea .bot-content > :first-child { margin-top: 0; }
 #messagesArea .bot-content > :last-child  { margin-bottom: 0; }
 
-/* ✅ br 과다로 생기는 빈 공간 완화 */
-#messagesArea .bot-content br {
-  line-height: 1.15;
-}
+#messagesArea .bot-content br { line-height: 1.15; }
 
-/* ✅ 리스트(ul/ol) */
 #messagesArea .bot-content ul,
 #messagesArea .bot-content ol {
   margin: 6px 0;
   padding-left: 18px;
 }
 
-/* ✅ li 간격 */
 #messagesArea .bot-content li {
   margin: 4px 0;
   line-height: 1.46;
 }
 
-/* ✅ li 내부 p로 2배 벌어짐 방지 */
-#messagesArea .bot-content li > p {
-  margin: 0;
-}
+#messagesArea .bot-content li > p { margin: 0; }
 
-/* ✅ 제목류 */
 #messagesArea .bot-content h1,
 #messagesArea .bot-content h2,
 #messagesArea .bot-content h3,
@@ -241,10 +223,8 @@
   line-height: 1.28;
 }
 
-/* ✅ strong */
 #messagesArea .bot-content strong { font-weight: 900; }
 
-/* ✅ pre/code */
 #messagesArea .bot-content pre {
   margin: 8px 0;
   padding: 8px 10px;
@@ -259,7 +239,6 @@
   font-size: 12.5px;
 }
 
-/* ✅ blockquote */
 #messagesArea .bot-content blockquote {
   margin: 8px 0;
   padding-left: 10px;
@@ -267,7 +246,6 @@
   color: rgba(17, 24, 39, 0.85);
 }
 
-/* ✅ 취소선 안전장치 */
 #messagesArea .bot-content del { text-decoration: none !important; }
 
 /* =======================
@@ -401,4 +379,36 @@
   0% { opacity: 0.2; transform: translateY(0); }
   20% { opacity: 1; transform: translateY(-2px); }
   100% { opacity: 0.2; transform: translateY(0); }
+}
+
+/* =========================================================
+   ✅✅✅ [추가] 이미지 업로드 말풍선 전용 (파란 말풍선 제거)
+   - JSP에서 이미지 말풍선 class를 "user-image-bubble"로 써야 함
+   - 기존 .message-bubble.user 규칙을 완전히 피함
+========================================================= */
+#messagesArea .user-image-bubble {
+  align-self: flex-end;
+  max-width: 75%;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 6px 0 !important;
+  border-radius: 0 !important;
+  position: relative;
+}
+
+#messagesArea .user-image-bubble::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* ✅ 이미지 자체만 보이게 */
+#messagesArea .user-image-bubble .chat-image-preview {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+  cursor: zoom-in;
 }

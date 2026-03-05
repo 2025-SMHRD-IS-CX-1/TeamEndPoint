@@ -6,10 +6,11 @@
     <title>TRAFFIC:ON - 챗봇가이드</title>
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <!-- ✅ 마크다운 렌더링 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- ✅ 사진.. 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
+    <!-- ✅ 사진 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
     <style>
         .image-modal-overlay {
             position: fixed;
@@ -101,7 +102,7 @@
                 <i data-lucide="plus" size="24"></i>
             </button>
 
-            <!-- ✅ 여러 장 업로드: multiple 추가 -->
+            <!-- ✅ 여러 장 업로드: multiple -->
             <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png" multiple style="display:none"/>
 
             <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
@@ -214,7 +215,6 @@
             const files = Array.from(e.target.files || []);
             if (!files.length) return;
 
-            // ✅ 여러장: 순서대로 업로드/분석
             for (const file of files) {
                 const okTypes = ["image/jpeg", "image/png"];
                 if (!okTypes.includes(file.type)) {
@@ -335,7 +335,7 @@
         const keywordSection = document.getElementById('keywordSection');
         if (keywordSection) keywordSection.style.display = 'none';
 
-        // ✅ 텍스트(Uploaded image) 같은 거 없이, 유저 이미지 말풍선만 추가
+        // ✅ 파란 말풍선 대신: 이미지 전용 말풍선
         addUserImageBubble(file);
         scrollToBottom();
 
@@ -384,14 +384,13 @@
         }
     }
 
-    // ✅ 텍스트 전처리: "DB 메타데이터" 제거 + (차량기지 건설공사 문단 제거)
+    // ✅ 텍스트 전처리: DB 메타/불필요 문단 제거
     function normalizeBotText(text) {
         let t = (text || "");
 
         t = t.replace(/\r\n/g, "\n");
         t = t.replace(/(\S)~(\S)/g, "$1 ~ $2");
 
-        // "또한, 광주도시철도2호선 차량기지 건설공사..." 문단 제거
         t = t.replace(
             /(^|\n)\s*또한,\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
             "\n"
@@ -401,25 +400,16 @@
             "\n"
         );
 
-        // (id=2, row_no=2) 제거
         t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
 
-        // 쉼표/공백 찌꺼기 정리
         t = t.replace(/,\s*,+/g, ", ");
         t = t.replace(/\s+,/g, ",");
         t = t.replace(/,\s*\n/g, "\n");
         t = t.replace(/,\s*$/g, "");
 
-        // 공백 정리는 스페이스/탭만
         t = t.replace(/[ \t]{2,}/g, " ");
-
-        // 빈 줄 폭발 제거
         t = t.replace(/\n{3,}/g, "\n\n");
-
-        // "라벨:\n\n- " -> "라벨:\n- "
         t = t.replace(/:\n\n(?=[-*\+])/g, ":\n");
-
-        // 리스트 앞 공백 정리
         t = t.replace(/\n[ \t]+([-*+])[ \t]+/g, "\n$1 ");
 
         return t.trim();
@@ -459,12 +449,18 @@
         return bubble;
     }
 
-    // ✅ 유저 이미지 말풍선: 파란 배경 없애려면 class에 "image" 추가가 핵심
+    /**
+     * ✅ 핵심 수정:
+     * - 파란 말풍선(.message-bubble.user) 규칙을 아예 타지 않도록
+     *   "user-image-bubble" 클래스를 별도로 씀
+     *
+     * ⚠️ 이거 적용하려면 CSS에도 #messagesArea .user-image-bubble 규칙이 있어야 함
+     */
     function addUserImageBubble(file) {
         const messagesArea = document.getElementById('messagesArea');
 
         const bubble = document.createElement('div');
-        bubble.className = "message-bubble user image"; // ✅ 핵심
+        bubble.className = "user-image-bubble"; // ✅ 핵심 (message-bubble user 제거)
 
         const img = document.createElement('img');
         img.className = "chat-image-preview";
@@ -473,17 +469,12 @@
         const url = URL.createObjectURL(file);
         img.src = url;
 
-        // ✅ 클릭하면 확대
+        // ✅ 클릭 확대 (모달에는 같은 objectURL 사용)
         img.addEventListener('click', () => openImageModal(url));
 
         img.onerror = () => {
-            bubble.innerText = "⚠️ 이미지 미리보기를 불러오지 못했어요.";
-            URL.revokeObjectURL(url);
+            bubble.textContent = "⚠️ 이미지 미리보기를 불러오지 못했어요.";
         };
-
-        // ✅ 모달에서 쓰는 url 때문에 여기서 revoke하면 안 됨.
-        // 모달/버블이 제거될 일이 거의 없어서, 메모리 신경 쓰면 아래처럼 처리 가능:
-        // img.onload = () => { /* no revoke here */ };
 
         bubble.appendChild(img);
         messagesArea.appendChild(bubble);
@@ -570,12 +561,10 @@
 
         closeBtn.addEventListener('click', closeImageModal);
 
-        // 바깥 클릭 닫기
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closeImageModal();
         });
 
-        // ESC 닫기
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeImageModal();
         });
