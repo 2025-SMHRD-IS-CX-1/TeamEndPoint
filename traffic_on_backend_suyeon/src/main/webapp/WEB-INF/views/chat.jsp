@@ -7,351 +7,424 @@
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- ✅ 마크다운(**, 리스트, 줄바꿈 등) 렌더링용 -->
+    <!-- ✅ 마크다운 렌더링 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- ✅ 사진 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
+    <style>
+        .image-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            padding: 18px;
+        }
+        .image-modal-overlay.open { display: flex; }
+
+        .image-modal {
+            max-width: min(920px, 96vw);
+            max-height: 92vh;
+            position: relative;
+        }
+        .image-modal img {
+            display: block;
+            max-width: 100%;
+            max-height: 92vh;
+            border-radius: 14px;
+            background: #fff;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+            font-size: 20px;
+            line-height: 40px;
+        }
+    </style>
 </head>
 <body>
-    <div class="chat-page-container">
-        <!-- Header -->
-        <header class="chat-header">
-            <button class="back-btn" onclick="history.back()">
-                <i data-lucide="chevron-left"></i>
-            </button>
-            <div class="chat-logo">
-                <span class="logo-text">TRAFFIC:ON</span>
+<div class="chat-page-container">
+    <!-- Header -->
+    <header class="chat-header">
+        <button class="back-btn" onclick="history.back()">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <div class="chat-logo">
+            <span class="logo-text">TRAFFIC:ON</span>
+        </div>
+        <div class="header-spacer"></div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="chat-content" id="chatContent">
+        <div class="chat-intro">
+            <div class="pengrimi-avatar">
+                <img src="/images/Pengrimi.png" alt="펭리미" style="width: 100%; height: 100%; object-fit: contain;">
             </div>
-            <div class="header-spacer"></div>
-        </header>
-
-        <!-- Content Area -->
-        <div class="chat-content" id="chatContent">
-
-            <!-- ✅ 원래 화면 복구: display:none 제거 -->
-            <div class="chat-intro">
-                <div class="pengrimi-avatar">
-                    <img src="/images/Pengrimi.png" alt="펭리미" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <div class="pengrimi-message">
-                    <p>안녕하세요~!</p>
-                    <p><strong>교통 길잡이 펭리미입니다 🐧</strong></p>
-                    <p>어떤 교통 불편 때문에 불편하셨나요?</p>
-                </div>
+            <div class="pengrimi-message">
+                <p>안녕하세요~!</p>
+                <p><strong>교통 길잡이 펭리미입니다 🐧</strong></p>
+                <p>어떤 교통 불편 때문에 불편하셨나요?</p>
             </div>
+        </div>
 
-            <div class="chat-messages-area" id="messagesArea">
-                <div id="keywordSection" class="non-member-chat-keywords">
+        <div class="chat-messages-area" id="messagesArea">
+            <%
+                boolean isLoggedInServer = (session.getAttribute("loginMember") != null);
+            %>
+
+            <% if (!isLoggedInServer) { %>
+            <div class="keyword-dock" style="width:100%; display:flex; justify-content:center;">
+                <div id="keywordSection" class="non-member-chat-keywords" style="width: fit-content; margin: 0 auto;">
                     <button class="chat-keyword-btn" onclick="handleKeywordClick('지하철 공사')">지하철 공사</button>
                     <button class="chat-keyword-btn" onclick="handleKeywordClick('불법주정차')">불법주정차</button>
                     <button class="chat-keyword-btn" onclick="handleKeywordClick('장애인주차')">장애인주차</button>
                 </div>
             </div>
-        </div>
-
-        <!-- Bottom Input Area -->
-        <div class="chat-input-wrapper">
-            <div class="chat-input-bar">
-
-                <!-- ✅ + 버튼 (이미지 업로드 트리거) -->
-                <button class="chat-plus-btn" id="plusBtn" type="button">
-                    <i data-lucide="plus" size="24"></i>
-                </button>
-
-                <!-- ✅ 숨김 파일 선택 input (이미지 업로드용) -->
-                <input
-                    type="file"
-                    id="imageInput"
-                    accept="image/jpeg,image/jpg,image/png"
-                    style="display:none"
-                />
-
-                <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
-
-                <button class="chat-send-btn" disabled id="sendBtn" type="button">
-                    <i data-lucide="arrow-up" size="24" color="#ccc"></i>
-                </button>
-            </div>
+            <% } %>
         </div>
     </div>
 
-    <script>
-        lucide.createIcons();
+    <!-- Bottom Input Area -->
+    <div class="chat-input-wrapper" id="chatInputWrapper">
+        <div class="chat-input-bar">
+            <button class="chat-plus-btn" id="plusBtn" type="button">
+                <i data-lucide="plus" size="24"></i>
+            </button>
 
-        // ✅ 세션 키는 loginMember
-        const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
+            <!-- ✅ 여러 장 업로드: multiple -->
+            <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png" multiple style="display:none"/>
 
-        // ✅ marked 옵션(줄바꿈을 <br>로 반영)
-        if (window.marked) {
-            marked.setOptions({ breaks: true });
-        }
+            <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
 
-        // ✅ 방(room) idx (텍스트와 이미지 둘 다 동일하게 보냄)
-        const CROOM_IDX = 2;
+            <button class="chat-send-btn" disabled id="sendBtn" type="button">
+                <i data-lucide="arrow-up" size="24" color="#ccc"></i>
+            </button>
+        </div>
+    </div>
+</div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const input = document.getElementById('chatInput');
-            const sendBtn = document.getElementById('sendBtn');
+<!-- ✅ 이미지 확대 모달 -->
+<div class="image-modal-overlay" id="imageModalOverlay" aria-hidden="true">
+    <div class="image-modal" role="dialog" aria-modal="true">
+        <button class="image-modal-close" id="imageModalClose" type="button" aria-label="close">×</button>
+        <img id="imageModalImg" src="" alt="">
+    </div>
+</div>
 
-            // ✅ 이미지 업로드 DOM
-            const plusBtn = document.getElementById('plusBtn');
-            const imageInput = document.getElementById('imageInput');
+<script>
+    lucide.createIcons();
 
-            // ✅ + 버튼 클릭 → 파일 선택창
-            plusBtn.addEventListener('click', () => {
-                if (!isLoggedIn) {
-                    addMessage("이미지 분석 기능은 로그인 후 이용 가능합니다.", "bot");
-                    showLoginNudge();
-                    scrollToBottom();
-                    return;
-                }
-                imageInput.value = ""; // 같은 파일 재선택 가능
-                imageInput.click();
-            });
+    const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
 
-            // ✅ 파일 선택 → 업로드/분석 요청
-            imageInput.addEventListener('change', async (e) => {
-                if (!isLoggedIn) return;
+    if (window.marked) {
+        marked.setOptions({ breaks: true, gfm: true });
+    }
 
-                const file = e.target.files && e.target.files[0];
-                if (!file) return;
+    const CROOM_IDX = 2;
 
-                // ✅ 타입 체크
+    const GUEST_KEYWORD_ANSWERS = {
+        "지하철 공사": `
+**지하철 공사**
+총 6개 공구로 진행 중입니다.
+
+- 차량기지 ~ 운천저수지
+- 금호지구 ~ 풍금사거리
+- 월드컵경기장 ~ 무등시장
+- 동아병원 ~ 양림휴먼시아
+- 남광주역 ~ 지산사거리
+- 두암지구 ~ 광주역
+
+※ 더욱 자세한 안내와 서비스 이용은 로그인 후 이용 가능합니다.
+        `.trim(),
+
+        "불법주정차": `
+**불법 주정차 신고 방법**
+
+필요 정보:
+- 위치
+- 시간
+- 차량정보
+- 사진
+
+신고 방법:
+- 광주 교통민원 신고 앱
+- 광주광역시 홈페이지 민원신고
+- ☎ 062-120 (다산콜센터)
+
+처리 절차:
+- 접수 → 확인 → 조치
+
+※ 더욱 자세한 안내와 서비스 이용은 로그인 후 이용 가능합니다.
+        `.trim(),
+
+        "장애인주차": `
+**장애인 전용 주차구역 위반 신고**
+
+확인 사항:
+- 위반 위치
+- 시간
+- 차량번호
+- 현장 사진 또는 영상
+
+신고 경로:
+- 모바일 신고 앱
+- 광주광역시 민원신고
+- ☎ 062-120
+
+처리 절차:
+- 접수 후 현장 확인
+- 위반 여부에 따라 조치
+
+※ 더욱 자세한 안내와 서비스 이용은 로그인 후 이용 가능합니다.
+        `.trim()
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const plusBtn = document.getElementById('plusBtn');
+        const imageInput = document.getElementById('imageInput');
+
+        // ✅ + 버튼 → file input 트리거
+        plusBtn.addEventListener('click', () => {
+            if (!isLoggedIn) {
+                addMessage("이미지 분석 기능은 로그인 후 이용 가능합니다.", "bot");
+                showLoginNudgeOnce();
+                scrollToBottom();
+                return;
+            }
+            imageInput.value = ""; // 같은 파일 재선택 가능하게
+            imageInput.click();
+        });
+
+        // ✅ 여러 장 선택 처리
+        imageInput.addEventListener('change', async (e) => {
+            if (!isLoggedIn) return;
+
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+
+            for (const file of files) {
                 const okTypes = ["image/jpeg", "image/png"];
                 if (!okTypes.includes(file.type)) {
                     addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
                     scrollToBottom();
-                    return;
+                    continue;
                 }
 
-                // ✅ (선택) 너무 큰 파일 방지 (예: 10MB)
                 const MAX_MB = 10;
                 if (file.size > MAX_MB * 1024 * 1024) {
                     addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
                     scrollToBottom();
-                    return;
+                    continue;
                 }
 
                 await sendImage(file);
-            });
-
-            if (isLoggedIn) {
-                input.disabled = false;
-                input.placeholder = "교통 민원 내용을 입력해 주세요.";
-                sendBtn.disabled = false;
-
-                // 버튼 클릭 전송
-                sendBtn.addEventListener('click', () => sendMessage());
-
-                // Enter 전송 (한글 조합중이면 무시.)
-                input.addEventListener('keydown', (e) => {
-                    if (e.isComposing) return;
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
             }
         });
 
-        // ✅ 키워드 클릭
-        function handleKeywordClick(keyword) {
-            const keywordSection = document.getElementById('keywordSection');
-            if (keywordSection) keywordSection.style.display = 'none';
+        if (isLoggedIn) {
+            input.disabled = false;
+            input.placeholder = "교통 민원 내용을 입력해 주세요.";
+            sendBtn.disabled = false;
 
-            if (!isLoggedIn) {
-                setTimeout(() => {
-                    addMessage(`'${keyword}'에 대해 궁금하시군요! 로그인 후 더 자세히 안내해 드릴게요.`, 'bot');
-                    showLoginNudge();
-                    scrollToBottom();
-                }, 200);
+            sendBtn.addEventListener('click', () => sendMessage());
+
+            input.addEventListener('keydown', (e) => {
+                if (e.isComposing) return;
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        window.addEventListener('resize', () => updateLoginNudgePosition());
+
+        // ✅ 모달 이벤트
+        setupImageModal();
+    });
+
+    function handleKeywordClick(keyword) {
+        const keywordSection = document.getElementById('keywordSection');
+        if (keywordSection) keywordSection.style.display = 'none';
+
+        if (!isLoggedIn) {
+            addMessage(keyword, 'user');
+            scrollToBottom();
+
+            setTimeout(() => {
+                const answer = GUEST_KEYWORD_ANSWERS[keyword] || "안내 정보를 준비 중입니다.";
+                addMessage(answer, 'bot');
+                showLoginNudgeOnce();
+                scrollToBottom();
+            }, 150);
+            return;
+        }
+
+        sendMessage(keyword);
+    }
+
+    async function sendMessage(forcedText) {
+        if (!isLoggedIn) return;
+
+        const input = document.getElementById('chatInput');
+        const text = (forcedText ?? input.value ?? "").trim();
+        if (!text) return;
+
+        const keywordSection = document.getElementById('keywordSection');
+        if (keywordSection) keywordSection.style.display = 'none';
+
+        addMessage(text, 'user');
+        if (!forcedText) input.value = "";
+        scrollToBottom();
+
+        const loadingEl = showTyping();
+        scrollToBottom();
+
+        try {
+            const payload = { text, croom_idx: CROOM_IDX };
+
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            const raw = await res.text();
+
+            if (!res.ok) {
+                replaceMessage(loadingEl, "❌ 서버 오류: " + raw, "bot");
+                scrollToBottom();
                 return;
             }
 
-            sendMessage(keyword);
-        }
+            let data;
+            try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
 
-        // ✅ 실제 Spring API 호출 (텍스트)
-        async function sendMessage(forcedText) {
-            if (!isLoggedIn) return;
+            const answer =
+                data.answer ??
+                data.response ??
+                data.message ??
+                data.result ??
+                data.analysis_result ??
+                (typeof data === "string" ? data : JSON.stringify(data));
+
+            replaceMessage(loadingEl, answer, "bot");
+            scrollToBottom();
+
+        } catch (err) {
+            console.error(err);
+            replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + err.message, "bot");
+            scrollToBottom();
+        }
+    }
+
+    async function sendImage(file) {
+        const keywordSection = document.getElementById('keywordSection');
+        if (keywordSection) keywordSection.style.display = 'none';
+
+        // ✅ 파란 말풍선 대신: 이미지 전용 말풍선
+        addUserImageBubble(file);
+        scrollToBottom();
+
+        const loadingEl = showTyping();
+        scrollToBottom();
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("croom_idx", String(CROOM_IDX));
 
             const input = document.getElementById('chatInput');
-            const text = (forcedText ?? input.value ?? "").trim();
-            if (!text) return;
+            formData.append("text", (input.value || "").trim());
 
-            const keywordSection = document.getElementById('keywordSection');
-            if (keywordSection) keywordSection.style.display = 'none';
+            const res = await fetch("/api/chat/image", {
+                method: "POST",
+                body: formData
+            });
 
-            // ✅ 유저 메시지는 여기서 "한 번만"
-            addMessage(text, 'user');
-            if (!forcedText) input.value = "";
-            scrollToBottom();
+            const raw = await res.text();
 
-            // ✅ 타이핑 표시
-            const loadingEl = showTyping();
-            scrollToBottom();
-
-            try {
-                const payload = { text, croom_idx: CROOM_IDX };
-
-                const res = await fetch("/api/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
-                const raw = await res.text();
-
-                if (!res.ok) {
-                    replaceMessage(loadingEl, "❌ 서버 오류: " + raw, "bot");
-                    scrollToBottom();
-                    return;
-                }
-
-                let data;
-                try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
-
-                const answer =
-                    data.answer ??
-                    data.response ??
-                    data.message ??
-                    data.result ??
-                    data.analysis_result ??
-                    (typeof data === "string" ? data : JSON.stringify(data));
-
-                replaceMessage(loadingEl, answer, "bot");
+            if (!res.ok) {
+                replaceMessage(loadingEl, "❌ 이미지 분석 서버 오류: " + raw, "bot");
                 scrollToBottom();
-
-            } catch (err) {
-                console.error(err);
-                replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + err.message, "bot");
-                scrollToBottom();
-            }
-        }
-
-        // ✅ 이미지 업로드/분석 호출 (multipart/form-data)
-        async function sendImage(file) {
-            const keywordSection = document.getElementById('keywordSection');
-            if (keywordSection) keywordSection.style.display = 'none';
-
-            // ✅ 유저 이미지 버블(미리보기) 출력
-            addImageMessage(file, 'user');
-            scrollToBottom();
-
-            // ✅ 타이핑 표시
-            const loadingEl = showTyping();
-            scrollToBottom();
-
-            try {
-                const formData = new FormData();
-
-                // ✅ FastAPI docs 스펙: file(required), croom_idx(Integer), text(String)
-                formData.append("file", file);
-                formData.append("croom_idx", String(CROOM_IDX));
-
-                // text는 선택값이지만 스펙에 있으니 같이 보냄 (원하면 빈값 유지)
-                const input = document.getElementById('chatInput');
-                formData.append("text", (input.value || "").trim()); // 또는 "" 로 고정해도 됨
-
-                // ✅ Spring 이미지 업로드 API: POST /api/chat/image
-                const res = await fetch("/api/chat/image", {
-                    method: "POST",
-                    body: formData
-                });
-
-                const raw = await res.text();
-
-                if (!res.ok) {
-                    replaceMessage(loadingEl, "❌ 이미지 분석 서버 오류: " + raw, "bot");
-                    scrollToBottom();
-                    return;
-                }
-
-                let data;
-                try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
-
-                const answer =
-                    data.analysis_result ??
-                    data.answer ??
-                    data.response ??
-                    data.message ??
-                    data.result ??
-                    (typeof data === "string" ? data : JSON.stringify(data));
-
-                replaceMessage(loadingEl, answer, "bot");
-                scrollToBottom();
-
-            } catch (err) {
-                console.error(err);
-                replaceMessage(loadingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
-                scrollToBottom();
-            }
-        }
-
-        function renderBotHtml(text) {
-            if (!window.marked) return (text || "").replace(/\*\*/g, "");
-            return marked.parse(text || "");
-        }
-
-        function addMessage(text, sender) {
-            const messagesArea = document.getElementById('messagesArea');
-
-            if (sender === "bot") {
-                const wrapper = document.createElement('div');
-                wrapper.className = "bot-wrapper";
-
-                const content = document.createElement('div');
-                content.className = "bot-content";
-
-                const bubble = document.createElement('div');
-                bubble.className = "message-bubble bot";
-                bubble.innerHTML = renderBotHtml(text);
-
-                content.appendChild(bubble);
-                wrapper.appendChild(content);
-
-                messagesArea.appendChild(wrapper);
-                return bubble;
+                return;
             }
 
-            const bubble = document.createElement('div');
-            bubble.className = "message-bubble user";
-            bubble.innerText = text;
-            messagesArea.appendChild(bubble);
-            return bubble;
+            let data;
+            try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
+
+            const answer =
+                data.analysis_result ??
+                data.answer ??
+                data.response ??
+                data.message ??
+                data.result ??
+                (typeof data === "string" ? data : JSON.stringify(data));
+
+            replaceMessage(loadingEl, answer, "bot");
+            scrollToBottom();
+
+        } catch (err) {
+            console.error(err);
+            replaceMessage(loadingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
+            scrollToBottom();
         }
+    }
 
-        // ✅ 유저 이미지 메시지 추가
-        function addImageMessage(file, sender) {
-            const messagesArea = document.getElementById('messagesArea');
-            const url = URL.createObjectURL(file);
+    // ✅ 텍스트 전처리: DB 메타/불필요 문단 제거
+    function normalizeBotText(text) {
+        let t = (text || "");
 
-            if (sender === "bot") {
-                const wrapper = document.createElement('div');
-                wrapper.className = "bot-wrapper";
+        t = t.replace(/\r\n/g, "\n");
+        t = t.replace(/(\S)~(\S)/g, "$1 ~ $2");
 
-                const content = document.createElement('div');
-                content.className = "bot-content";
+        t = t.replace(
+            /(^|\n)\s*또한,\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
+            "\n"
+        );
+        t = t.replace(
+            /(^|\n)\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
+            "\n"
+        );
 
-                const bubble = document.createElement('div');
-                bubble.className = "message-bubble bot";
-                bubble.innerHTML = `<img src="${url}" class="chat-image-preview" alt="uploaded image" />`;
+        t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
 
-                content.appendChild(bubble);
-                wrapper.appendChild(content);
+        t = t.replace(/,\s*,+/g, ", ");
+        t = t.replace(/\s+,/g, ",");
+        t = t.replace(/,\s*\n/g, "\n");
+        t = t.replace(/,\s*$/g, "");
 
-                messagesArea.appendChild(wrapper);
-                return bubble;
-            }
+        t = t.replace(/[ \t]{2,}/g, " ");
+        t = t.replace(/\n{3,}/g, "\n\n");
+        t = t.replace(/:\n\n(?=[-*\+])/g, ":\n");
+        t = t.replace(/\n[ \t]+([-*+])[ \t]+/g, "\n$1 ");
 
-            const bubble = document.createElement('div');
-            bubble.className = "message-bubble user";
-            bubble.innerHTML = `<img src="${url}" class="chat-image-preview" alt="uploaded image" />`;
-            messagesArea.appendChild(bubble);
-            return bubble;
-        }
+        return t.trim();
+    }
 
-        function showTyping() {
-            const messagesArea = document.getElementById('messagesArea');
+    function renderBotHtml(text) {
+        const normalized = normalizeBotText(text);
+        if (!window.marked) return normalized.replace(/\*\*/g, "");
+        return marked.parse(normalized);
+    }
 
+    function addMessage(text, sender) {
+        const messagesArea = document.getElementById('messagesArea');
+
+        if (sender === "bot") {
             const wrapper = document.createElement('div');
             wrapper.className = "bot-wrapper";
 
@@ -360,13 +433,7 @@
 
             const bubble = document.createElement('div');
             bubble.className = "message-bubble bot";
-            bubble.innerHTML = `
-                <div class="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
+            bubble.innerHTML = renderBotHtml(text);
 
             content.appendChild(bubble);
             wrapper.appendChild(content);
@@ -375,34 +442,150 @@
             return bubble;
         }
 
-        function replaceMessage(el, newText, sender) {
-            if (!el) return;
+        const bubble = document.createElement('div');
+        bubble.className = "message-bubble user";
+        bubble.innerText = text;
+        messagesArea.appendChild(bubble);
+        return bubble;
+    }
 
-            el.className = `message-bubble ${sender}`;
+    /**
+     * ✅ 핵심 수정:
+     * - 파란 말풍선(.message-bubble.user) 규칙을 아예 타지 않도록
+     *   "user-image-bubble" 클래스를 별도로 씀
+     *
+     * ⚠️ 이거 적용하려면 CSS에도 #messagesArea .user-image-bubble 규칙이 있어야 함
+     */
+    function addUserImageBubble(file) {
+        const messagesArea = document.getElementById('messagesArea');
 
-            if (sender === "bot") {
-                el.innerHTML = renderBotHtml(newText);
-            } else {
-                el.innerText = newText;
-            }
+        const bubble = document.createElement('div');
+        bubble.className = "user-image-bubble"; // ✅ 핵심 (message-bubble user 제거)
+
+        const img = document.createElement('img');
+        img.className = "chat-image-preview";
+        img.alt = "";
+
+        const url = URL.createObjectURL(file);
+        img.src = url;
+
+        // ✅ 클릭 확대 (모달에는 같은 objectURL 사용)
+        img.addEventListener('click', () => openImageModal(url));
+
+        img.onerror = () => {
+            bubble.textContent = "⚠️ 이미지 미리보기를 불러오지 못했어요.";
+        };
+
+        bubble.appendChild(img);
+        messagesArea.appendChild(bubble);
+        return bubble;
+    }
+
+    function showTyping() {
+        const messagesArea = document.getElementById('messagesArea');
+
+        const wrapper = document.createElement('div');
+        wrapper.className = "bot-wrapper";
+
+        const content = document.createElement('div');
+        content.className = "bot-content";
+
+        const bubble = document.createElement('div');
+        bubble.className = "message-bubble bot";
+        bubble.innerHTML = `
+            <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        `;
+
+        content.appendChild(bubble);
+        wrapper.appendChild(content);
+
+        messagesArea.appendChild(wrapper);
+        return bubble;
+    }
+
+    function replaceMessage(el, newText, sender) {
+        if (!el) return;
+        el.className = `message-bubble ${sender}`;
+        if (sender === "bot") el.innerHTML = renderBotHtml(newText);
+        else el.innerText = newText;
+    }
+
+    function showLoginNudgeOnce() {
+        if (document.getElementById('loginNudge')) {
+            updateLoginNudgePosition();
+            return;
         }
 
-        function showLoginNudge() {
-            const messagesArea = document.getElementById('messagesArea');
-            const nudgeDiv = document.createElement('div');
-            nudgeDiv.className = 'login-nudge-msg';
-            nudgeDiv.innerHTML = `
-                <button class="chat-login-nudge-btn" onclick="location.href='/login'">
-                    로그인하고 서비스 이용하기
-                </button>
-            `;
-            messagesArea.appendChild(nudgeDiv);
-        }
+        const container = document.querySelector('.chat-page-container');
+        const nudgeDiv = document.createElement('div');
+        nudgeDiv.className = 'login-nudge-msg';
+        nudgeDiv.id = 'loginNudge';
+        nudgeDiv.innerHTML = `
+            <button class="chat-login-nudge-btn" onclick="location.href='/login'">
+                로그인 하러가기
+            </button>
+        `;
+        container.appendChild(nudgeDiv);
 
-        function scrollToBottom() {
-            const chatContent = document.getElementById('chatContent');
-            chatContent.scrollTop = chatContent.scrollHeight;
-        }
-    </script>
+        updateLoginNudgePosition();
+    }
+
+    function updateLoginNudgePosition() {
+        const nudge = document.getElementById('loginNudge');
+        if (!nudge) return;
+
+        const inputWrapper = document.getElementById('chatInputWrapper');
+        if (!inputWrapper) return;
+
+        const rect = inputWrapper.getBoundingClientRect();
+        const bottomFromViewport = window.innerHeight - rect.top;
+
+        nudge.style.bottom = (bottomFromViewport + 10) + "px";
+    }
+
+    function scrollToBottom() {
+        const chatContent = document.getElementById('chatContent');
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
+    /* =========================
+       ✅ 이미지 확대 모달
+    ========================= */
+    function setupImageModal() {
+        const overlay = document.getElementById('imageModalOverlay');
+        const closeBtn = document.getElementById('imageModalClose');
+
+        closeBtn.addEventListener('click', closeImageModal);
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeImageModal();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
+    }
+
+    function openImageModal(src) {
+        const overlay = document.getElementById('imageModalOverlay');
+        const img = document.getElementById('imageModalImg');
+        img.src = src;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeImageModal() {
+        const overlay = document.getElementById('imageModalOverlay');
+        const img = document.getElementById('imageModalImg');
+        if (!overlay.classList.contains('open')) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        img.src = "";
+    }
+</script>
 </body>
 </html>
