@@ -24,6 +24,7 @@ public class WriteBoardController {
     @PostMapping("/board/write")
     public String writeBoard(@RequestParam("title") String title,
                               @RequestParam("content") String content,
+                              @RequestParam("category") String category,
                               HttpSession session) {
 
         Member loginMember = (Member) session.getAttribute("loginMember");
@@ -35,6 +36,7 @@ public class WriteBoardController {
         WriteBoard board = new WriteBoard();
         board.setTitle(title);
         board.setContent(content);
+        board.setCategory(category);
         board.setMemId(loginMember.getMemID());
         board.setCreatedAt(java.time.LocalDateTime.now());
 

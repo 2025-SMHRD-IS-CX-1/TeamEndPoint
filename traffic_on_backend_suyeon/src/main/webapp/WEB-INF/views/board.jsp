@@ -54,15 +54,15 @@
             border-bottom: 1px solid #eee;
         }
         .board-table-refined th {
-            padding: 12px 10px;
-            font-size: 13px;
+            padding: 12px 6px;
+            font-size: 12px;
             font-weight: 700;
             color: #888;
             text-align: center;
         }
         .board-table-refined td {
-            padding: 14px 10px;
-            font-size: 14px;
+            padding: 12px 6px;
+            font-size: 13px;
             color: #222;
             text-align: center;
             border-bottom: 1px solid #f0f0f0;
@@ -80,6 +80,20 @@
             color: #aaa;
             font-size: 14px;
             padding: 30px 0 !important;
+        }
+        .category-badge {
+            background: #fff3ee;
+            color: #FF5722;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 2px 8px;
+            white-space: nowrap;
+        }
+        .date-text {
+            font-size: 11px;
+            color: #aaa;
+            white-space: nowrap;
         }
         .board-footer-refined {
             margin-top: 16px;
@@ -160,7 +174,6 @@
 <body>
 <div class="mobile-wrap">
 
-    <!-- 상단 헤더 -->
     <header class="top-header">
         <div class="left"></div>
         <div class="logo-container">
@@ -169,7 +182,6 @@
         <div class="right"></div>
     </header>
 
-    <!-- 본문 -->
     <div class="board-wrap">
         <div class="board-title-section">
             <h1>ON! 교통 정보</h1>
@@ -181,22 +193,28 @@
                 <table class="board-table-refined">
                     <thead>
                         <tr>
-                            <th class="col-no">No</th>
-                            <th class="col-title">제목</th>
-                            <th class="col-author">아이디</th>
+                            <th>No</th>
+                            <th>카테고리</th>
+                            <th>제목</th>
+                            <th>아이디</th>
+                            <th>날짜</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="board" items="${boards}" varStatus="status">
                             <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
                                 <td>${status.count}</td>
+                                <td><span class="category-badge">${board.category}</span></td>
                                 <td class="text-left">${board.title}</td>
                                 <td>${board.memId}</td>
+                                <td class="date-text">
+                                    ${board.createdAt.toString().substring(0, 16).replace('T', ' ')}
+                                </td>
                             </tr>
                         </c:forEach>
                         <c:if test="${boards.size() == 0}">
                             <tr>
-                                <td colspan="3" class="empty-row">등록된 게시물이 없습니다.</td>
+                                <td colspan="5" class="empty-row">등록된 게시물이 없습니다.</td>
                             </tr>
                         </c:if>
                     </tbody>
@@ -229,23 +247,38 @@
         </c:if>
     </div>
 
-    <!-- 하단 네비 -->
     <nav class="bottom-nav">
-        <a href="/" class="nav-item">
-            <i data-lucide="home"></i>
-            <span>홈</span>
+        <a class="nav-item" href="${pageContext.request.contextPath}/">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m21 21-4.34-4.34"></path>
+                <circle cx="11" cy="11" r="8"></circle>
+            </svg>
+            <span>사전해결 가이드</span>
         </a>
-        <a href="/board" class="nav-item active">
-            <i data-lucide="newspaper"></i>
-            <span>게시판</span>
+        <div class="nav-divider"></div>
+        <a class="nav-item" href="${pageContext.request.contextPath}/guide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+                <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+                <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+                <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+            </svg>
+            <span>민원유형</span>
         </a>
-        <a href="/chat" class="nav-item">
-            <i data-lucide="message-circle"></i>
-            <span>채팅</span>
-        </a>
-        <a href="/mypage" class="nav-item">
-            <i data-lucide="user"></i>
-            <span>마이</span>
+        <div class="nav-divider"></div>
+        <a class="nav-item" href="${pageContext.request.contextPath}/application-process">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                <path d="m9 15 2 2 4-4"></path>
+            </svg>
+            <span>신청절차 안내</span>
         </a>
     </nav>
 

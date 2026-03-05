@@ -12,7 +12,6 @@
 <body>
 <div class="mobile-wrap">
 
-    <!-- 상단 헤더 -->
     <header class="top-header">
         <div class="left">
             <button class="icon-btn" onclick="history.back()">
@@ -25,10 +24,18 @@
         <div class="right"></div>
     </header>
 
-    <!-- 폼 본문 -->
     <div class="write-body">
         <form action="/board/write" method="post">
             <div class="write-card">
+                <div class="write-form-row">
+                    <label for="category">카테고리</label>
+                 <select id="category" name="category" class="write-input">
+    <option value="신고/민원">신고/민원</option>
+    <option value="정보/가이드">정보/가이드</option>
+    <option value="후기/공유">후기/공유</option>
+</select>
+                </div>
+                <div class="divider"></div>
                 <div class="write-form-row">
                     <label for="title">제목</label>
                     <input type="text" id="title" name="title"
@@ -50,8 +57,6 @@
     </div>
 
 </div>
-<script>
-    lucide.createIcons();
-</script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

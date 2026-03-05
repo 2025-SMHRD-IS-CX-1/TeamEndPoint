@@ -13,7 +13,6 @@
 <body>
 <div class="mobile-wrap">
 
-    <!-- 상단 헤더 -->
     <header class="top-header">
         <div class="left">
             <button class="icon-btn" onclick="history.back()">
@@ -26,9 +25,13 @@
         <div class="right"></div>
     </header>
 
-    <!-- 본문 -->
     <div class="write-body">
         <div class="write-card">
+            <div class="write-form-row">
+                <label>카테고리</label>
+                <div class="write-input">${board.category}</div>
+            </div>
+            <div class="divider"></div>
             <div class="write-form-row">
                 <label>제목</label>
                 <div class="write-input">${board.title}</div>
@@ -40,13 +43,19 @@
             </div>
             <div class="divider"></div>
             <div class="write-form-row">
+                <label>작성일</label>
+                <div class="write-input">
+                    ${board.createdAt.toString().substring(0, 16).replace('T', ' ')}
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="write-form-row">
                 <label>내용</label>
                 <div class="write-textarea">${board.content}</div>
             </div>
         </div>
     </div>
 
-    <!-- 하단 버튼 -->
     <div class="write-footer">
         <button class="cancel-btn" onclick="location.href='/board'">목록으로</button>
         <c:if test="${canEdit}">
@@ -64,8 +73,6 @@
     </div>
 
 </div>
-<script>
-    lucide.createIcons();
-</script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

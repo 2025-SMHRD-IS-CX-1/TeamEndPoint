@@ -44,6 +44,9 @@ public class WriteBoard {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
     public String getMemId() { return memId; }
     public void setMemId(String memId) { this.memId = memId; }
 
