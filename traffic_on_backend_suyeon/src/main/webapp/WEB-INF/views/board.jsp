@@ -29,12 +29,12 @@
                 </thead>
                 <tbody>
                     <c:forEach var="board" items="${boards}">
-                        <tr>
-                            <td>${board.boardId}</td>
-                            <td class="text-left">${board.title}</td>
-                            <td>${board.memId}</td>
-                        </tr>
-                    </c:forEach>
+    <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
+       				 <td>${board.boardId}</td>
+        				<td class="text-left">${board.title}</td>
+       				 <td>${board.memId}</td>
+   				 </tr>
+				</c:forEach>
                     <c:if test="${boards.size() == 0}">
                         <tr>
                             <td colSpan="3" class="empty-row">등록된 게시물이 없습니다.</td>
@@ -46,7 +46,6 @@
 
         <!-- 로그인 여부에 따라 조건부 렌더링 -->
         <c:if test="${!isLoggedIn}">
-            <!-- 비회원 전용 로그인 유도 박스 (게시판 위에 덮임) -->
             <div id="loginInvitation" class="board-login-invitation">
                 <div class="board-invitation-box">
                     <p>게시판의 상세 내용 확인과<br />게시글 작성은</p>
@@ -60,7 +59,6 @@
         </c:if>
 
         <c:if test="${isLoggedIn}">
-            <!-- 회원 전용 푸터 -->
             <div id="boardFooter" class="board-footer-refined">
                 <div class="board-footer-divider"></div>
                 <button class="write-btn" onclick="location.href='/board/write'">글쓰기</button>
