@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,6 +44,14 @@
         <!-- 하단 버튼 -->
         <div class="write-footer">
             <button class="cancel-btn" onclick="location.href='/board'">목록으로</button>
+            <!-- 삭제 버튼: 당사자 또는 admin만 표시 -->
+            <c:if test="${canDelete}">
+                <form action="/board/delete/${board.boardId}" method="post" style="flex:1;">
+                    <button type="submit" class="submit-btn"
+                        style="background:#ff4d4d; box-shadow: 0 8px 22px rgba(255,77,77,0.22); width:100%;"
+                        onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                </form>
+            </c:if>
         </div>
 
     </div>

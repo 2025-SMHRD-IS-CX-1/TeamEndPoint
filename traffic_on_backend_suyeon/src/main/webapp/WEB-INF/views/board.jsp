@@ -28,13 +28,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="board" items="${boards}">
-    <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
-       				 <td>${board.boardId}</td>
-        				<td class="text-left">${board.title}</td>
-       				 <td>${board.memId}</td>
-   				 </tr>
-				</c:forEach>
+                    <c:forEach var="board" items="${boards}" varStatus="status">
+                        <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
+                            <td>${status.count}</td>
+                            <td class="text-left">${board.title}</td>
+                            <td>${board.memId}</td>
+                        </tr>
+                    </c:forEach>
                     <c:if test="${boards.size() == 0}">
                         <tr>
                             <td colSpan="3" class="empty-row">등록된 게시물이 없습니다.</td>
