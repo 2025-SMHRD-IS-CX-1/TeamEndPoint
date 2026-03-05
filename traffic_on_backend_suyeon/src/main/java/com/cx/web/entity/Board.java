@@ -62,6 +62,14 @@ public class Board {
     public void setMemId(String memId) {
         this.memId = memId;
     }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
+		
+	
 }
 
 	

@@ -42,29 +42,11 @@
                     </c:if>
                 </tbody>
             </table>
-
-            <!-- 모바일 카드형 UI -->
-            <div class="board-card-list">
-                <c:forEach var="board" items="${boards}">
-                    <div class="board-card">
-                        <div class="board-card-title">${board.title}</div>
-                        <div class="board-card-meta">
-                            <span>No. ${board.boardId}</span>
-                            <span>${board.memId}</span>
-                        </div>
-                    </div>
-                </c:forEach>
-                <c:if test="${boards.size() == 0}">
-                    <div class="board-card">
-                        <div class="board-card-title">등록된 게시물이 없습니다.</div>
-                    </div>
-                </c:if>
-            </div>
         </div>
 
         <!-- 로그인 여부에 따라 조건부 렌더링 -->
         <c:if test="${!isLoggedIn}">
-            <!-- 비회원 전용 로그인 유도 박스 -->
+            <!-- 비회원 전용 로그인 유도 박스 (게시판 위에 덮임) -->
             <div id="loginInvitation" class="board-login-invitation">
                 <div class="board-invitation-box">
                     <p>게시판의 상세 내용 확인과<br />게시글 작성은</p>
@@ -81,7 +63,7 @@
             <!-- 회원 전용 푸터 -->
             <div id="boardFooter" class="board-footer-refined">
                 <div class="board-footer-divider"></div>
-                <button class="write-btn">글쓰기</button>
+                <button class="write-btn" onclick="location.href='/board/write'">글쓰기</button>
                 <div class="pagination">
                     <i data-lucide="chevron-left" class="pagi-arrow disabled"></i>
                     <span class="pagi-num active">1</span>
@@ -94,7 +76,6 @@
     <script>
         lucide.createIcons();
 
-        // Controller에서 전달된 로그인 여부를 JS에서도 활용 가능
         let isLoggedIn = "${isLoggedIn}" === "true";
 
         if (isLoggedIn) {
