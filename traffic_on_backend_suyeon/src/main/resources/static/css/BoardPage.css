@@ -1,4 +1,7 @@
 .board-container {
+    width: 100%;
+    max-width: 420px;   /* 모바일 폭 제한 */
+    margin: 0 auto;     /* 중앙 정렬 */
     padding: 1.5rem 1.5rem 100px 1.5rem;
     background: #fff;
     min-height: 100vh;
