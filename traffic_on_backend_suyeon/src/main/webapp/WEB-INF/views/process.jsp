@@ -6,7 +6,7 @@
 <head>
     <title>TRAFFIC:ON - 신청절차 안내</title>
     <jsp:include page="/WEB-INF/views/common/head.jsp"/>
-    <link rel="stylesheet" href="/css/ApplicationProcessPage.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ApplicationProcessPage.css">
 </head>
 
 <body>
