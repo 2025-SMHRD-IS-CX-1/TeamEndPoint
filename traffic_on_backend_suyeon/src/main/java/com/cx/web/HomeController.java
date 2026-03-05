@@ -84,7 +84,7 @@ public class HomeController {
     public String aboutPage(HttpSession session, HttpServletRequest request, Model model) {
         tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
-        return "about";
+        return "redirect:/";
     }
 
     @GetMapping("/application-process")

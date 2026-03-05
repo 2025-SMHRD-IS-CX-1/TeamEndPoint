@@ -63,7 +63,7 @@
                     </div>
                 </a>
 
-                <a href="/about" class="menu-item">
+                <a href="/" class="menu-item">
                     <i data-lucide="info" size="20" class="menu-icon"></i>
                     <div class="menu-text">
                         <span class="menu-title">TRAFFIC:ON</span>

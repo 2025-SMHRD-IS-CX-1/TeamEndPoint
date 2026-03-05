@@ -461,6 +461,7 @@
 
 <!-- ✅ 클릭 시 해당 유형만 보이게 -->
 <script>
+document.addEventListener("DOMContentLoaded", () => {
   const items = document.querySelectorAll(".category-item");
   const sections = document.querySelectorAll(".guide-section");
 
@@ -479,8 +480,9 @@
     });
   });
 
-  // 처음엔 교통안전만
+  // 처음엔 교통안전만 보이게
   showSection("sec-traffic-safety");
+});
 </script>
 </div>
 <jsp:include page="/WEB-INF/views/common/bottomNav.jsp" />
