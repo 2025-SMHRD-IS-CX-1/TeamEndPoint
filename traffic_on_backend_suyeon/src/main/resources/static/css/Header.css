@@ -1,45 +1,81 @@
-/* Header.css */
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: white;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+/* =========================
+   Header
+========================= */
+
+.top-header{
+
+    width:100%;
+    height:64px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 14px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #e5e7eb;
+
+    position:sticky;
+    top:0;
+    z-index:999;
 }
 
-.icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* 아이콘 버튼 */
+
+.icon-btn{
+
+    width:40px;
+    height:40px;
+
+    border:none;
+    background:transparent;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
 }
 
-.icon-btn:hover {
-    background-color: #f5f5f5;
-    border-radius: 50%;
+/* 로고 */
+
+.logo-container{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+/* 로고 이미지 */
+
+.logo-img{
+
+    width:40px;
+    height:40px;
+
+    object-fit:contain;
+
+    transform:scaleX(-1);
 }
 
-.logo-icon {
-    font-size: 1.5rem;
+/* 로고 텍스트 */
+
+.logo-text{
+
+    font-size:18px;
+    font-weight:900;
+
+    color:#ff6b35;
 }
 
-.logo-text {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #ff6b00;
-    /* Traffic orange */
-    font-family: sans-serif;
-    letter-spacing: -0.5px;
+/* lucide 아이콘 크기 */
+
+.top-header svg{
+
+    width:24px;
+    height:24px;
+
+    stroke:#333;
 }
