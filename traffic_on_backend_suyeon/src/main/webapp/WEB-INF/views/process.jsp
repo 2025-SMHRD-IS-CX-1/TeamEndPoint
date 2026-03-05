@@ -36,7 +36,7 @@
 	<!-- 1 → 2 -->
 	<div class="v3-flow-row">
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">1 교통민원24 접속</div>
+	        <div class="v3-step-box">교통민원24 접속</div>
 	    </div>
 
 	    <div class="v3-arrow-horizontal">
@@ -47,7 +47,7 @@
 	    </div>
 
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">2 로그인(본인인증)</div>
+	        <div class="v3-step-box">로그인(본인인증)</div>
 	    </div>
 	</div>
 
@@ -64,7 +64,7 @@
 	<!-- 3 -->
 	<div class="v3-flow-row justify-end">
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">3 신고할 민원 선택</div>
+	        <div class="v3-step-box">신고할 민원 선택</div>
 	    </div>
 	</div>
 
@@ -81,7 +81,7 @@
 	<!-- 4 → 5 -->
 	<div class="v3-flow-row">
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">4 상황 정보 입력</div>
+	        <div class="v3-step-box">상황 정보 입력</div>
 	    </div>
 
 	    <div class="v3-arrow-horizontal">
@@ -92,7 +92,7 @@
 	    </div>
 
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">5 증빙 자료 업로드</div>
+	        <div class="v3-step-box">증빙 자료 업로드</div>
 	    </div>
 	</div>
 
@@ -109,7 +109,7 @@
 	<!-- 6 ← 7 -->
 	<div class="v3-flow-row row-reverse">
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">6 신청 제출</div>
+	        <div class="v3-step-box">신청 제출</div>
 	    </div>
 
 	    <div class="v3-arrow-horizontal flip-h">
@@ -120,7 +120,7 @@
 	    </div>
 
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">7 접수 번호 확인</div>
+	        <div class="v3-step-box">접수 번호 확인</div>
 	    </div>
 	</div>
 
@@ -137,7 +137,7 @@
 	<!-- 8 -->
 	<div class="v3-flow-row justify-start">
 	    <div class="v3-step-unit">
-	        <div class="v3-step-box">8 처리 결과 확인</div>
+	        <div class="v3-step-box">처리 결과 확인</div>
 	    </div>
 	</div>
 
