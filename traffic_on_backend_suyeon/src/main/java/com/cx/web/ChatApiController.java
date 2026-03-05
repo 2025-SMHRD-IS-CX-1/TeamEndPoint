@@ -15,12 +15,21 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api")
 public class ChatApiController {
 
+    /**
+     * ✅ FastAPI 서버 Base URL
+     * - 기본값: 네 PC IP (팀원이 접근 가능)
+     * - 필요 시 환경변수 FASTAPI_BASE_URL로 덮어쓰기 가능
+     *   예) FASTAPI_BASE_URL=http://192.168.219.49:8000
+     */
+    private static final String FASTAPI_BASE_URL =
+            System.getenv().getOrDefault("FASTAPI_BASE_URL", "http://192.168.219.49:8000");
+
     // ✅ FastAPI 서버 주소 (텍스트 채팅)
-    private static final String FASTAPI_CHAT_URL = "http://localhost:8000/api/chat";
+    private static final String FASTAPI_CHAT_URL = FASTAPI_BASE_URL + "/api/chat";
 
     // ✅ FastAPI 이미지 분석 엔드포인트 (FastAPI docs 기준)
     // POST /api/media/image
-    private static final String FASTAPI_IMAGE_URL = "http://localhost:8000/api/media/image";
+    private static final String FASTAPI_IMAGE_URL = FASTAPI_BASE_URL + "/api/media/image";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -53,7 +62,7 @@ public class ChatApiController {
 
     /**
      * ✅ 이미지 업로드/분석. -> Spring(/api/chat/image) -> FastAPI(/api/media/image)
-     *.
+     *
      * ✅ 400 invalid_image_format (Invalid MIME type) 해결 핵심:
      * - FastAPI로 보낼 때 file 파트에 Content-Type(image/jpeg, image/png) + filename을 명확히 붙여서 전달
      * - @RequestParam 사용 (415 이슈 방지)
@@ -74,7 +83,7 @@ public class ChatApiController {
         try {
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
-            // ✅ 파일.... 파트 헤더(콘텐츠 타입 / 파일명) 강제 세팅
+            // ✅ 파일 파트 헤더(콘텐츠 타입 / 파일명) 강제 세팅
             HttpHeaders fileHeaders = new HttpHeaders();
 
             MediaType fileContentType = MediaType.APPLICATION_OCTET_STREAM;

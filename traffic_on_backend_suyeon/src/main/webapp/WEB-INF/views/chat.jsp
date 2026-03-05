@@ -658,7 +658,7 @@
     }
 
     /* =========================
-       ✅ 이미지 확대 모달
+       ✅ 이미지 확대 모달.
     ========================= */
     function setupImageModal() {
         const overlay = document.getElementById('imageModalOverlay');
