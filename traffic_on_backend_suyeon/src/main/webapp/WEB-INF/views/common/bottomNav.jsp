@@ -1,10 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <nav class="bottom-nav">
-	<a class="nav-item ${pageContext.request.requestURI.contains('/about') ? 'active' : ''}"
-	   href="${pageContext.request.contextPath}/about">
+  <a class="nav-item ${pageContext.request.requestURI.equals(pageContext.request.contextPath + '/') ? 'active' : ''}"
+     href="${pageContext.request.contextPath}/">
     <i data-lucide="search"></i>
     <span>사전해결 가이드</span>
   </a>
