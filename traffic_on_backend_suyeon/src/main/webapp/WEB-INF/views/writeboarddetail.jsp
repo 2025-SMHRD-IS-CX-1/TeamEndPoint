@@ -6,58 +6,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRAFFIC:ON - 게시글 상세</title>
+    <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/WriteBoard.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="write-container">
+<div class="mobile-wrap">
 
-        <!-- 헤더 -->
-        <header class="write-header">
-            <button type="button" class="back-btn" onclick="history.back()">
+    <!-- 상단 헤더 -->
+    <header class="top-header">
+        <div class="left">
+            <button class="icon-btn" onclick="history.back()">
                 <i data-lucide="chevron-left"></i>
             </button>
-            <h1>게시글 상세</h1>
-            <div class="header-spacer"></div>
-        </header>
+        </div>
+        <div class="logo-container">
+            <span class="logo-text">게시글 상세</span>
+        </div>
+        <div class="right"></div>
+    </header>
 
-        <!-- 본문 -->
-        <div class="write-body">
-            <div class="write-card">
-                <div class="write-form-row">
-                    <label>제목</label>
-                    <div class="write-input">${board.title}</div>
-                </div>
-                <div class="divider"></div>
-                <div class="write-form-row">
-                    <label>작성자</label>
-                    <div class="write-input">${board.memId}</div>
-                </div>
-                <div class="divider"></div>
-                <div class="write-form-row">
-                    <label>내용</label>
-                    <div class="write-textarea">${board.content}</div>
-                </div>
+    <!-- 본문 -->
+    <div class="write-body">
+        <div class="write-card">
+            <div class="write-form-row">
+                <label>제목</label>
+                <div class="write-input">${board.title}</div>
+            </div>
+            <div class="divider"></div>
+            <div class="write-form-row">
+                <label>작성자</label>
+                <div class="write-input">${board.memId}</div>
+            </div>
+            <div class="divider"></div>
+            <div class="write-form-row">
+                <label>내용</label>
+                <div class="write-textarea">${board.content}</div>
             </div>
         </div>
-
-        <!-- 하단 버튼 -->
-        <div class="write-footer">
-            <button class="cancel-btn" onclick="location.href='/board'">목록으로</button>
-            <!-- 삭제 버튼: 당사자 또는 admin만 표시 -->
-            <c:if test="${canDelete}">
-                <form action="/board/delete/${board.boardId}" method="post" style="flex:1;">
-                    <button type="submit" class="submit-btn"
-                        style="background:#ff4d4d; box-shadow: 0 8px 22px rgba(255,77,77,0.22); width:100%;"
-                        onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
-                </form>
-            </c:if>
-        </div>
-
     </div>
 
-    <script>
-        lucide.createIcons();
-    </script>
+    <!-- 하단 버튼 -->
+    <div class="write-footer">
+        <button class="cancel-btn" onclick="location.href='/board'">목록으로</button>
+        <c:if test="${canEdit}">
+            <button class="submit-btn"
+                onclick="location.href='/board/edit/${board.boardId}'"
+                style="background:#2f6bff;">수정</button>
+        </c:if>
+        <c:if test="${canDelete}">
+            <form action="/board/delete/${board.boardId}" method="post" style="flex:1;">
+                <button type="submit" class="submit-btn"
+                    style="background:#ff4d4d; box-shadow:0 8px 22px rgba(255,77,77,0.22); width:100%;"
+                    onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+            </form>
+        </c:if>
+    </div>
+
+</div>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 </html>
