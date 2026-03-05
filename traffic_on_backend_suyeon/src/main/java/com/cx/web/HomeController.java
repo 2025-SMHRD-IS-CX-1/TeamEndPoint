@@ -93,4 +93,10 @@ public class HomeController {
         model.addAttribute("isLoggedIn", isLoggedIn(session));
         return "process";
     }
+    
+    @GetMapping("/guide")
+    public String guide() {
+        return "guide";
+    }
+
 }
