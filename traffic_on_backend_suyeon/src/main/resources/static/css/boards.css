@@ -171,10 +171,15 @@
     font-weight: 600;
 }
 
-/* ✅ 제목 컬럼 축소 */
 .col-title {
     width: 200px;
     font-weight: 500;
+}
+
+.col-category {
+    width: 120px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .col-author {
@@ -182,7 +187,6 @@
     text-align: center;
 }
 
-/* ✅ 작성일 한줄 처리 */
 .col-date {
     width: 130px;
     text-align: center;

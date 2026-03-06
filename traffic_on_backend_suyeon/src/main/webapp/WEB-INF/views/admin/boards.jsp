@@ -11,7 +11,7 @@
 
   <link rel="icon" href="${pageContext.request.contextPath}/images/mascot.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Dashboard.css" />
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/boards.css?v=2" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/boards.css?v=3" />
   <style>
     .board-detail .detail-cell {
       background-color: #f9fafb;
@@ -89,6 +89,7 @@
               <th class="col-checkbox"><input type="checkbox" id="chkAll" /></th>
               <th class="col-number">번호</th>
               <th class="col-title">게시물</th>
+              <th class="col-category">카테고리</th>
               <th class="col-author">아이디</th>
               <th class="col-date">작성일</th>
             </tr>
@@ -100,11 +101,12 @@
                 <td class="col-checkbox"><input type="checkbox" class="chkRow" value="${b.boardId}" /></td>
                 <td class="col-number">${page.totalElements - (page.number * page.size) - status.index}</td>
                 <td class="col-title">${b.title}</td>
+                <td class="col-category">${b.category}</td>
                 <td class="col-author">${b.memId}</td>
                 <td class="col-date">${fn:substring(fn:replace(b.createdAt, "T", " "), 0, 16)}</td>
               </tr>
               <tr class="board-detail" style="display:none;">
-                <td colspan="5" class="detail-cell">
+                <td colspan="6" class="detail-cell">
                   ${b.content}
                 </td>
               </tr>
