@@ -37,9 +37,9 @@
       <section class="chatbot-section">
         <div class="chatbot-intro-wrapper" onclick="location.href='/chat'" style="cursor: pointer;">
           <div class="chatbot-intro">
-            <div class="chatbot-avatar">
-              <img src="/images/Pengrimi.png" alt="펭리미" class="v3-quick-char-img-large" />
-            </div>
+			<div class="chatbot-avatar">
+			 <img src="/images/pon.png" alt="펭리미" class="chatbot-img" />
+			</div>
             <div class="chatbot-bubble">
               <p>안녕하세요~!</p>
               <p><strong>교통 길잡이 펭리미입니다 🐧</strong></p>

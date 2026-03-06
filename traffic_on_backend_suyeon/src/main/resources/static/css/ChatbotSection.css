@@ -124,3 +124,8 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.2s ease;
 }
+
+.chatbot-avatar img {
+  width: 70px;
+  height: auto;
+}
