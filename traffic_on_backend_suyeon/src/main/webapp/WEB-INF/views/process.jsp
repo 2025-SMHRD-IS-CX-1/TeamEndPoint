@@ -431,6 +431,7 @@
     </div>
 
     <jsp:include page="/WEB-INF/views/common/bottomNav.jsp"/>
+	<%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 </div>
 
 <script>
