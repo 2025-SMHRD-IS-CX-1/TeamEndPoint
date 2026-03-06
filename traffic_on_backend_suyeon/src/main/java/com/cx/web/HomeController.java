@@ -1,5 +1,6 @@
 package com.cx.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.servlet.http.Cookie;
@@ -11,15 +12,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.cx.web.entity.Member;
+import com.cx.web.entity.WriteBoard;
 import com.cx.web.repository.MemberRepository;
+import com.cx.web.repository.WriteBoardRepository;
 
 @Controller
 public class HomeController {
 
     private final MemberRepository memberRepository;
+    private final WriteBoardRepository writeBoardRepository;
 
-    public HomeController(MemberRepository memberRepository) {
+    public HomeController(MemberRepository memberRepository, WriteBoardRepository writeBoardRepository) {
         this.memberRepository = memberRepository;
+        this.writeBoardRepository = writeBoardRepository;
     }
 
     // ✅ 쿠키 자동로그인: 세션 없을 때만 복구 (관리자는 절대 X)
@@ -98,5 +103,37 @@ public class HomeController {
     public String guide() {
         return "guide";
     }
+    
+    @GetMapping("/mypage")
+    public String mypage(HttpSession session, Model model) {
 
+        Member loginMember = (Member) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("member", loginMember);
+
+        // ✅ 내 게시글 미리보기(최근 3개)
+        List<WriteBoard> all =
+            writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
+
+        model.addAttribute("myPostsPreview", all.size() > 3 ? all.subList(0, 3) : all);
+
+        return "mypage";   // mypage.jsp
+    }
+    
+    @GetMapping("/my-posts")
+    public String myPosts(HttpSession session, Model model) {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/login";
+
+        List<WriteBoard> posts =
+        	    writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
+
+        model.addAttribute("posts", posts);
+        return "my-posts";
+    }
 }

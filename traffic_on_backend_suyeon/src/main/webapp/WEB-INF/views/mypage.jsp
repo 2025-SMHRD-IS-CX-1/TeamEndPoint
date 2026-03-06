@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <!DOCTYPE html>
     <html>
 
     <head>
         <title>TRAFFIC:ON - 마이페이지</title>
         <%@ include file="common/head.jsp" %>
-            <link rel="stylesheet" href="/css/MyPage.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MyPage.css">
     </head>
 
     <body>
-        <div class="mypage-container">
+		<div class="app-container">
+		  <div class="mypage-container">
             <!-- 상단 헤더 -->
             <div class="mypage-header">
                 <button class="back-btn" onclick="history.back()">
@@ -24,7 +26,7 @@
             <div class="profile-card">
                 <div class="profile-image-container">
                     <div class="profile-avatar">
-                        <img src="/images/character.png" alt="프로필" class="profile-character-img" />
+                        <img src="${pageContext.request.contextPath}/images/character.png" alt="프로필" class="profile-character-img" />
                     </div>
                 </div>
                 <div class="profile-main-info">
@@ -66,6 +68,33 @@
                     </button>
                 </div>
             </div>
+			
+			<!-- 내 게시글 -->
+			<div class="settings-section">
+			  <div class="section-header posts-header">
+			    <i data-lucide="file-text" class="section-icon"></i>
+			    <h3>내 게시글</h3>
+			    <a class="view-all" href="${pageContext.request.contextPath}/my-posts">전체 보기 &gt;</a>
+			  </div>
+
+			  <div class="posts-card">
+			    <div class="posts-table-head">
+			      <span>제목</span>
+			      <span>작성일</span>
+			    </div>
+
+			    <c:if test="${empty myPostsPreview}">
+			      <div class="posts-empty">작성한 게시글이 없습니다.</div>
+			    </c:if>
+
+			    <c:forEach var="p" items="${myPostsPreview}">
+			      <div class="posts-table-row" onclick="location.href='${pageContext.request.contextPath}/my-posts'">
+			        <span class="title">${p.title}</span>
+			        <span class="date">${p.createdAt.toString().substring(0,10)}</span>
+			      </div>
+			    </c:forEach>
+			  </div>
+			</div>
 
             <!-- 하단 로그아웃 -->
             <div class="bottom-actions">
@@ -75,9 +104,10 @@
                 </button>
             </div>
         </div>
-
+        </div>
+		
         <!-- 하단 네비게이션 포함 -->
-        <%@ include file="common/bottomNav.jsp" %>
+        <!--<%@ include file="common/bottomNav.jsp" %>-->
 
             <script>
                 lucide.createIcons();

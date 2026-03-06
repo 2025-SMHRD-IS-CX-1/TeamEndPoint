@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.cx.web.entity.Member" %>
     <!-- sideMenu.jsp -->
     <link rel="stylesheet" href="/css/SideMenu.css">
 
@@ -7,14 +8,18 @@
             <div class="sidemenu-header">
                 <div class="user-status-section">
                     <!-- isLoggedIn value should be passed from the host page or session --> 
-                    <% Boolean isLoggedIn=(Boolean) session.getAttribute("isLoggedIn"); if (isLoggedIn !=null &&
-                        isLoggedIn) { %>
+					
+
+					<%
+					Member loginMember = (Member) session.getAttribute("loginMember");
+					if (loginMember != null) {
+					%>
                         <div class="user-logged-in">
                             <div class="user-avatar-small">
                                 <i data-lucide="user" size="20"></i>
                             </div>
                             <div class="user-info-text">
-                                <span class="user-name">반가워요, 회원님!</span>
+                                <span class="user-name">반가워요, <%= loginMember.getMemName() %>님!</span>
                                 <form action="/logout" method="post" id="logoutForm">
                                     <button type="submit" class="logout-btn">로그아웃</button>
                                 </form>
@@ -71,7 +76,7 @@
                     </div>
                 </a>
 
-                <% if (isLoggedIn !=null && isLoggedIn) { %>
+                <% if (loginMember != null) { %>
                     <a href="/mypage" class="menu-item">
                         <i data-lucide="user" size="20" class="menu-icon"></i>
                         <div class="menu-text">
