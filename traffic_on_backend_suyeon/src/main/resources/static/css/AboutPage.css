@@ -247,9 +247,9 @@ html, body {
 
 /* AI 퀵 버튼 */
 .quick-ai-btn {
-    position: absolute;
-    right: 16px;
-    bottom: 84px;
+    position: fixed;
+    left: calc(50% + 195px - 82px);
+    bottom: 140px;
     width: 66px;
     height: 66px;
     border-radius: 50%;
