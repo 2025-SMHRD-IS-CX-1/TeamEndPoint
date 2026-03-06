@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-
 <div class="mobile-wrap">
 
     <header class="top-header">
@@ -26,7 +25,7 @@
     </header>
 
     <div class="write-body">
-        <form action="/board/write" method="post">
+        <form id="writeForm" action="/board/write" method="post">
             <div class="write-card">
 
                 <div class="write-form-row">
@@ -66,8 +65,36 @@
 </div>
 
 <script>
-lucide.createIcons();
-</script>
+    lucide.createIcons();
 
+    // 욕설 사전 + 정규식 기반 필터링
+  <script>
+    lucide.createIcons();
+
+    // 한글 욕설 사전 (예시 30개)
+    const badWords = [
+      "시발","씨발","씹","좆","병신","개새끼","꺼져","죽어","닥쳐","지랄",
+      "미친놈","또라이","정신병자","쓰레기","멍청이","바보","등신","후레자식",
+      "개년","걸레","창녀","니미","염병","쌍놈","개자식","개같은","개소리",
+      "개망신","개똥","개판","개돼지"
+    ];
+
+    // 정규식 패턴 변환 (특수문자/띄어쓰기 허용)
+    const badPatterns = badWords.map(word => {
+        const regex = word.split("").map(ch => ch + "[\\W_]*").join("");
+        return new RegExp(regex, "i");
+    });
+
+    document.getElementById("writeForm").addEventListener("submit", function(e) {
+        const content = document.getElementById("content").value;
+        for (const pattern of badPatterns) {
+            if (pattern.test(content)) {
+                e.preventDefault();
+                alert("금칙어가 포함되어 있어 글을 등록할 수 없습니다.");
+                return;
+            }
+        }
+    });
+</script>
 </body>
 </html>
