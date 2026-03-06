@@ -11,5 +11,17 @@ href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/
 <!-- Global CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css">
 
+<!-- ✅ Header CSS 추가 -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/Header.css">
+
 <!-- Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- Lucide 실행 -->
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+    if (window.lucide) {
+        lucide.createIcons();
+    }
+});
+</script>

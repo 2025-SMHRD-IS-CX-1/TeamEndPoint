@@ -1,21 +1,41 @@
-/* QuickButton.css */
-.v3-quick-btn-icon-only {
+/* =========================
+   Quick Button
+========================= */
+
+/* mobile-wrap와 같은 폭으로 가운데 고정 */
+.quick-btn-layer {
     position: fixed;
+    left: 50%;
+    bottom: 0;
+    width: 390px;
+    height: 100vh;
+    transform: translateX(-50%);
+    pointer-events: none;   /* 레이어는 클릭 막고 */
+    z-index: 9999;
+}
+
+/* 실제 버튼만 클릭 가능 */
+.v3-quick-btn-icon-only {
+    position: absolute;
     right: 20px;
-    bottom: 85px;
-    width: 65px;
-    height: 65px;
+    bottom: 110px;
+
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background-color: #e0f4ff;
-    border: 2.5px solid #0056b3;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 3px solid #0056b3;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     cursor: pointer;
-    z-index: 1100;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10000;
     padding: 0;
+    pointer-events: auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .v3-quick-icon-inner {
@@ -30,7 +50,7 @@
     top: -5px;
     right: -10px;
     background-color: #0056b3;
-    color: white;
+    color: #ffffff;
     font-size: 9px;
     font-weight: 900;
     padding: 2px 6px;
@@ -40,7 +60,7 @@
 }
 
 .v3-quick-btn-icon-only:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
     box-shadow: 0 8px 20px rgba(0, 86, 179, 0.25);
 }
 

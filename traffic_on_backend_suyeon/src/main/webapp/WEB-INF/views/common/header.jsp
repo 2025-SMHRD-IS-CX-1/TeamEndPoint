@@ -1,57 +1,43 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/Header.css">
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <header class="top-header">
+    <div class="left">
+        <button class="icon-btn" type="button" aria-label="menu" onclick="openSideMenu()">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
 
-  <!-- 메뉴 버튼 -->
-  <button class="icon-btn"
-      onclick="if(typeof openSideMenu === 'function'){ openSideMenu(); }">
-      <i data-lucide="menu"></i>
-  </button>
+    <div class="center">
+        <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+             alt="logo"
+             class="header-logo">
+        <span class="logo-text">TRAFFIC:ON</span>
+    </div>
 
-  <!-- 로고 -->
-  <div class="logo-container"
-      onclick="location.href='${pageContext.request.contextPath}/'"
-      style="cursor:pointer;">
+    <div class="right">
+        <c:if test="${!isLoggedIn}">
+            <button class="user-btn"
+                    type="button"
+                    onclick="location.href='${pageContext.request.contextPath}/login'"
+                    aria-label="로그인">
+                <i data-lucide="user-plus"></i>
+            </button>
+        </c:if>
 
-      <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-          class="logo-img"
-          alt="logo">
-
-      <span class="logo-text">TRAFFIC:ON</span>
-
-  </div>
-
-  <!-- 로그인 상태 -->
-  <%
-      Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-
-      if(isLoggedIn != null && isLoggedIn){
-  %>
-
-      <button class="icon-btn"
-          onclick="location.href='${pageContext.request.contextPath}/mypage'">
-          <i data-lucide="user"></i>
-      </button>
-
-  <%
-      } else {
-  %>
-
-      <button class="icon-btn"
-          onclick="location.href='${pageContext.request.contextPath}/login'">
-          <i data-lucide="user-plus"></i>
-      </button>
-
-  <%
-      }
-  %>
-
+        <c:if test="${isLoggedIn}">
+            <button class="user-btn"
+                    type="button"
+                    onclick="location.href='${pageContext.request.contextPath}/mypage'"
+                    aria-label="마이페이지">
+                <i data-lucide="user"></i>
+            </button>
+        </c:if>
+    </div>
 </header>
 
 <script>
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+    if (window.lucide) {
+        lucide.createIcons();
+    }
 </script>

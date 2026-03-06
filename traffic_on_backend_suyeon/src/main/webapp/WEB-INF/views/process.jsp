@@ -1,169 +1,458 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>TRAFFIC:ON - 신청절차 안내</title>
     <jsp:include page="/WEB-INF/views/common/head.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ApplicationProcessPage.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/QuickButton.css">
 </head>
 
 <body>
-    
-    <%
-    Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    %>
 
-<div class="mobile-layout-container">
-<div class="mobile-layout-content">
-
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
-
-<div class="view-content">
-
-<div class="v3-process-container">
-
-    <div class="v3-page-body">
-
-    <div class="v3-intro-section">
-        <img src="/images/logo_efines.png" class="v3-intro-logo-img">
-        <span class="v3-intro-underline">교통민원24 접수는 다음 절차에 따라 진행됩니다.</span>
-    </div>
-
-    <div class="v3-flow-map">
-
-    <div class="v3-flow-row">
-        <div class="v3-step-unit">
-            <div class="v3-step-box">1 교통민원24 접속</div>
+<!-- 퀵버튼 -->
+<div class="quick-btn-layer">
+    <button class="v3-quick-btn-icon-only" onclick="location.href='${pageContext.request.contextPath}/chat'">
+        <div class="v3-quick-icon-inner">
+            <img
+                src="${pageContext.request.contextPath}/images/Pengrimi.png"
+                alt="펭리미"
+                class="v3-quick-char-img-large"
+            />
+            <span class="v3-quick-badge-ai">AI</span>
         </div>
-
-        <div class="v3-arrow-horizontal">
-            <div class="v3-h-lines">
-                <div class="v3-h-line-center"></div>
-            </div>
-            <div class="v3-h-triangle"></div>
-        </div>
-
-        <div class="v3-step-unit">
-            <div class="v3-step-box">2 로그인(본인인증)</div>
-        </div>
-    </div>
-
-    <div class="v3-arrow-vertical-row align-right">
-        <div class="v3-v-arrow-unit">
-            <div class="v3-v-lines">
-                <div class="v3-v-line-center"></div>
-            </div>
-            <div class="v3-v-triangle"></div>
-        </div>
-    </div>
-
-    <div class="v3-flow-row justify-end">
-        <div class="v3-step-unit">
-            <div class="v3-step-box">3 신고할 민원 선택</div>
-        </div>
-    </div>
-
-    <div class="v3-arrow-vertical-row align-left">
-        <div class="v3-v-arrow-unit">
-            <div class="v3-v-lines">
-                <div class="v3-v-line-center"></div>
-            </div>
-            <div class="v3-v-triangle"></div>
-        </div>
-    </div>
-
-    <div class="v3-flow-row">
-        <div class="v3-step-unit">
-            <div class="v3-step-box">4 상황 정보 입력</div>
-        </div>
-
-        <div class="v3-arrow-horizontal">
-            <div class="v3-h-lines">
-                <div class="v3-h-line-center"></div>
-            </div>
-            <div class="v3-h-triangle"></div>
-        </div>
-
-        <div class="v3-step-unit">
-            <div class="v3-step-box">5 증빙 자료 업로드</div>
-        </div>
-    </div>
-
-    <div class="v3-arrow-vertical-row align-right">
-        <div class="v3-v-arrow-unit">
-            <div class="v3-v-lines">
-                <div class="v3-v-line-center"></div>
-            </div>
-            <div class="v3-v-triangle"></div>
-        </div>
-    </div>
-
-    <div class="v3-flow-row row-reverse">
-        <div class="v3-step-unit">
-            <div class="v3-step-box">6 신청 제출</div>
-        </div>
-
-        <div class="v3-arrow-horizontal flip-h">
-            <div class="v3-h-lines">
-                <div class="v3-h-line-center"></div>
-            </div>
-            <div class="v3-h-triangle"></div>
-        </div>
-
-        <div class="v3-step-unit">
-            <div class="v3-step-box">7 접수 번호 확인</div>
-        </div>
-    </div>
-
-    <div class="v3-arrow-vertical-row align-left">
-        <div class="v3-v-arrow-unit">
-            <div class="v3-v-lines">
-                <div class="v3-v-line-center"></div>
-            </div>
-            <div class="v3-v-triangle"></div>
-        </div>
-    </div>
-
-    <div class="v3-flow-row justify-start">
-        <div class="v3-step-unit">
-            <div class="v3-step-box">8 처리 결과 확인</div>
-        </div>
-    </div>
-
-    </div>
-    </div>
-
-<div class="v3-login-invitation">
-
-<div class="invitation-box">
-
-<p>더욱 상세한 정보나<br>민원 사이트 연결은</p>
-
-<h3>로그인 후</h3>
-
-<p>이용 가능한 서비스 입니다 !</p>
-
-<button class="v3-login-btn-process"
-onclick="location.href='/login'">
-로그인하러 가기
-</button>
-
+    </button>
 </div>
 
+<div class="mobile-wrap">
+
+    <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+
+    <div class="process-page-wrap">
+
+        <!-- 상단 민원창구 아이콘바 -->
+        <div class="process-portal-bar">
+            <button type="button" class="portal-item active portal-traffic24" data-portal="traffic24">
+                <div class="portal-icon-circle">
+                    <img src="${pageContext.request.contextPath}/images/icon1.png" alt="교통민원24">
+                </div>
+                <span>교통민원24</span>
+            </button>
+
+            <button type="button" class="portal-item portal-epeople" data-portal="epeople">
+                <div class="portal-icon-circle">
+                    <img src="${pageContext.request.contextPath}/images/icon2.png" alt="국민신문고">
+                </div>
+                <span>국민신문고</span>
+            </button>
+
+            <button type="button" class="portal-item portal-safety" data-portal="safety">
+                <div class="portal-icon-circle">
+                    <img src="${pageContext.request.contextPath}/images/icon3.png" alt="안전신문고">
+                </div>
+                <span>안전신문고</span>
+            </button>
+
+            <button type="button" class="portal-item portal-gwangju" data-portal="gwangju">
+                <div class="portal-icon-circle">
+                    <img src="${pageContext.request.contextPath}/images/icon4.png" alt="광주광역시">
+                </div>
+                <span>광주광역시</span>
+            </button>
+        </div>
+
+        <div class="process-content-area">
+
+            <!-- =========================
+                 1. 교통민원24
+            ========================== -->
+            <section class="portal-process active" id="traffic24">
+                <div class="process-title-row traffic24">
+                    <img src="${pageContext.request.contextPath}/images/icon1.png" alt="교통민원24">
+                    <h2>교통민원24 접수는 다음 절차에 따라 진행됩니다.</h2>
+                </div>
+
+                <div class="process-flow traffic24">
+                    <div class="flow-row">
+                        <div class="step-box">교통민원24 접속</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">로그인(본인인증)</div>
+                    </div>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble left-bubble">
+                            <h4>📌 민원 유형 예시</h4>
+                            <ul>
+                                <li>🚗 1. 불법 주정차</li>
+                                <li>🚦 2. 교통 위험 행위</li>
+                                <li>🎓 3. 도로 시설 불편</li>
+                                <li>🛣️ 4. 기타 교통민원</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="flow-row justify-end">
+                        <div class="step-box">신고할 민원 선택</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row">
+                        <div class="step-box">상황 정보 입력</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">증빙 자료 업로드</div>
+                    </div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble right-bubble">
+                            <h4>📎 업로드 가능 자료</h4>
+                            <ul>
+                                <li>📷 현장 사진 / 영상</li>
+                                <li>🚘 블랙박스 영상</li>
+                                <li>🔢 차량 번호 식별 가능</li>
+                                <li>📍 위치 확인 자료</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <div class="flow-row row-reverse">
+                        <div class="step-box">신청 제출</div>
+                        <div class="arrow left"></div>
+                        <div class="step-box">접수 번호 확인</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row justify-start">
+                        <div class="step-box">처리 결과 확인</div>
+                    </div>
+                </div>
+
+                <c:choose>
+                    <c:when test="${isLoggedIn}">
+                        <div class="process-bottom-link traffic24">
+                            <a href="https://www.efine.go.kr/" target="_blank" rel="noopener noreferrer">
+                                🔗 교통민원24 공식 사이트 바로가기
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="process-login-box">
+                            <p>더욱 상세한 정보나<br>민원 사이트 연결은</p>
+                            <h3>로그인 후</h3>
+                            <p>이용 가능한 서비스 입니다 !</p>
+                            <button type="button" class="process-login-btn"
+                                    onclick="location.href='${pageContext.request.contextPath}/login'">
+                                로그인하러 가기
+                            </button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </section>
+
+            <!-- =========================
+                 2. 국민신문고
+            ========================== -->
+            <section class="portal-process" id="epeople">
+                <div class="process-title-row epeople">
+                    <img src="${pageContext.request.contextPath}/images/icon2.png" alt="국민신문고">
+                    <h2>국민신문고 접수는 다음 절차에 따라 진행됩니다.</h2>
+                </div>
+
+                <div class="process-flow epeople">
+                    <div class="flow-row">
+                        <div class="step-box">국민신문고 접속</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">로그인</div>
+                    </div>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble left-bubble">
+                            <h4>📌 민원 유형 예시</h4>
+                            <ul>
+                                <li>📄 일반 민원</li>
+                                <li>💡 제안/건의</li>
+                                <li>🐝 부패/공익 신고</li>
+                                <li>🛡️ 적극행정 국민신청</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="flow-row justify-end">
+                        <div class="step-box">신청서 작성</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row">
+                        <div class="step-box">유사사례 검토</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">처리기관 선택 및 제출</div>
+                    </div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble right-bubble">
+                            <h4>📎 업로드 가능 자료</h4>
+                            <ul>
+                                <li>📁 관련 서류</li>
+                                <li>📷 현장 사진</li>
+                                <li>🎬 참고 동영상</li>
+                                <li>📄 기타 증빙</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <div class="flow-row row-reverse">
+                        <div class="step-box">접수</div>
+                        <div class="arrow left"></div>
+                        <div class="step-box">처리</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row justify-start">
+                        <div class="step-box">만족도 조사</div>
+                    </div>
+                </div>
+
+                <c:choose>
+                    <c:when test="${isLoggedIn}">
+                        <div class="process-bottom-link epeople">
+                            <a href="https://www.epeople.go.kr/" target="_blank" rel="noopener noreferrer">
+                                🔗 국민신문고 공식 사이트 바로가기
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="process-login-box">
+                            <p>더욱 상세한 정보나<br>민원 사이트 연결은</p>
+                            <h3>로그인 후</h3>
+                            <p>이용 가능한 서비스 입니다 !</p>
+                            <button type="button" class="process-login-btn"
+                                    onclick="location.href='${pageContext.request.contextPath}/login'">
+                                로그인하러 가기
+                            </button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </section>
+
+            <!-- =========================
+                 3. 안전신문고
+            ========================== -->
+            <section class="portal-process" id="safety">
+                <div class="process-title-row safety">
+                    <img src="${pageContext.request.contextPath}/images/icon3.png" alt="안전신문고">
+                    <h2>안전신문고 접수는 다음 절차에 따라 진행됩니다.</h2>
+                </div>
+
+                <div class="process-flow safety">
+                    <div class="flow-row">
+                        <div class="step-box">안전신문고 접속</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">신고할 분류 선택</div>
+                    </div>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble left-bubble">
+                            <h4>📌 민원 유형 예시</h4>
+                            <ul>
+                                <li>⚠️ 도로 · 시설 파손</li>
+                                <li>⚡ 위험 구역</li>
+                                <li>🔥 소방 시설 장애</li>
+                                <li>🚴 기타 위험 요소</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="flow-row justify-end">
+                        <div class="step-box">신고 유형 선택</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row">
+                        <div class="step-box">증빙 사진·동영상</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">신고 내용 작성</div>
+                    </div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble right-bubble">
+                            <h4>📎 업로드 가능 자료</h4>
+                            <ul>
+                                <li>🎥 동영상(필수권장)</li>
+                                <li>📷 현장 사진</li>
+                                <li>📍 주소지 확인 가능</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <div class="flow-row row-reverse">
+                        <div class="step-box">처리기관 분류</div>
+                        <div class="arrow left"></div>
+                        <div class="step-box">위험해소</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row justify-start">
+                        <div class="step-box">처리 결과 통보</div>
+                    </div>
+                </div>
+
+                <c:choose>
+                    <c:when test="${isLoggedIn}">
+                        <div class="process-bottom-link safety">
+                            <a href="https://www.safetyreport.go.kr/" target="_blank" rel="noopener noreferrer">
+                                🔗 안전신문고 공식 사이트 바로가기
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="process-login-box">
+                            <p>더욱 상세한 정보나<br>민원 사이트 연결은</p>
+                            <h3>로그인 후</h3>
+                            <p>이용 가능한 서비스 입니다 !</p>
+                            <button type="button" class="process-login-btn"
+                                    onclick="location.href='${pageContext.request.contextPath}/login'">
+                                로그인하러 가기
+                            </button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </section>
+
+            <!-- =========================
+                 4. 광주광역시
+            ========================== -->
+            <section class="portal-process" id="gwangju">
+                <div class="process-title-row gwangju">
+                    <img src="${pageContext.request.contextPath}/images/icon4.png" alt="광주광역시">
+                    <h2>광주광역시 접수는 다음 절차에 따라 진행됩니다.</h2>
+                </div>
+
+                <div class="process-flow gwangju">
+                    <div class="flow-row">
+                        <div class="step-box">바로응답 접속</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">민원 작성 및 본인인증</div>
+                    </div>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble left-bubble">
+                            <h4>📌 민원 유형 예시</h4>
+                            <ul>
+                                <li>🏙️ 시정 불편 사항</li>
+                                <li>🛠️ 공공시설 보수</li>
+                                <li>🌳 가로수/조경 관리</li>
+                                <li>📢 정책 제안</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="flow-row justify-end">
+                        <div class="step-box">신청서 작성</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row">
+                        <div class="step-box">접수 번호 발급</div>
+                        <div class="arrow right"></div>
+                        <div class="step-box">주관 부서 및 담당자 배정</div>
+                    </div>
+
+                    <c:if test="${isLoggedIn}">
+                        <div class="info-bubble right-bubble">
+                            <h4>📎 업로드 가능 자료</h4>
+                            <ul>
+                                <li>📷 위치 이미지</li>
+                                <li>🎬 불편 상황 영상</li>
+                                <li>🗺️ 지도 캡처본</li>
+                            </ul>
+                        </div>
+                    </c:if>
+
+                    <div class="arrow-down right-side"></div>
+
+                    <div class="flow-row row-reverse">
+                        <div class="step-box">접수</div>
+                        <div class="arrow left"></div>
+                        <div class="step-box">처리</div>
+                    </div>
+
+                    <div class="arrow-down left-side"></div>
+
+                    <div class="flow-row justify-start">
+                        <div class="step-box">사후관리 및 만족도 평가</div>
+                    </div>
+                </div>
+
+                <c:choose>
+                    <c:when test="${isLoggedIn}">
+                        <div class="process-bottom-link gwangju">
+                            <a href="https://www.gwangju.go.kr/" target="_blank" rel="noopener noreferrer">
+                                🔗 광주광역시 공식 사이트 바로가기
+                            </a>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="process-login-box">
+                            <p>더욱 상세한 정보나<br>민원 사이트 연결은</p>
+                            <h3>로그인 후</h3>
+                            <p>이용 가능한 서비스 입니다 !</p>
+                            <button type="button" class="process-login-btn"
+                                    onclick="location.href='${pageContext.request.contextPath}/login'">
+                                로그인하러 가기
+                            </button>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </section>
+
+        </div>
+    </div>
+
+    <jsp:include page="/WEB-INF/views/common/bottomNav.jsp"/>
 </div>
 
-</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const portalButtons = document.querySelectorAll(".portal-item");
+    const portalSections = document.querySelectorAll(".portal-process");
 
-</div>
+    portalButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const target = this.dataset.portal;
 
-</div>
+            portalButtons.forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
 
-<jsp:include page="/WEB-INF/views/common/bottomNav.jsp"/>
+            portalSections.forEach(section => section.classList.remove("active"));
+            document.getElementById(target).classList.add("active");
 
-</div>
-</div>
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    });
+});
+</script>
 
 </body>
 </html>
