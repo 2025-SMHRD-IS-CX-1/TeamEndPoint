@@ -67,13 +67,13 @@
                 </div>
             </a>
 
-            <a href="/" class="menu-item">
-                <i data-lucide="info" size="20" class="menu-icon"></i>
-                <div class="menu-text">
-                    <span class="menu-title">TRAFFIC:ON</span>
-                    <span class="menu-subtext">우리 서비스는 · · ·</span>
-                </div>
-            </a>
+			<a href="${pageContext.request.contextPath}/about" class="menu-item">
+			    <i data-lucide="info" size="20" class="menu-icon"></i>
+			    <div class="menu-text">
+			        <span class="menu-title">TRAFFIC:ON</span>
+			        <span class="menu-subtext">우리 서비스 소개</span>
+			    </div>
+			</a>
 
             <% if (loginMember != null) { %>
                 <a href="/mypage" class="menu-item">

@@ -3,8 +3,8 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <nav class="bottom-nav">
-  <a class="nav-item ${pageContext.request.requestURI.contains('/about') ? 'active' : ''}"
-     href="${pageContext.request.contextPath}/about">
+  <a class="nav-item ${pageContext.request.requestURI.equals(pageContext.request.contextPath.concat('/')) || pageContext.request.requestURI.endsWith('/index') ? 'active' : ''}"
+     href="${pageContext.request.contextPath}/">
     <i data-lucide="search"></i>
     <span>사전해결 가이드</span>
   </a>
