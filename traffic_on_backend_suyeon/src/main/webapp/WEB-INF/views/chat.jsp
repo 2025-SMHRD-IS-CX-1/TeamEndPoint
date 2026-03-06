@@ -2,6 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<header class="chat-header">
+	    <button class="back-btn" onclick="history.back()">
+	        <i data-lucide="chevron-left"></i>
+	    </button>
+
+	    <div class="center">
+	        <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+	             alt="logo"
+	             class="header-logo">
+	        <span class="logo-text">TRAFFIC:ON</span>
+	    </div>
+
+	    <div class="header-spacer"></div>
+	</header>
     <meta charset="UTF-8">
     <title>TRAFFIC:ON - 챗봇가이드</title>
     <link rel="stylesheet" href="/css/ChatPage.css">
@@ -92,10 +106,13 @@
         <button class="back-btn" onclick="history.back()">
             <i data-lucide="chevron-left"></i>
         </button>
-        <div class="chat-logo">
-            <span class="logo-text">TRAFFIC:ON</span>
-        </div>
-        <div class="header-spacer"></div>
+		<div class="center">
+		    <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+		         alt="logo"
+		         class="header-logo">
+		    <span class="logo-text">TRAFFIC:ON</span>
+		</div>
+        
     </header>
 
     <div class="chat-content" id="chatContent">
