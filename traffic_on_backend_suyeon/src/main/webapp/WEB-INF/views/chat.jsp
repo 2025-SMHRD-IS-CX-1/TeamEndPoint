@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- ✅ 마크다운 렌더링 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- ✅ 사진 확대 모달용 최소 CSS (ChatPage.css로 옮겨도 됨) -->
     <style>
         .image-modal-overlay {
             position: fixed;
@@ -51,13 +49,12 @@
             line-height: 40px;
         }
 
-        /* ✅ 이미지 말풍선(파란 배경 완전 제거) + 삭제버튼 */
         .user-image-bubble {
             align-self: flex-end;
             max-width: 75%;
             position: relative;
             padding: 0;
-            margin: 0;
+            margin: 6px 0;
             background: transparent;
         }
         .user-image-bubble .chat-image-preview {
@@ -85,17 +82,12 @@
             font-weight: 900;
         }
         .user-image-bubble .img-remove-btn:active { transform: scale(0.98); }
-
-        /* ✅ 전송된 이미지는 X 숨김(버블은 그대로 유지) */
         .user-image-bubble.sent .img-remove-btn { display: none; }
-
-        /* ✅ 전송 중에는 살짝 흐리게(선택) */
         .user-image-bubble.sending { opacity: 0.78; }
     </style>
 </head>
 <body>
 <div class="chat-page-container">
-    <!-- Header -->
     <header class="chat-header">
         <button class="back-btn" onclick="history.back()">
             <i data-lucide="chevron-left"></i>
@@ -106,7 +98,6 @@
         <div class="header-spacer"></div>
     </header>
 
-    <!-- Content Area -->
     <div class="chat-content" id="chatContent">
         <div class="chat-intro">
             <div class="pengrimi-avatar">
@@ -136,15 +127,20 @@
         </div>
     </div>
 
-    <!-- Bottom Input Area -->
     <div class="chat-input-wrapper" id="chatInputWrapper">
         <div class="chat-input-bar">
             <button class="chat-plus-btn" id="plusBtn" type="button">
                 <i data-lucide="plus" size="24"></i>
             </button>
 
-            <!-- ✅ 여러 장 업로드: multiple -->
-            <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png" multiple style="display:none"/>
+            <!-- ✅ FastAPI가 처리 가능한 형식까지 허용 -->
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/bmp,image/gif,.jfif,.jpeg,.jpg,.png,.webp,.bmp,.gif,.heic,.heif"
+                multiple
+                style="display:none"
+            />
 
             <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
 
@@ -155,7 +151,6 @@
     </div>
 </div>
 
-<!-- ✅ 이미지 확대 모달 -->
 <div class="image-modal-overlay" id="imageModalOverlay" aria-hidden="true">
     <div class="image-modal" role="dialog" aria-modal="true">
         <button class="image-modal-close" id="imageModalClose" type="button" aria-label="close">×</button>
@@ -167,16 +162,60 @@
     lucide.createIcons();
 
     const isLoggedIn = <%= (session.getAttribute("loginMember") != null) ? "true" : "false" %>;
+    const CROOM_IDX = 2;
+    let pendingImages = [];
 
     if (window.marked) {
         marked.setOptions({ breaks: true, gfm: true });
     }
 
-    const CROOM_IDX = 2;
+    const FIXED_RESPONSES = [
+        {
+            keys: ["안녕", "안녕하세요", "hi", "hello", "반가워", "반갑"],
+            text: `
+안녕하세요! 저는 교통 길잡이 펭리미예요.
 
-    // ✅ 선택만 해두고 "전송"할 때 같이 보내기
-    // item: { id, file, url, bubbleEl, removeBtnEl }
-    let pendingImages = [];
+교통 민원(VOC) 데이터를 바탕으로  
+불편했던 상황을 **쉽게 정리**하고, **민원 접수 전에 필요한 절차를 한눈에** 볼 수 있게 도와드리는  
+**교통 민원·정보 가이드 서비스**랍니다 🙂
+
+지금 겪으신 상황을 편하게 말씀해 주세요!
+            `.trim()
+        },
+        {
+            keys: ["너는 누구야", "넌 누구야", "너 누구야", "누구세요", "누구야", "정체", "소개해줘", "너 뭐야"],
+            text: `
+저는 교통 길잡이 펭리미예요!
+
+교통 민원(VOC) 데이터를 활용해서  
+시민분들이 교통 불편을 더 **쉽게 이해**하고,  
+민원 접수 전에 **필요한 절차/준비물**을 **빠르게 정리**할 수 있게 도와드리고 있어요 🙂
+
+원하시면 “불법주정차 / 장애인주차 / 지하철 공사” 같은 주제로 바로 안내해드릴게요!
+            `.trim()
+        },
+        {
+            keys: ["도움말", "사용법", "어떻게 써", "어떻게 사용", "할 수 있는", "뭐 할 수", "기능", "가능한"],
+            text: `
+좋아요! 펭리미 이렇게 쓰면 편해요 🐧
+
+**1) 글로 질문하기**
+- 예) “불법주정차 신고는 어떻게 해요?”
+- 예) “버스정류장 앞에 주차했는데 신고 가능해요?”
+
+**2) 사진으로 물어보기**
+- 사진 올리고, 바로 아래에 상황을 한 줄로 적어주세요.
+- 예) “여기 장애인구역 위반인가요?” / “이 표지판 무슨 뜻이에요?”
+
+**3) 안내 받을 수 있는 것**
+- 상황에 맞는 **민원 유형 정리**
+- **신고 방법/절차**, 준비해야 할 정보(시간/장소/사진 등)
+- 관련 **연락처/경로** 안내
+
+편하게 상황만 말해주시면 제가 알아서 정리해드릴게요 🙂
+            `.trim()
+        }
+    ];
 
     const GUEST_KEYWORD_ANSWERS = {
         "지하철 공사": `
@@ -233,13 +272,39 @@
         `.trim()
     };
 
+    function getSafeErrorMessage(err, fallback = "알 수 없는 오류가 발생했어요.") {
+        if (!err) return fallback;
+        if (typeof err === "string") return err;
+        if (err.message && String(err.message).trim()) return err.message;
+        return fallback;
+    }
+
+    function parseApiPayload(raw) {
+        let data;
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            data = { answer: raw };
+        }
+
+        const answer =
+            data.answer ??
+            data.analysis_result ??
+            data.response ??
+            data.message ??
+            data.result ??
+            data.error ??
+            (typeof data === "string" ? data : JSON.stringify(data));
+
+        return { data, answer };
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         const input = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
         const plusBtn = document.getElementById('plusBtn');
         const imageInput = document.getElementById('imageInput');
 
-        // ✅ + 버튼 → file input 트리거
         plusBtn.addEventListener('click', () => {
             if (!isLoggedIn) {
                 addMessage("이미지 분석 기능은 로그인 후 이용 가능합니다.", "bot");
@@ -247,34 +312,48 @@
                 scrollToBottom();
                 return;
             }
-            imageInput.value = ""; // 같은 파일 재선택 가능하게
+            imageInput.value = "";
             imageInput.click();
         });
 
-        // ✅ 여러 장 선택: "미리보기만" 보여주고 pendingImages에 쌓기
         imageInput.addEventListener('change', (e) => {
             if (!isLoggedIn) return;
 
             const files = Array.from(e.target.files || []);
             if (!files.length) return;
 
-            // 같은 파일 재선택 가능
             imageInput.value = "";
 
-            const okTypes = ["image/jpeg", "image/png"];
-            const MAX_MB = 10;
+            // ✅ 허용 타입 확장
+            const okTypes = [
+                "image/jpeg",
+                "image/jpg",
+                "image/png",
+                "image/webp",
+                "image/bmp",
+                "image/gif",
+                "image/heic",
+                "image/heif"
+            ];
+
+            const okExts = [".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif", ".jfif", ".heic", ".heif"];
+            const MAX_MB = 15;
 
             for (const file of files) {
-                if (!okTypes.includes(file.type)) {
-                    addMessage("⚠️ JPG/PNG 이미지만 업로드할 수 있어요.", "bot");
+                const lowerName = (file.name || "").toLowerCase();
+                const extOk = okExts.some(ext => lowerName.endsWith(ext));
+                const typeOk = okTypes.includes(file.type);
+
+                if (!typeOk && !extOk) {
+                    addMessage("⚠️ JPG/PNG/WEBP/BMP/GIF/JFIF 이미지만 업로드할 수 있어요.", "bot");
                     continue;
                 }
+
                 if (file.size > MAX_MB * 1024 * 1024) {
                     addMessage(`⚠️ 이미지 용량이 너무 커요. (${MAX_MB}MB 이하로 올려주세요)`, "bot");
                     continue;
                 }
 
-                // ✅ 미리보기 추가 + pending에 저장
                 addPendingImageBubble(file);
             }
 
@@ -285,6 +364,17 @@
             input.disabled = false;
             input.placeholder = "교통 민원 내용을 입력해 주세요.";
             sendBtn.disabled = false;
+
+            input.addEventListener("focus", () => {
+                input.dataset.ph = input.placeholder || "";
+                input.placeholder = "";
+            });
+
+            input.addEventListener("blur", () => {
+                if (!input.value.trim()) {
+                    input.placeholder = input.dataset.ph || "교통 민원 내용을 입력해 주세요.";
+                }
+            });
 
             sendBtn.addEventListener('click', () => sendMessage());
 
@@ -298,8 +388,6 @@
         }
 
         window.addEventListener('resize', () => updateLoginNudgePosition());
-
-        // ✅ 모달 이벤트
         setupImageModal();
     });
 
@@ -323,39 +411,53 @@
         sendMessage(keyword);
     }
 
+    function matchFixedResponse(text) {
+        const t = (text || "").trim().toLowerCase();
+        if (!t) return null;
+
+        for (const item of FIXED_RESPONSES) {
+            const hit = item.keys.some(k => t.includes(String(k).toLowerCase()));
+            if (hit) return item.text;
+        }
+        return null;
+    }
+
     async function sendMessage(forcedText) {
         if (!isLoggedIn) return;
 
         const input = document.getElementById('chatInput');
         const text = (forcedText ?? input.value ?? "").trim();
 
-        // ✅ 텍스트도 없고, 첨부 이미지도 없으면 전송 X
         if (!text && pendingImages.length === 0) return;
 
         const keywordSection = document.getElementById('keywordSection');
         if (keywordSection) keywordSection.style.display = 'none';
 
-        // ✅ 유저 텍스트는 있을 때만 표시
-        if (text) addMessage(text, 'user');
+        const fixed = matchFixedResponse(text);
+        if (fixed) {
+            if (text) addMessage(text, "user");
+            if (!forcedText) input.value = "";
+            const t = showTyping();
+            replaceMessage(t, fixed, "bot");
+            scrollToBottom();
+            return;
+        }
 
+        if (text) addMessage(text, 'user');
         if (!forcedText) input.value = "";
         scrollToBottom();
 
-        // ✅ 이미지가 있으면: 이미지 분석 API로 전송(한 장씩)
         if (pendingImages.length > 0) {
             let typingEl = showTyping();
             scrollToBottom();
 
-            // ✅ 현재 큐 스냅샷
             const queue = pendingImages.slice();
 
-            // ✅ 전송 중 표시 + X 비활성화(버블은 유지)
             queue.forEach(item => {
                 if (item?.bubbleEl) item.bubbleEl.classList.add('sending');
                 if (item?.removeBtnEl) item.removeBtnEl.disabled = true;
             });
 
-            // ✅ 중복 전송 방지: pending에서 먼저 제거(버블은 그대로 둠)
             pendingImages = pendingImages.filter(x => !queue.includes(x));
 
             try {
@@ -372,7 +474,6 @@
                     scrollToBottom();
                 }
 
-                // ✅ 전송 완료: sending 제거 + sent 처리(버블 유지, X는 숨김)
                 queue.forEach(item => {
                     if (item?.bubbleEl) {
                         item.bubbleEl.classList.remove('sending');
@@ -383,10 +484,10 @@
 
             } catch (err) {
                 console.error(err);
-                replaceMessage(typingEl, "❌ 이미지 분석 요청 실패: " + err.message, "bot");
+                const msg = getSafeErrorMessage(err, "이미지 분석 중 오류가 발생했어요.");
+                replaceMessage(typingEl, "❌ 이미지 분석 요청 실패: " + msg, "bot");
                 scrollToBottom();
 
-                // ✅ 실패 시: 다시 pending으로 복구 + X 다시 활성화(버블 유지)
                 pendingImages = queue.concat(pendingImages);
                 queue.forEach(item => {
                     if (item?.bubbleEl) item.bubbleEl.classList.remove('sending');
@@ -396,7 +497,6 @@
             return;
         }
 
-        // ✅ 이미지 없으면: 일반 채팅 API
         const loadingEl = showTyping();
         scrollToBottom();
 
@@ -410,35 +510,24 @@
             });
 
             const raw = await res.text();
+            const { answer } = parseApiPayload(raw);
 
             if (!res.ok) {
-                replaceMessage(loadingEl, "❌ 서버 오류: " + raw, "bot");
+                replaceMessage(loadingEl, "❌ 서버 오류: " + answer, "bot");
                 scrollToBottom();
                 return;
             }
-
-            let data;
-            try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
-
-            const answer =
-                data.analysis_result ??
-                data.answer ??
-                data.response ??
-                data.message ??
-                data.result ??
-                (typeof data === "string" ? data : JSON.stringify(data));
 
             replaceMessage(loadingEl, answer, "bot");
             scrollToBottom();
 
         } catch (err) {
             console.error(err);
-            replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + err.message, "bot");
+            replaceMessage(loadingEl, "❌ 챗봇 서버 연결 실패: " + getSafeErrorMessage(err), "bot");
             scrollToBottom();
         }
     }
 
-    // ✅ 이미지 API만 호출(미리보기/typing은 sendMessage에서 처리)
     async function sendImageOnlyAPI(file, text) {
         const formData = new FormData();
         formData.append("file", file);
@@ -451,26 +540,21 @@
         });
 
         const raw = await res.text();
+        console.log("IMAGE API raw =", raw);
+
+        const { answer } = parseApiPayload(raw);
 
         if (!res.ok) {
-            throw new Error(raw);
+            throw new Error(answer || "이미지 분석 응답을 받지 못했어요.");
         }
 
-        let data;
-        try { data = JSON.parse(raw); } catch { data = { answer: raw }; }
-
-        const answer =
-            data.analysis_result ??
-            data.answer ??
-            data.response ??
-            data.message ??
-            data.result ??
-            (typeof data === "string" ? data : JSON.stringify(data));
+        if (!answer || !String(answer).trim()) {
+            throw new Error("이미지 분석 결과가 비어 있어요.");
+        }
 
         return answer;
     }
 
-    // ✅ 텍스트 전처리: DB 메타/불필요 문단 제거
     function normalizeBotText(text) {
         let t = (text || "");
 
@@ -487,12 +571,10 @@
         );
 
         t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
-
         t = t.replace(/,\s*,+/g, ", ");
         t = t.replace(/\s+,/g, ",");
         t = t.replace(/,\s*\n/g, "\n");
         t = t.replace(/,\s*$/g, "");
-
         t = t.replace(/[ \t]{2,}/g, " ");
         t = t.replace(/\n{3,}/g, "\n\n");
         t = t.replace(/:\n\n(?=[-*\+])/g, ":\n");
@@ -535,10 +617,8 @@
         return bubble;
     }
 
-    // ✅ 이미지 미리보기 + X 삭제 버튼 + pendingImages 저장
     function addPendingImageBubble(file) {
         const messagesArea = document.getElementById('messagesArea');
-
         const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now() + Math.random());
 
         const bubble = document.createElement('div');
@@ -551,11 +631,8 @@
 
         const url = URL.createObjectURL(file);
         img.src = url;
-
-        // 클릭 확대
         img.addEventListener('click', () => openImageModal(url));
 
-        // 삭제 버튼
         const removeBtn = document.createElement('button');
         removeBtn.type = "button";
         removeBtn.className = "img-remove-btn";
@@ -566,15 +643,11 @@
             e.preventDefault();
             e.stopPropagation();
 
-            // pendingImages에서 제거
             pendingImages = pendingImages.filter(x => x.id !== id);
 
-            // DOM 제거
             if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
 
-            // objectURL 해제
             try { URL.revokeObjectURL(url); } catch (err) {}
-
             scrollToBottom();
         });
 
@@ -657,9 +730,6 @@
         chatContent.scrollTop = chatContent.scrollHeight;
     }
 
-    /* =========================
-       ✅ 이미지 확대 모달.
-    ========================= */
     function setupImageModal() {
         const overlay = document.getElementById('imageModalOverlay');
         const closeBtn = document.getElementById('imageModalClose');

@@ -404,7 +404,7 @@
   cursor: zoom-in;
 }
 
-/* ✅ X 삭제 버튼 */
+/* ✅ X 삭제 버튼. */
 #messagesArea .user-image-bubble .img-remove-btn {
   position: absolute;
   top: -10px;
