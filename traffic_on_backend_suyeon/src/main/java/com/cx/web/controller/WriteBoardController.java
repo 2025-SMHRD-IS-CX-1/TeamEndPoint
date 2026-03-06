@@ -1,8 +1,8 @@
 package com.cx.web.controller;
 
-import com.cx.web.entity.WriteBoard;
+import com.cx.web.entity.Board;
 import com.cx.web.entity.Member;
-import com.cx.web.repository.WriteBoardRepository;
+import com.cx.web.repository.BoardRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WriteBoardController {
 
     @Autowired
-    private WriteBoardRepository writeBoardRepository;
+    private BoardRepository boardRepository;
 
     @GetMapping("/board/write")
     public String writeBoardPage() {
@@ -26,22 +26,17 @@ public class WriteBoardController {
                              @RequestParam("content") String content,
                              @RequestParam("category") String category,
                              HttpSession session) {
-
         Member loginMember = (Member) session.getAttribute("loginMember");
-
         if (loginMember == null) {
             return "redirect:/login";
         }
-
-        WriteBoard board = new WriteBoard();
+        Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
         board.setCategory(category);
         board.setMemId(loginMember.getMemID());
         board.setCreatedAt(java.time.LocalDateTime.now());
-
-        writeBoardRepository.save(board);
-
+        boardRepository.save(board);
         return "redirect:/board";
     }
 }

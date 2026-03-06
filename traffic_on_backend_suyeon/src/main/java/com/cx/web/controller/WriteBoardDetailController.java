@@ -1,8 +1,8 @@
 package com.cx.web.controller;
 
-import com.cx.web.entity.WriteBoard;
+import com.cx.web.entity.Board;
 import com.cx.web.entity.Member;
-import com.cx.web.repository.WriteBoardRepository;
+import com.cx.web.repository.BoardRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WriteBoardDetailController {
 
     @Autowired
-    private WriteBoardRepository writeBoardRepository;
+    private BoardRepository boardRepository;
 
     @GetMapping("/board/{id}")
     public String boardDetail(@PathVariable("id") Integer id, Model model, HttpSession session) {
-        WriteBoard board = writeBoardRepository.findById(id).orElse(null);
+        Board board = boardRepository.findById(id).orElse(null);
         if (board == null) {
             return "redirect:/board";
         }
@@ -44,22 +44,16 @@ public class WriteBoardDetailController {
 
     @GetMapping("/board/edit/{id}")
     public String editBoardPage(@PathVariable("id") Integer id, Model model, HttpSession session) {
-        WriteBoard board = writeBoardRepository.findById(id).orElse(null);
-        if (board == null) {
-            return "redirect:/board";
-        }
+        Board board = boardRepository.findById(id).orElse(null);
+        if (board == null) return "redirect:/board";
 
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            return "redirect:/login";
-        }
+        if (loginMember == null) return "redirect:/login";
 
         boolean isAdmin = "ADMIN".equals(loginMember.getMemType());
         boolean isWriter = loginMember.getMemID().equals(board.getMemId());
 
-        if (!isAdmin && !isWriter) {
-            return "redirect:/board";
-        }
+        if (!isAdmin && !isWriter) return "redirect:/board";
 
         model.addAttribute("board", board);
         return "writeboardedit";
@@ -72,14 +66,10 @@ public class WriteBoardDetailController {
                              HttpSession session) {
 
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            return "redirect:/login";
-        }
+        if (loginMember == null) return "redirect:/login";
 
-        WriteBoard board = writeBoardRepository.findById(id).orElse(null);
-        if (board == null) {
-            return "redirect:/board";
-        }
+        Board board = boardRepository.findById(id).orElse(null);
+        if (board == null) return "redirect:/board";
 
         boolean isAdmin = "ADMIN".equals(loginMember.getMemType());
         boolean isWriter = loginMember.getMemID().equals(board.getMemId());
@@ -88,7 +78,7 @@ public class WriteBoardDetailController {
             board.setTitle(title);
             board.setContent(content);
             board.setUpdatedAt(java.time.LocalDateTime.now());
-            writeBoardRepository.save(board);
+            boardRepository.save(board);
         }
 
         return "redirect:/board/" + id;
@@ -97,20 +87,16 @@ public class WriteBoardDetailController {
     @PostMapping("/board/delete/{id}")
     public String deleteBoard(@PathVariable("id") Integer id, HttpSession session) {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if (loginMember == null) {
-            return "redirect:/login";
-        }
+        if (loginMember == null) return "redirect:/login";
 
-        WriteBoard board = writeBoardRepository.findById(id).orElse(null);
-        if (board == null) {
-            return "redirect:/board";
-        }
+        Board board = boardRepository.findById(id).orElse(null);
+        if (board == null) return "redirect:/board";
 
         boolean isAdmin = "ADMIN".equals(loginMember.getMemType());
         boolean isWriter = loginMember.getMemID().equals(board.getMemId());
 
         if (isAdmin || isWriter) {
-            writeBoardRepository.deleteById(id);
+            boardRepository.deleteById(id);
         }
 
         return "redirect:/board";
