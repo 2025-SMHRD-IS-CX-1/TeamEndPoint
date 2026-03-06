@@ -13,7 +13,6 @@
         opacity: 0;
         transform: translateY(10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -111,25 +110,6 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.new-post-btn {
-    padding: 10px 24px;
-    background-color: #5b6d8f;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-}
-
-.new-post-btn:hover {
-    background-color: #4a5a75;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(91, 109, 143, 0.3);
-}
-
 .board-table-container {
     background-color: white;
     border-radius: 12px;
@@ -153,12 +133,6 @@
     font-weight: 600;
     font-size: 0.95rem;
     white-space: nowrap;
-}
-
-.board-table th .sort-icon {
-    margin-left: 5px;
-    font-size: 0.75rem;
-    opacity: 0.7;
 }
 
 .board-table tbody tr {
@@ -197,8 +171,9 @@
     font-weight: 600;
 }
 
+/* ✅ 제목 컬럼 축소 */
 .col-title {
-    min-width: 300px;
+    width: 200px;
     font-weight: 500;
 }
 
@@ -207,60 +182,11 @@
     text-align: center;
 }
 
+/* ✅ 작성일 한줄 처리 */
 .col-date {
     width: 130px;
     text-align: center;
-}
-
-.col-likes {
-    width: 100px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.col-status {
-    width: 120px;
-    text-align: center;
-}
-
-.col-action {
-    width: 80px;
-    text-align: center;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-}
-
-.status-normal {
-    background-color: #d1fae5;
-    color: #065f46;
-}
-
-.status-reported {
-    background-color: #fed7aa;
-    color: #92400e;
-}
-
-.delete-btn {
-    background-color: transparent;
-    border: none;
-    color: #dc2626;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 6px 12px;
-    border-radius: 4px;
-}
-
-.delete-btn:hover {
-    background-color: #fee2e2;
-    color: #991b1b;
+    white-space: nowrap;
 }
 
 .pagination {
@@ -283,6 +209,7 @@
     transition: all 0.2s;
     min-width: 36px;
     text-align: center;
+    text-decoration: none;
 }
 
 .page-btn:hover,
@@ -303,23 +230,12 @@
     border-color: #2563eb;
 }
 
-.warn-badge {
-    padding: 6px 12px;
-    border-radius: 8px;
-    background-color: #fee2e2;
-    color: #b91c1c;
-    font-weight: 700;
-    font-size: 0.85rem;
-}
-
-/* 게시판 테이블 가운데 정렬 */
 .board-table th,
 .board-table td {
-  text-align: center;
-  vertical-align: middle;
+    text-align: center;
+    vertical-align: middle;
 }
 
-/* 게시물(제목)도 가운데 */
 .board-table td.title-cell {
-  text-align: center;
+    text-align: center;
 }

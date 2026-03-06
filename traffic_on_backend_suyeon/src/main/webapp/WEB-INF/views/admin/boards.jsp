@@ -11,27 +11,8 @@
 
   <link rel="icon" href="${pageContext.request.contextPath}/images/mascot.png">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Dashboard.css" />
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/boards.css?v=1" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/boards.css?v=2" />
   <style>
-    .action-btn.warn {
-      background-color: #FF5722;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .action-btn.warn:hover {
-      background-color: #e64a19;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
-    }
-    .action-btn.warn.active {
-      background-color: #d84315;
-    }
     .board-detail .detail-cell {
       background-color: #f9fafb;
       padding: 16px;
@@ -110,7 +91,6 @@
               <th class="col-title">게시물</th>
               <th class="col-author">아이디</th>
               <th class="col-date">작성일</th>
-              <th class="col-action">경고</th>
             </tr>
           </thead>
 
@@ -122,12 +102,9 @@
                 <td class="col-title">${b.title}</td>
                 <td class="col-author">${b.memId}</td>
                 <td class="col-date">${fn:substring(fn:replace(b.createdAt, "T", " "), 0, 16)}</td>
-                <td class="col-action">
-                  <button class="action-btn warn" data-memid="${b.memId}">경고</button>
-                </td>
               </tr>
               <tr class="board-detail" style="display:none;">
-                <td colspan="6" class="detail-cell">
+                <td colspan="5" class="detail-cell">
                   ${b.content}
                 </td>
               </tr>
@@ -160,7 +137,6 @@
 
   <div class="sidebar-overlay" id="overlay" style="display:none;"></div>
 
-  <!-- ✅ users.jsp와 동일한 사이드바 (게시판 관리 active) -->
   <aside class="dashboard-sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-brand">
@@ -218,7 +194,6 @@
 <script>
   const ctx = "${pageContext.request.contextPath}";
 
-  // ===== 사이드바 토글 =====
   const btnMenu = document.getElementById("btnMenu");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
@@ -244,7 +219,6 @@
   });
   if (overlay) overlay.addEventListener("click", closeSidebar);
 
-  // ===== 체크박스 동작 =====
   const chkAll = document.getElementById("chkAll");
   const rowChecks = () => Array.from(document.querySelectorAll(".chkRow"));
   function syncAllCheckbox() {
@@ -260,40 +234,12 @@
     chk.addEventListener("change", syncAllCheckbox);
   });
 
-  // ===== 행 클릭 시 게시글 상세 페이지로 이동 =====
   document.querySelectorAll(".board-row").forEach(row => {
     row.addEventListener("click", (e) => {
-      if (e.target.closest(".chkRow") || e.target.closest(".action-btn")) return;
+      if (e.target.closest(".chkRow")) return;
       const boardId = row.dataset.id;
       location.href = ctx + "/board/" + boardId;
     });
-  });
-
-  // ===== 경고 토글 기능 =====
-  document.addEventListener("click", async (e) => {
-    const warnBtn = e.target.closest(".action-btn.warn");
-    if (!warnBtn) return;
-
-    const memID = warnBtn.dataset.memid;
-    try {
-      const res = await fetch(ctx + "/admin/users/warn-toggle", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ memID })
-      });
-      const data = await res.json();
-
-      if (data.warnCnt && data.warnCnt >= 1) {
-        warnBtn.classList.add("active");
-        warnBtn.textContent = "경고 해제";
-      } else {
-        warnBtn.classList.remove("active");
-        warnBtn.textContent = "경고";
-      }
-    } catch (err) {
-      console.error("경고 토글 실패:", err);
-      alert("경고 토글 중 오류가 발생했습니다.");
-    }
   });
 </script>
 
