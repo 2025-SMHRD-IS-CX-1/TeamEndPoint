@@ -1,18 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<<<<<<< HEAD
+
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <nav class="bottom-nav">
   <a class="nav-item ${pageContext.request.requestURI.contains('/about') ? 'active' : ''}"
      href="${pageContext.request.contextPath}/about">
-=======
-
-<script src="https://unpkg.com/lucide@latest"></script>
-
-<nav class="bottom-nav">
-	<a class="nav-item ${pageContext.request.requestURI.contains('/about') ? 'active' : ''}"
-	   href="${pageContext.request.contextPath}/about">
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     <i data-lucide="search"></i>
     <span>사전해결 가이드</span>
   </a>

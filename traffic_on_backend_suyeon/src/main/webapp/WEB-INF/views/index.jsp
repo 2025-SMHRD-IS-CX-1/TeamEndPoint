@@ -13,15 +13,12 @@
   <link rel="stylesheet" href="/css/ChatbotSection.css" />
   <link rel="stylesheet" href="/css/QuickButton.css" />
 
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
-  <!-- ✅ 모바일 화면 래퍼 -->
   <div class="mobile-wrap">
 
-    <!-- ✅ 퀵버튼 -->
     <button class="v3-quick-btn-icon-only" onclick="location.href='/chat'">
       <div class="v3-quick-icon-inner">
         <img
@@ -34,16 +31,11 @@
       </div>
     </button>
 
-    <!-- ✅ 상단 헤더 -->
     <header class="top-header">
       <div class="left">
-<<<<<<< HEAD
-		<button class="icon-btn" aria-label="menu" onclick="openSideMenu()">
-		  <i data-lucide="menu"></i>
-		</button>
-=======
-        <button class="icon-btn" aria-label="menu">☰</button>
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
+        <button class="icon-btn" aria-label="menu" onclick="openSideMenu()">
+          <i data-lucide="menu"></i>
+        </button>
       </div>
 
       <div class="center">
@@ -52,26 +44,24 @@
       </div>
 
       <div class="right">
-		<button class="user-btn" onclick="location.href='/login'" aria-label="사용자">
-		  <i data-lucide="user"></i>
-		</button>
+        <button class="user-btn" onclick="location.href='/login'" aria-label="사용자">
+          <i data-lucide="user"></i>
+        </button>
       </div>
     </header>
 
-    <!-- ✅ 메인 콘텐츠 -->
     <div class="main-layout">
 
-      <!-- 2. Chatbot Section -->
       <section class="chatbot-section">
         <div class="chatbot-intro-wrapper" onclick="location.href='/chat'" style="cursor: pointer;">
           <div class="chatbot-intro">
             <div class="chatbot-avatar">
-				<img
-				  src="/images/Pengrimi.png"
-				  alt="펭리미"
-				  class="v3-quick-char-img-large"
-				  style="width: 100%;"
-				/>
+              <img
+                src="/images/Pengrimi.png"
+                alt="펭리미"
+                class="v3-quick-char-img-large"
+                style="width: 100%;"
+              />
             </div>
             <div class="chatbot-bubble">
               <p>안녕하세요~!</p>
@@ -80,37 +70,30 @@
           </div>
         </div>
 
-        <!-- 게시판 미리보기 (모자이크 적용) -->
         <div class="board-preview-container not-logged-in">
           <div class="board-preview-header">
             <h3>ON! 교통 정보</h3>
             <span class="more-text">전체보기 &gt;</span>
           </div>
 
-		  <div class="board-content-wrapper">
+          <div class="board-content-wrapper">
+            <ul class="board-preview-list ${isLoggedIn ? '' : 'is-blurred'}">
+              <li class="board-preview-empty">등록된 게시물이 없습니다.</li>
+            </ul>
 
-		      <!-- ✅ 로그인 상태면 is-blurred 제거 / 비로그인 상태면 is-blurred 적용 -->
-		      <ul class="board-preview-list ${isLoggedIn ? '' : 'is-blurred'}">
-		          <li class="board-preview-empty">등록된 게시물이 없습니다.</li>
-		      </ul>
-
-		      <!-- ✅ 비로그인일 때만 로그인 유도 오버레이 보이기 -->
-		      <c:if test="${!isLoggedIn}">
-		          <div class="board-login-overlay">
-		              <button class="login-prompt-btn-v2" onclick="location.href='${pageContext.request.contextPath}/login'">
-		                  로그인하러 가기
-		              </button>
-		          </div>
-		      </c:if>
-		  </div>
-		  
+            <c:if test="${!isLoggedIn}">
+              <div class="board-login-overlay">
+                <button class="login-prompt-btn-v2" onclick="location.href='${pageContext.request.contextPath}/login'">
+                  로그인하러 가기
+                </button>
+              </div>
+            </c:if>
+          </div>
         </div>
       </section>
 
-      <!-- Banner Section -->
       <section class="banner-section">
         <div class="banner-scroll-container">
-          <!-- 0번 슬라이드: 충장축제 -->
           <div
             class="banner-slide"
             onclick="location.href='${pageContext.request.contextPath}/events'"
@@ -130,7 +113,6 @@
 
     </div>
 
-    <!-- ✅ 하단 네비게이션 -->
     <nav class="bottom-nav">
       <a class="nav-item active" href="${pageContext.request.contextPath}/">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -172,20 +154,13 @@
         <span>신청절차 안내</span>
       </a>
     </nav>
-<<<<<<< HEAD
-	  <%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
+
+    <%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
   </div>
-  <!-- ✅ 모바일 화면 래퍼 끝 -->
 
   <script>
     lucide.createIcons();
   </script>
-<<<<<<< HEAD
-
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 </body>
 </html>

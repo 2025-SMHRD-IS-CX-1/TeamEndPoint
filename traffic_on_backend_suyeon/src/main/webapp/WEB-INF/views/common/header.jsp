@@ -1,95 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<<<<<<< HEAD
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Header.css">
 
 <header class="top-header">
+
+  <!-- 메뉴 버튼 -->
   <button class="icon-btn"
-    onclick="if(typeof openSideMenu === 'function') { openSideMenu(); }">
-    <i data-lucide="menu" size="24" color="#333"></i>
+      onclick="if(typeof openSideMenu === 'function'){ openSideMenu(); }">
+      <i data-lucide="menu"></i>
   </button>
 
+  <!-- 로고 -->
   <div class="logo-container"
-       onclick="location.href='${pageContext.request.contextPath}/'"
-       style="cursor:pointer;">
-    <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-         alt="로고"
-         style="width:50px;height:50px;object-fit:contain;transform:scaleX(-1);" />
-    <span class="logo-text">TRAFFIC:ON</span>
+      onclick="location.href='${pageContext.request.contextPath}/'"
+      style="cursor:pointer;">
+
+      <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+          class="logo-img"
+          alt="logo">
+
+      <span class="logo-text">TRAFFIC:ON</span>
+
   </div>
 
+  <!-- 로그인 상태 -->
   <%
-    Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-    if (isLoggedIn != null && isLoggedIn) {
+      Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+
+      if(isLoggedIn != null && isLoggedIn){
   %>
-    <button class="icon-btn" onclick="location.href='${pageContext.request.contextPath}/mypage'">
-      <i data-lucide="user" size="24" color="#333"></i>
-    </button>
+
+      <button class="icon-btn"
+          onclick="location.href='${pageContext.request.contextPath}/mypage'">
+          <i data-lucide="user"></i>
+      </button>
+
   <%
-    } else {
+      } else {
   %>
-    <button class="icon-btn login-btn-header" onclick="location.href='${pageContext.request.contextPath}/login'">
-      <i data-lucide="user-plus" size="24" color="#333"></i>
-    </button>
+
+      <button class="icon-btn"
+          onclick="location.href='${pageContext.request.contextPath}/login'">
+          <i data-lucide="user-plus"></i>
+      </button>
+
   <%
-    }
+      }
   %>
+
 </header>
 
 <script>
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 </script>
-=======
-<header class="top-header">
-
-    <!-- 메뉴 버튼 -->
-    <button class="icon-btn"
-        onclick="if(typeof openSideMenu === 'function'){ openSideMenu(); }">
-
-        <i data-lucide="menu"></i>
-    </button>
-
-    <!-- 로고 -->
-    <div class="logo-container"
-        onclick="location.href='${pageContext.request.contextPath}/'"
-        style="cursor:pointer;">
-
-        <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-            class="logo-img"
-            alt="logo">
-
-        <span class="logo-text">TRAFFIC:ON</span>
-
-    </div>
-
-    <!-- 로그인 상태 -->
-    <%
-        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
-
-        if(isLoggedIn != null && isLoggedIn){
-    %>
-
-        <button class="icon-btn"
-            onclick="location.href='${pageContext.request.contextPath}/mypage'">
-
-            <i data-lucide="user"></i>
-
-        </button>
-
-    <%
-        } else {
-    %>
-
-        <button class="icon-btn"
-            onclick="location.href='${pageContext.request.contextPath}/login'">
-
-            <i data-lucide="user-plus"></i>
-
-        </button>
-
-    <%
-        }
-    %>
-
-</header>
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad

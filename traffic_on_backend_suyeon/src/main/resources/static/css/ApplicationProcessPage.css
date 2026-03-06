@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-/* =========================================
-   Reset + Mobile frame (390px 고정)
-========================================= */
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 html, body {
   height: 100%;
   margin: 0;
@@ -11,7 +5,6 @@ html, body {
 }
 
 .mobile-layout-container {
-<<<<<<< HEAD
   width: 100% !important;
   min-height: 100vh !important;
   display: flex !important;
@@ -20,32 +13,30 @@ html, body {
 }
 
 .mobile-layout-content {
-  width: 390px !important;      /* ★ 우리 모바일 폭 */
+  width: 390px !important;
   max-width: 390px !important;
   min-height: 100vh !important;
   background: #f6f9fc !important;
   position: relative !important;
 }
 
-/* 혹시 기존에 view-content가 width:100%로 퍼트리면 방지 */
 .view-content {
   width: 100% !important;
 }
 
-/* 모바일 화면 크기 고정 */
 .mobile-layout-container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    background: #f6f9fc;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #f6f9fc;
 }
 
 .mobile-layout-content {
-    width: 390px;
-    min-height: 100vh;
-    background: #f6f9fc;
-    position: relative;
+  width: 390px;
+  min-height: 100vh;
+  background: #f6f9fc;
+  position: relative;
 }
 
 /* =========================
@@ -53,10 +44,10 @@ html, body {
 ========================= */
 
 .v3-process-container{
-    background-color:#f6f9fc;
-    min-height:100vh;
-    font-family:'Pretendard',sans-serif;
-    width:100%;
+  background-color:#f6f9fc;
+  min-height:100vh;
+  font-family:'Pretendard',sans-serif;
+  width:100%;
 }
 
 /* =========================
@@ -64,50 +55,50 @@ html, body {
 ========================= */
 
 .v3-tab-bar{
-    display:flex;
-    justify-content:space-around;
-    padding:15px 5px;
-    background:#fff;
-    border-bottom:2px solid #ddd;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  display:flex;
+  justify-content:space-around;
+  padding:15px 5px;
+  background:#fff;
+  border-bottom:2px solid #ddd;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .v3-tab-item{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:6px;
-    flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  flex:1;
 }
 
 .v3-tab-icon-circle{
-    width:58px;
-    height:58px;
-    border-radius:50%;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:3px solid #f1f5f9;
-    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:3px solid #f1f5f9;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
 .v3-tab-logo-img{
-    width:36px;
-    height:36px;
-    object-fit:contain;
-    transition:transform .2s ease;
+  width:36px;
+  height:36px;
+  object-fit:contain;
+  transition:transform .2s ease;
 }
 
 .v3-tab-item:hover .v3-tab-logo-img{
-    transform:scale(1.1);
+  transform:scale(1.1);
 }
 
 .v3-tab-text{
-    font-size:10px;
-    font-weight:800;
-    color:#64748b;
-    text-align:center;
+  font-size:10px;
+  font-weight:800;
+  color:#64748b;
+  text-align:center;
 }
 
 /* =========================
@@ -115,28 +106,28 @@ html, body {
 ========================= */
 
 .v3-page-body{
-    padding:25px 15px;
-    width:100%;
+  padding:25px 15px;
+  width:100%;
 }
 
 .v3-intro-section{
-    font-size:16px;
-    font-weight:900;
-    color:#1e3a8a;
-    margin-bottom:40px;
-    display:flex;
-    align-items:center;
-    gap:10px;
+  font-size:16px;
+  font-weight:900;
+  color:#1e3a8a;
+  margin-bottom:40px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .v3-intro-logo-img{
-    width:28px;
-    height:28px;
+  width:28px;
+  height:28px;
 }
 
 .v3-intro-underline{
-    border-bottom:1.5px solid #1e3a8a;
-    padding-bottom:2px;
+  border-bottom:1.5px solid #1e3a8a;
+  padding-bottom:2px;
 }
 
 /* =========================
@@ -144,31 +135,29 @@ html, body {
 ========================= */
 
 .v3-flow-map{
-    display:flex;
-    flex-direction:column;
-    width:100%;
+  display:flex;
+  flex-direction:column;
+  width:100%;
 }
 
-/* 한 줄 */
-
 .v3-flow-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    width:100%;
-    margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  margin-bottom:20px;
 }
 
 .v3-flow-row.justify-end{
-    justify-content:flex-end;
+  justify-content:flex-end;
 }
 
 .v3-flow-row.justify-start{
-    justify-content:flex-start;
+  justify-content:flex-start;
 }
 
 .v3-flow-row.row-reverse{
-    flex-direction:row-reverse;
+  flex-direction:row-reverse;
 }
 
 /* =========================
@@ -176,27 +165,25 @@ html, body {
 ========================= */
 
 .v3-step-unit{
-    width:180px;
+  width:180px;
 }
 
 .v3-step-box{
-    background:#fff;
-    padding:14px 10px;
-    border-radius:40px;
-    font-weight:900;
-    font-size:15px;
-    color:#333;
-    text-align:center;
-    box-shadow:0 8px 15px rgba(0,0,0,0.08);
-    border:3.5px solid #ff6b35;
-    width:100%;
-    box-sizing:border-box;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    white-space:nowrap;
+  background:#fff;
+  padding:14px 10px;
+  border-radius:40px;
+  font-weight:900;
+  font-size:15px;
+  color:#333;
+  text-align:center;
+  box-shadow:0 8px 15px rgba(0,0,0,0.08);
+  border:3.5px solid #ff6b35;
+  width:100%;
+  box-sizing:border-box;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
 }
 
 /* =========================
@@ -204,40 +191,40 @@ html, body {
 ========================= */
 
 .v3-arrow-horizontal{
-    flex:1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#ff6b35;
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#ff6b35;
 }
 
 .v3-h-lines{
-    width:20px;
-    height:12px;
-    border-left:4px solid currentColor;
-    border-right:4px solid currentColor;
-    position:relative;
+  width:20px;
+  height:12px;
+  border-left:4px solid currentColor;
+  border-right:4px solid currentColor;
+  position:relative;
 }
 
 .v3-h-line-center{
-    position:absolute;
-    left:8px;
-    width:4px;
-    height:12px;
-    background:currentColor;
+  position:absolute;
+  left:8px;
+  width:4px;
+  height:12px;
+  background:currentColor;
 }
 
 .v3-h-triangle{
-    width:0;
-    height:0;
-    border-top:8px solid transparent;
-    border-bottom:8px solid transparent;
-    border-left:12px solid currentColor;
-    margin-left:2px;
+  width:0;
+  height:0;
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+  border-left:12px solid currentColor;
+  margin-left:2px;
 }
 
 .v3-arrow-horizontal.flip-h{
-    transform:rotate(180deg);
+  transform:rotate(180deg);
 }
 
 /* =========================
@@ -245,51 +232,51 @@ html, body {
 ========================= */
 
 .v3-arrow-vertical-row{
-    height:45px;
-    display:flex;
-    padding:0 50px;
-    margin-top:-15px;
-    margin-bottom:5px;
+  height:45px;
+  display:flex;
+  padding:0 50px;
+  margin-top:-15px;
+  margin-bottom:5px;
 }
 
 .v3-arrow-vertical-row.align-right{
-    justify-content:flex-end;
+  justify-content:flex-end;
 }
 
 .v3-arrow-vertical-row.align-left{
-    justify-content:flex-start;
+  justify-content:flex-start;
 }
 
 .v3-v-arrow-unit{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    color:#ff6b35;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  color:#ff6b35;
 }
 
 .v3-v-lines{
-    width:15px;
-    height:18px;
-    border-top:4px solid currentColor;
-    border-bottom:4px solid currentColor;
-    position:relative;
+  width:15px;
+  height:18px;
+  border-top:4px solid currentColor;
+  border-bottom:4px solid currentColor;
+  position:relative;
 }
 
 .v3-v-line-center{
-    position:absolute;
-    top:7px;
-    height:4px;
-    width:15px;
-    background:currentColor;
+  position:absolute;
+  top:7px;
+  height:4px;
+  width:15px;
+  background:currentColor;
 }
 
 .v3-v-triangle{
-    width:0;
-    height:0;
-    border-left:10px solid transparent;
-    border-right:10px solid transparent;
-    border-top:15px solid #ff6b35;
-    margin-top:2px;
+  width:0;
+  height:0;
+  border-left:10px solid transparent;
+  border-right:10px solid transparent;
+  border-top:15px solid #ff6b35;
+  margin-top:2px;
 }
 
 /* =========================
@@ -297,43 +284,43 @@ html, body {
 ========================= */
 
 .v3-guide-bubble-v3{
-    background:#fff5eb;
-    border-radius:25px;
-    padding:16px;
-    border:1px solid #ffe4cc;
-    position:relative;
-    box-shadow:0 6px 15px rgba(0,0,0,0.05);
-    width:200px;
+  background:#fff5eb;
+  border-radius:25px;
+  padding:16px;
+  border:1px solid #ffe4cc;
+  position:relative;
+  box-shadow:0 6px 15px rgba(0,0,0,0.05);
+  width:200px;
 }
 
 .v3-bubble-header{
-    font-size:13px;
-    font-weight:900;
-    margin-bottom:8px;
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:8px;
 }
 
 .v3-bubble-list{
-    list-style:none;
-    padding:0;
-    margin:0;
+  list-style:none;
+  padding:0;
+  margin:0;
 }
 
 .v3-bubble-list li{
-    font-size:12px;
-    font-weight:700;
-    color:#4b5563;
-    margin-bottom:3px;
-    white-space:nowrap;
+  font-size:12px;
+  font-weight:700;
+  color:#4b5563;
+  margin-bottom:3px;
+  white-space:nowrap;
 }
 
 .v3-bubble-tail-v3{
-    position:absolute;
-    right:-10px;
-    top:50%;
-    transform:translateY(-50%);
-    border-top:10px solid transparent;
-    border-bottom:10px solid transparent;
-    border-left:10px solid #fff5eb;
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform:translateY(-50%);
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+  border-left:10px solid #fff5eb;
 }
 
 /* =========================
@@ -341,45 +328,45 @@ html, body {
 ========================= */
 
 .v3-login-invitation{
-    margin-top:40px;
-    display:flex;
-    justify-content:center;
-    width:100%;
+  margin-top:40px;
+  display:flex;
+  justify-content:center;
+  width:100%;
 }
 
 .invitation-box{
-    background:#fff;
-    border:2px solid #007bff;
-    border-radius:25px;
-    padding:2.5rem 1.5rem;
-    text-align:center;
-    width:100%;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  background:#fff;
+  border:2px solid #007bff;
+  border-radius:25px;
+  padding:2.5rem 1.5rem;
+  text-align:center;
+  width:100%;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
 .invitation-box p{
-    margin:0;
-    font-size:1.1rem;
-    font-weight:700;
-    color:#333;
+  margin:0;
+  font-size:1.1rem;
+  font-weight:700;
+  color:#333;
 }
 
 .invitation-box h3{
-    margin:0.8rem 0;
-    font-size:2.2rem;
-    font-weight:900;
+  margin:0.8rem 0;
+  font-size:2.2rem;
+  font-weight:900;
 }
 
 .v3-login-btn-process{
-    margin-top:1.5rem;
-    padding:0.8rem 2.8rem;
-    background:#fff;
-    border:1.5px solid #007bff;
-    border-radius:35px;
-    font-size:1.1rem;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 8px 20px rgba(0,123,255,0.15);
+  margin-top:1.5rem;
+  padding:0.8rem 2.8rem;
+  background:#fff;
+  border:1.5px solid #007bff;
+  border-radius:35px;
+  font-size:1.1rem;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(0,123,255,0.15);
 }
 
 /* =========================
@@ -387,7 +374,7 @@ html, body {
 ========================= */
 
 .v3-bottom-padding{
-    height:100px;
+  height:100px;
 }
 
 /* =========================
@@ -396,282 +383,17 @@ html, body {
 
 @media(max-width:393px){
 
-    .v3-step-unit{
-        width:170px;
-    }
+  .v3-step-unit{
+    width:170px;
+  }
 
-    .v3-step-box{
-        font-size:14px;
-    }
+  .v3-step-box{
+    font-size:14px;
+  }
 
-    .v3-guide-bubble-v3{
-        width:180px;
-        padding:12px;
-    }
+  .v3-guide-bubble-v3{
+    width:180px;
+    padding:12px;
+  }
 
-=======
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  background: #f6f9fc;
-}
-
-.mobile-layout-content {
-  width: 390px;              /* ✅ 우리 모바일 폭 */
-  max-width: 390px;
-  min-height: 100vh;
-  background: #f6f9fc;
-  position: relative;
-  box-sizing: border-box;
-
-  /* ✅ bottomNav가 fixed로 떠있어도 안 가리게 */
-  padding-bottom: 110px;     /* bottom nav 높이보다 조금 크게 */
-}
-
-.view-content {
-  width: 100%;
-}
-
-/* =========================================
-   헤더(상단바) 안전장치 (header.jsp에 해당되는 태그/클래스가 뭔지 몰라서 범용)
-========================================= */
-header,
-.v3-header,
-.top-nav,
-.header-bar {
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  background: #fff;
-}
-
-/* =========================================
-   Base Layout
-========================================= */
-.v3-process-container {
-  background-color: #f6f9fc;
-  min-height: 100vh;
-  font-family: 'Pretendard', sans-serif;
-  width: 100%;
-}
-
-.v3-page-body {
-  padding: 22px 15px 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* =========================================
-   Intro
-========================================= */
-.v3-intro-section {
-  font-size: 16px;
-  font-weight: 900;
-  color: #1e3a8a;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.v3-intro-logo-img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
-.v3-intro-underline {
-  border-bottom: 1.5px solid #1e3a8a;
-  padding-bottom: 2px;
-}
-
-/* =========================================
-   Flow Map
-========================================= */
-.v3-flow-map {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.v3-flow-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 18px;
-}
-
-.v3-flow-row.justify-end { justify-content: flex-end; }
-.v3-flow-row.justify-start { justify-content: flex-start; }
-.v3-flow-row.row-reverse { flex-direction: row-reverse; }
-
-/* Step Box */
-.v3-step-unit {
-  width: 178px;
-}
-
-.v3-step-box {
-  background: #fff;
-  padding: 14px 10px;
-  border-radius: 40px;
-  font-weight: 900;
-  font-size: 15px;
-  color: #333;
-  text-align: center;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.08);
-  border: 3.5px solid #ff6b35;
-  width: 100%;
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  white-space: nowrap;
-}
-
-/* Horizontal Arrow */
-.v3-arrow-horizontal {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ff6b35;
-}
-
-.v3-h-lines {
-  width: 20px;
-  height: 12px;
-  border-left: 4px solid currentColor;
-  border-right: 4px solid currentColor;
-  position: relative;
-}
-
-.v3-h-line-center {
-  position: absolute;
-  left: 8px;
-  width: 4px;
-  height: 12px;
-  background: currentColor;
-}
-
-.v3-h-triangle {
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 12px solid currentColor;
-  margin-left: 2px;
-}
-
-.v3-arrow-horizontal.flip-h {
-  transform: rotate(180deg);
-}
-
-/* Vertical Arrow */
-.v3-arrow-vertical-row {
-  height: 42px;
-  display: flex;
-  padding: 0 50px;
-  margin-top: -14px;
-  margin-bottom: 6px;
-}
-
-.v3-arrow-vertical-row.align-right { justify-content: flex-end; }
-.v3-arrow-vertical-row.align-left { justify-content: flex-start; }
-
-.v3-v-arrow-unit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #ff6b35;
-}
-
-.v3-v-lines {
-  width: 15px;
-  height: 18px;
-  border-top: 4px solid currentColor;
-  border-bottom: 4px solid currentColor;
-  position: relative;
-}
-
-.v3-v-line-center {
-  position: absolute;
-  top: 7px;
-  height: 4px;
-  width: 15px;
-  background: currentColor;
-}
-
-.v3-v-triangle {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 15px solid #ff6b35;
-  margin-top: 2px;
-}
-
-/* =========================================
-   Login Invitation (안 잘리게 + 중앙 폭 제한)
-========================================= */
-.v3-login-invitation {
-  margin-top: 34px;
-  margin-bottom: 30px; /* ✅ 아래 여백 */
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.invitation-box {
-  background: #fff;
-  border: 2px solid #007bff;
-  border-radius: 25px;
-  padding: 34px 18px;
-  text-align: center;
-
-  width: 100%;
-  max-width: 330px;  /* ✅ 너무 커서 삐져나오지 않게 */
-  box-sizing: border-box;
-
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.invitation-box p {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.invitation-box h3 {
-  margin: 0.8rem 0;
-  font-size: 2.1rem;
-  font-weight: 900;
-}
-
-.v3-login-btn-process {
-  margin-top: 1.2rem;
-  padding: 0.75rem 2.2rem;
-  background: #fff;
-  border: 1.5px solid #007bff;
-  border-radius: 35px;
-  font-size: 1.05rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,123,255,0.15);
-  white-space: nowrap; /* ✅ 버튼 글자 줄바꿈 방지 */
-}
-
-/* =========================================
-   Responsive
-========================================= */
-@media (max-width: 393px) {
-  .v3-step-unit { width: 170px; }
-  .v3-step-box { font-size: 14px; }
-  .invitation-box { max-width: 320px; }
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 }

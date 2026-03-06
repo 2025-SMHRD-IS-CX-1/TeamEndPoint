@@ -1,29 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<<<<<<< HEAD
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html>
 
-    <head>
-        <title>TRAFFIC:ON - 마이페이지</title>
-        <%@ include file="common/head.jsp" %>
-<<<<<<< HEAD
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MyPage.css">
-    </head>
+<head>
+    <title>TRAFFIC:ON - 마이페이지</title>
+    <%@ include file="common/head.jsp" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MyPage.css">
+</head>
 
-    <body>
-		<div class="app-container">
-		  <div class="mypage-container">
-=======
-            <link rel="stylesheet" href="/css/MyPage.css">
-    </head>
-
-    <body>
+<body>
+    <div class="app-container">
         <div class="mypage-container">
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
-            <!-- 상단 헤더 -->
             <div class="mypage-header">
                 <button class="back-btn" onclick="history.back()">
                     <i data-lucide="chevron-left"></i>
@@ -33,15 +21,10 @@
             </div>
             <p class="header-subtext">내 정보와 활동 내역을 확인할 수 있어요.</p>
 
-            <!-- 프로필 섹션 -->
             <div class="profile-card">
                 <div class="profile-image-container">
                     <div class="profile-avatar">
-<<<<<<< HEAD
                         <img src="${pageContext.request.contextPath}/images/character.png" alt="프로필" class="profile-character-img" />
-=======
-                        <img src="/images/character.png" alt="프로필" class="profile-character-img" />
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                     </div>
                 </div>
                 <div class="profile-main-info">
@@ -52,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- 기본 정보 -->
             <div class="settings-section">
                 <div class="section-header">
                     <i data-lucide="user" class="section-icon"></i>
@@ -70,7 +52,6 @@
                 </div>
             </div>
 
-            <!-- 보안 설정 -->
             <div class="settings-section">
                 <div class="section-header">
                     <i data-lucide="lock" class="section-icon"></i>
@@ -83,38 +64,33 @@
                     </button>
                 </div>
             </div>
-<<<<<<< HEAD
-			
-			<!-- 내 게시글 -->
-			<div class="settings-section">
-			  <div class="section-header posts-header">
-			    <i data-lucide="file-text" class="section-icon"></i>
-			    <h3>내 게시글</h3>
-			    <a class="view-all" href="${pageContext.request.contextPath}/my-posts">전체 보기 &gt;</a>
-			  </div>
 
-			  <div class="posts-card">
-			    <div class="posts-table-head">
-			      <span>제목</span>
-			      <span>작성일</span>
-			    </div>
+            <div class="settings-section">
+                <div class="section-header posts-header">
+                    <i data-lucide="file-text" class="section-icon"></i>
+                    <h3>내 게시글</h3>
+                    <a class="view-all" href="${pageContext.request.contextPath}/my-posts">전체 보기 &gt;</a>
+                </div>
 
-			    <c:if test="${empty myPostsPreview}">
-			      <div class="posts-empty">작성한 게시글이 없습니다.</div>
-			    </c:if>
+                <div class="posts-card">
+                    <div class="posts-table-head">
+                        <span>제목</span>
+                        <span>작성일</span>
+                    </div>
 
-			    <c:forEach var="p" items="${myPostsPreview}">
-			      <div class="posts-table-row" onclick="location.href='${pageContext.request.contextPath}/my-posts'">
-			        <span class="title">${p.title}</span>
-			        <span class="date">${p.createdAt.toString().substring(0,10)}</span>
-			      </div>
-			    </c:forEach>
-			  </div>
-			</div>
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
+                    <c:if test="${empty myPostsPreview}">
+                        <div class="posts-empty">작성한 게시글이 없습니다.</div>
+                    </c:if>
 
-            <!-- 하단 로그아웃 -->
+                    <c:forEach var="p" items="${myPostsPreview}">
+                        <div class="posts-table-row" onclick="location.href='${pageContext.request.contextPath}/my-posts'">
+                            <span class="title">${p.title}</span>
+                            <span class="date">${p.createdAt.toString().substring(0,10)}</span>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+
             <div class="bottom-actions">
                 <button class="logout-footer-btn" onclick="handleLogout()">
                     <i data-lucide="log-out"></i>
@@ -122,25 +98,18 @@
                 </button>
             </div>
         </div>
-<<<<<<< HEAD
-        </div>
-		
-        <!-- 하단 네비게이션 포함 -->
-        <!--<%@ include file="common/bottomNav.jsp" %>-->
-=======
+    </div>
 
-        <!-- 하단 네비게이션 포함 -->
-        <%@ include file="common/bottomNav.jsp" %>
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
+    <!--<%@ include file="common/bottomNav.jsp" %>-->
 
-            <script>
-                lucide.createIcons();
-                function handleLogout() {
-                    if (confirm('로그아웃 하시겠습니까?')) {
-                        location.href = '/logout';
-                    }
-                }
-            </script>
-    </body>
+    <script>
+        lucide.createIcons();
+        function handleLogout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                location.href = '/logout';
+            }
+        }
+    </script>
+</body>
 
-    </html>
+</html>

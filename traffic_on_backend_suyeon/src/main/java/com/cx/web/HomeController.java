@@ -1,9 +1,6 @@
 package com.cx.web;
 
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 import java.util.Optional;
 
 import jakarta.servlet.http.Cookie;
@@ -15,34 +12,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.cx.web.entity.Member;
-<<<<<<< HEAD
 import com.cx.web.entity.WriteBoard;
 import com.cx.web.repository.MemberRepository;
 import com.cx.web.repository.WriteBoardRepository;
-=======
-import com.cx.web.repository.MemberRepository;
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 
 @Controller
 public class HomeController {
 
     private final MemberRepository memberRepository;
-<<<<<<< HEAD
     private final WriteBoardRepository writeBoardRepository;
 
     public HomeController(MemberRepository memberRepository, WriteBoardRepository writeBoardRepository) {
         this.memberRepository = memberRepository;
         this.writeBoardRepository = writeBoardRepository;
-=======
-
-    public HomeController(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     }
 
-    // ✅ 쿠키 자동로그인: 세션 없을 때만 복구 (관리자는 절대 X)
+    // 쿠키 자동로그인
     private void tryAutoLogin(HttpSession session, HttpServletRequest request) {
-        if (session.getAttribute("loginMember") != null) return; // 이미 로그인 상태면 끝
+        if (session.getAttribute("loginMember") != null) return;
 
         Cookie[] cookies = request.getCookies();
         if (cookies == null) return;
@@ -61,18 +48,12 @@ public class HomeController {
         if (opt.isEmpty()) return;
 
         Member m = opt.get();
-
-        // ✅ 관리자 자동로그인 차단
         if ("ADMIN".equalsIgnoreCase(m.getMemType())) return;
-
-        // (선택) 정지/비활성 계정이면 막고 싶으면 여기에 조건 추가
-        // 예: if (!"ACTIVE".equalsIgnoreCase(m.getStatus())) return;
 
         session.setAttribute("loginMember", m);
         session.setAttribute("loginRole", "USER");
     }
 
-    // 로그인 여부 체크
     private boolean isLoggedIn(HttpSession session) {
         return session != null && session.getAttribute("loginMember") != null;
     }
@@ -102,11 +83,7 @@ public class HomeController {
     public String aboutPage(HttpSession session, HttpServletRequest request, Model model) {
         tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
-<<<<<<< HEAD
-        return "redirect:/";
-=======
         return "about";
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     }
 
     @GetMapping("/application-process")
@@ -115,33 +92,28 @@ public class HomeController {
         model.addAttribute("isLoggedIn", isLoggedIn(session));
         return "process";
     }
-    
+
     @GetMapping("/guide")
     public String guide() {
         return "guide";
     }
-<<<<<<< HEAD
-    
+
     @GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
 
         Member loginMember = (Member) session.getAttribute("loginMember");
-
-        if (loginMember == null) {
-            return "redirect:/login";
-        }
+        if (loginMember == null) return "redirect:/login";
 
         model.addAttribute("member", loginMember);
 
-        // ✅ 내 게시글 미리보기(최근 3개)
         List<WriteBoard> all =
-            writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
+                writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
 
         model.addAttribute("myPostsPreview", all.size() > 3 ? all.subList(0, 3) : all);
 
-        return "mypage";   // mypage.jsp
+        return "mypage";
     }
-    
+
     @GetMapping("/my-posts")
     public String myPosts(HttpSession session, Model model) {
 
@@ -149,12 +121,9 @@ public class HomeController {
         if (loginMember == null) return "redirect:/login";
 
         List<WriteBoard> posts =
-        	    writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
+                writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
 
         model.addAttribute("posts", posts);
         return "my-posts";
     }
-=======
-
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 }

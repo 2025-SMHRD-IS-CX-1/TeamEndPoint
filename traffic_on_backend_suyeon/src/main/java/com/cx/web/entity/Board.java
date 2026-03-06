@@ -41,10 +41,10 @@ public class Board {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ✅ 수동 getter/setter 추가
     public Integer getBoardId() {
         return boardId;
     }
+
     public void setBoardId(Integer boardId) {
         this.boardId = boardId;
     }
@@ -52,6 +52,7 @@ public class Board {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -59,26 +60,16 @@ public class Board {
     public String getMemId() {
         return memId;
     }
+
     public void setMemId(String memId) {
         this.memId = memId;
     }
+
     public String getContent() {
         return content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
-<<<<<<< HEAD
-	public void setCreatedAt(LocalDateTime now) {
-		this.updatedAt = updatedAt;
-		
-	}
-=======
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
-		
-	
 }
-
-	
-
-

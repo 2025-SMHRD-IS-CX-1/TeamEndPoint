@@ -1,9 +1,5 @@
 .sidemenu-overlay {
-<<<<<<< HEAD
-    position: absolute;   /* 수정 */
-=======
     position: fixed;
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     top: 0;
     left: 0;
     width: 100%;
@@ -11,10 +7,6 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2000;
     display: none;
-<<<<<<< HEAD
-=======
-    /* Initial state hidden */
->>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -125,7 +117,6 @@
     transition: background 0.2s;
     margin-bottom: 0.5rem;
     text-decoration: none;
-    /* For link */
 }
 
 .menu-item:active {
