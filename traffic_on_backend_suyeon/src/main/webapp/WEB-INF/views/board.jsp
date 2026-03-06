@@ -3,12 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <jsp:include page="/WEB-INF/views/common/head.jsp" />
     <title>TRAFFIC:ON - ON! 교통 정보</title>
-    <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/BoardPage.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .board-wrap {
             padding: 16px;
@@ -192,16 +189,9 @@
 <body>
 <div class="mobile-wrap">
 
-   <header class="top-header">
-    <div class="left"></div>
-    <div class="logo-container"
-         onclick="location.href='/'"
-         style="cursor:pointer;">
-        <img src="/images/mascot.png" alt="logo" class="header-logo">
-        <span class="logo-text">TRAFFIC:ON</span>
-    </div>
-    <div class="right"></div>
-</header>
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
+    <jsp:include page="/WEB-INF/views/common/sideMenu.jsp" />
+
     <div class="board-wrap">
         <div class="board-title-section">
             <h1>ON! 교통 정보</h1>
@@ -274,45 +264,11 @@
         </c:if>
     </div>
 
-    <nav class="bottom-nav">
-        <a class="nav-item" href="${pageContext.request.contextPath}/">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="m21 21-4.34-4.34"></path>
-                <circle cx="11" cy="11" r="8"></circle>
-            </svg>
-            <span>사전해결 가이드</span>
-        </a>
-        <div class="nav-divider"></div>
-        <a class="nav-item" href="${pageContext.request.contextPath}/guide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect width="7" height="7" x="3" y="3" rx="1"></rect>
-                <rect width="7" height="7" x="14" y="3" rx="1"></rect>
-                <rect width="7" height="7" x="14" y="14" rx="1"></rect>
-                <rect width="7" height="7" x="3" y="14" rx="1"></rect>
-            </svg>
-            <span>민원유형</span>
-        </a>
-        <div class="nav-divider"></div>
-        <a class="nav-item" href="${pageContext.request.contextPath}/application-process">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                 viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
-                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
-                <path d="m9 15 2 2 4-4"></path>
-            </svg>
-            <span>신청절차 안내</span>
-        </a>
-    </nav>
+    <jsp:include page="/WEB-INF/views/common/bottomNav.jsp" />
 
 </div>
 
 <script>
-    lucide.createIcons();
     let isLoggedIn = "${isLoggedIn}" === "true";
     if (isLoggedIn) {
         document.getElementById('boardTableWrapper').classList.remove('is-blurred');
