@@ -142,7 +142,7 @@
   max-width: 75%;
 }
 
-/* 유저 말풍선 */
+/* 유저 말풍선. */
 #messagesArea .message-bubble.user {
   align-self: flex-end;
   padding: 7px 10px;

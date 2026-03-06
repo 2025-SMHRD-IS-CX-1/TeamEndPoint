@@ -2,25 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<header class="chat-header">
-	    <button class="back-btn" onclick="history.back()">
-	        <i data-lucide="chevron-left"></i>
-	    </button>
-
-	    <div class="center">
-	        <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-	             alt="logo"
-	             class="header-logo">
-	        <span class="logo-text">TRAFFIC:ON</span>
-	    </div>
-
-	    <div class="header-spacer"></div>
-	</header>
     <meta charset="UTF-8">
     <title>TRAFFIC:ON - 챗봇가이드</title>
     <link rel="stylesheet" href="/css/ChatPage.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
@@ -98,6 +83,27 @@
         .user-image-bubble .img-remove-btn:active { transform: scale(0.98); }
         .user-image-bubble.sent .img-remove-btn { display: none; }
         .user-image-bubble.sending { opacity: 0.78; }
+
+        /* ✅ 비로그인 답변 아래에 붙는 키워드 박스 */
+        .guest-keyword-inline-wrap {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 6px 0;
+        }
+        .guest-keyword-inline-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+            max-width: 90%;
+            padding: 10px 12px;
+            border-radius: 18px;
+            background: #dfe7ee;
+            border: 1px solid #cfd8e3;
+        }
     </style>
 </head>
 <body>
@@ -106,13 +112,15 @@
         <button class="back-btn" onclick="history.back()">
             <i data-lucide="chevron-left"></i>
         </button>
-		<div class="center">
-		    <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-		         alt="logo"
-		         class="header-logo">
-		    <span class="logo-text">TRAFFIC:ON</span>
-		</div>
-        
+
+        <div class="center">
+            <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+                 alt="logo"
+                 class="header-logo">
+            <span class="logo-text">TRAFFIC:ON</span>
+        </div>
+
+        <div class="header-spacer"></div>
     </header>
 
     <div class="chat-content" id="chatContent">
@@ -150,7 +158,6 @@
                 <i data-lucide="plus" size="24"></i>
             </button>
 
-            <!-- ✅ FastAPI가 처리 가능한 형식까지 허용 -->
             <input
                 type="file"
                 id="imageInput"
@@ -234,6 +241,8 @@
         }
     ];
 
+    const GUEST_KEYWORDS = ["지하철 공사", "불법주정차", "장애인주차"];
+
     const GUEST_KEYWORD_ANSWERS = {
         "지하철 공사": `
 **지하철 공사**
@@ -289,6 +298,32 @@
         `.trim()
     };
 
+	function renderGuestKeywordButtons() {
+	    const messagesArea = document.getElementById('messagesArea');
+
+	    // ✅ 기존에 생성된 키워드 박스 전부 제거
+	    const oldKeywordWraps = messagesArea.querySelectorAll('.guest-keyword-inline-wrap');
+	    oldKeywordWraps.forEach(el => el.remove());
+
+	    const wrap = document.createElement('div');
+	    wrap.className = 'guest-keyword-inline-wrap';
+
+	    const box = document.createElement('div');
+	    box.className = 'guest-keyword-inline-box';
+
+	    GUEST_KEYWORDS.forEach(keyword => {
+	        const btn = document.createElement('button');
+	        btn.className = 'chat-keyword-btn';
+	        btn.textContent = keyword;
+	        btn.type = 'button';
+	        btn.onclick = () => handleKeywordClick(keyword);
+	        box.appendChild(btn);
+	    });
+
+	    wrap.appendChild(box);
+	    messagesArea.appendChild(wrap);
+	}
+
     function getSafeErrorMessage(err, fallback = "알 수 없는 오류가 발생했어요.") {
         if (!err) return fallback;
         if (typeof err === "string") return err;
@@ -341,7 +376,6 @@
 
             imageInput.value = "";
 
-            // ✅ 허용 타입 확장
             const okTypes = [
                 "image/jpeg",
                 "image/jpg",
@@ -409,19 +443,28 @@
     });
 
     function handleKeywordClick(keyword) {
-        const keywordSection = document.getElementById('keywordSection');
-        if (keywordSection) keywordSection.style.display = 'none';
-
         if (!isLoggedIn) {
+            const keywordSection = document.getElementById('keywordSection');
+
+            // 처음 상단 키워드 영역만 숨김
+            if (keywordSection) {
+                keywordSection.style.display = 'none';
+            }
+
             addMessage(keyword, 'user');
             scrollToBottom();
 
             setTimeout(() => {
                 const answer = GUEST_KEYWORD_ANSWERS[keyword] || "안내 정보를 준비 중입니다.";
                 addMessage(answer, 'bot');
+
+                // ✅ 항상 3개 전부 다시 출력
+                renderGuestKeywordButtons();
+
                 showLoginNudgeOnce();
                 scrollToBottom();
             }, 150);
+
             return;
         }
 
