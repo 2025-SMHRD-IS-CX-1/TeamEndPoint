@@ -59,10 +59,12 @@ body {
     background: #fff !important;
     box-shadow: 0 0 24px rgba(0,0,0,0.12) !important;
     overflow-x: hidden !important;
+
+    position: relative;   /* ⭐ 이거 추가 */
 }
 
 /* mobile-wrap 안에서 레이아웃이 튀어나가지 않게 + 하단바 여백 */
-.mobile-wrap .main-la yout {
+.mobile-wrap .main-layout {
   width: 100% !important;
   max-width: 100% !important;
   padding-bottom: 90px; /* 하단바 가림 방지 */
