@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -184,6 +185,29 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255,87,34,0.25);
         }
+
+        /* ✅ 관리자 행 스타일 */
+        .admin-row {
+            background-color: #fff8e1 !important;
+            font-weight: 700;
+        }
+        .admin-row:hover {
+            background-color: #fff3cd !important;
+        }
+        .admin-row td {
+            color: #111 !important;
+        }
+        .admin-badge {
+            display: inline-block;
+            background: #FF5722;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 1px 6px;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -219,11 +243,24 @@
                     </thead>
                     <tbody>
                         <c:forEach var="board" items="${boards}" varStatus="status">
-                            <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
+                           <c:set var="isAdmin" value="${adminIds.contains(board.memId)}" />
+                            <tr onclick="location.href='/board/${board.boardId}'"
+                                style="cursor:pointer;"
+                                class="${isAdmin ? 'admin-row' : ''}">
                                 <td>${boards.size() - status.index}</td>
                                 <td><span class="category-badge">${board.category}</span></td>
-                                <td class="title-cell">${board.title}</td>
-                                <td class="id-cell">${board.memId}</td>
+                                <td class="title-cell">
+                                    <c:if test="${isAdmin}">
+                                        <span class="admin-badge">공지</span>
+                                    </c:if>
+                                    ${board.title}
+                                </td>
+                                <td class="id-cell">
+                                    <c:choose>
+                                        <c:when test="${isAdmin}">관리자</c:when>
+                                        <c:otherwise>${board.memId}</c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td class="date-text">
                                     ${board.createdAt.toString().substring(0, 10)}
                                 </td>
