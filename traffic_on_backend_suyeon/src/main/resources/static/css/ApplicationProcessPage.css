@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+/* =========================================
+   Reset + Mobile frame (390px 고정)
+========================================= */
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 html, body {
   height: 100%;
   margin: 0;
@@ -5,6 +11,7 @@ html, body {
 }
 
 .mobile-layout-container {
+<<<<<<< HEAD
   width: 100% !important;
   min-height: 100vh !important;
   display: flex !important;
@@ -402,4 +409,269 @@ html, body {
         padding:12px;
     }
 
+=======
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #f6f9fc;
+}
+
+.mobile-layout-content {
+  width: 390px;              /* ✅ 우리 모바일 폭 */
+  max-width: 390px;
+  min-height: 100vh;
+  background: #f6f9fc;
+  position: relative;
+  box-sizing: border-box;
+
+  /* ✅ bottomNav가 fixed로 떠있어도 안 가리게 */
+  padding-bottom: 110px;     /* bottom nav 높이보다 조금 크게 */
+}
+
+.view-content {
+  width: 100%;
+}
+
+/* =========================================
+   헤더(상단바) 안전장치 (header.jsp에 해당되는 태그/클래스가 뭔지 몰라서 범용)
+========================================= */
+header,
+.v3-header,
+.top-nav,
+.header-bar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: #fff;
+}
+
+/* =========================================
+   Base Layout
+========================================= */
+.v3-process-container {
+  background-color: #f6f9fc;
+  min-height: 100vh;
+  font-family: 'Pretendard', sans-serif;
+  width: 100%;
+}
+
+.v3-page-body {
+  padding: 22px 15px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   Intro
+========================================= */
+.v3-intro-section {
+  font-size: 16px;
+  font-weight: 900;
+  color: #1e3a8a;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.v3-intro-logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.v3-intro-underline {
+  border-bottom: 1.5px solid #1e3a8a;
+  padding-bottom: 2px;
+}
+
+/* =========================================
+   Flow Map
+========================================= */
+.v3-flow-map {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.v3-flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.v3-flow-row.justify-end { justify-content: flex-end; }
+.v3-flow-row.justify-start { justify-content: flex-start; }
+.v3-flow-row.row-reverse { flex-direction: row-reverse; }
+
+/* Step Box */
+.v3-step-unit {
+  width: 178px;
+}
+
+.v3-step-box {
+  background: #fff;
+  padding: 14px 10px;
+  border-radius: 40px;
+  font-weight: 900;
+  font-size: 15px;
+  color: #333;
+  text-align: center;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+  border: 3.5px solid #ff6b35;
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  white-space: nowrap;
+}
+
+/* Horizontal Arrow */
+.v3-arrow-horizontal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff6b35;
+}
+
+.v3-h-lines {
+  width: 20px;
+  height: 12px;
+  border-left: 4px solid currentColor;
+  border-right: 4px solid currentColor;
+  position: relative;
+}
+
+.v3-h-line-center {
+  position: absolute;
+  left: 8px;
+  width: 4px;
+  height: 12px;
+  background: currentColor;
+}
+
+.v3-h-triangle {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid currentColor;
+  margin-left: 2px;
+}
+
+.v3-arrow-horizontal.flip-h {
+  transform: rotate(180deg);
+}
+
+/* Vertical Arrow */
+.v3-arrow-vertical-row {
+  height: 42px;
+  display: flex;
+  padding: 0 50px;
+  margin-top: -14px;
+  margin-bottom: 6px;
+}
+
+.v3-arrow-vertical-row.align-right { justify-content: flex-end; }
+.v3-arrow-vertical-row.align-left { justify-content: flex-start; }
+
+.v3-v-arrow-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ff6b35;
+}
+
+.v3-v-lines {
+  width: 15px;
+  height: 18px;
+  border-top: 4px solid currentColor;
+  border-bottom: 4px solid currentColor;
+  position: relative;
+}
+
+.v3-v-line-center {
+  position: absolute;
+  top: 7px;
+  height: 4px;
+  width: 15px;
+  background: currentColor;
+}
+
+.v3-v-triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid #ff6b35;
+  margin-top: 2px;
+}
+
+/* =========================================
+   Login Invitation (안 잘리게 + 중앙 폭 제한)
+========================================= */
+.v3-login-invitation {
+  margin-top: 34px;
+  margin-bottom: 30px; /* ✅ 아래 여백 */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.invitation-box {
+  background: #fff;
+  border: 2px solid #007bff;
+  border-radius: 25px;
+  padding: 34px 18px;
+  text-align: center;
+
+  width: 100%;
+  max-width: 330px;  /* ✅ 너무 커서 삐져나오지 않게 */
+  box-sizing: border-box;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.invitation-box p {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.invitation-box h3 {
+  margin: 0.8rem 0;
+  font-size: 2.1rem;
+  font-weight: 900;
+}
+
+.v3-login-btn-process {
+  margin-top: 1.2rem;
+  padding: 0.75rem 2.2rem;
+  background: #fff;
+  border: 1.5px solid #007bff;
+  border-radius: 35px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,123,255,0.15);
+  white-space: nowrap; /* ✅ 버튼 글자 줄바꿈 방지 */
+}
+
+/* =========================================
+   Responsive
+========================================= */
+@media (max-width: 393px) {
+  .v3-step-unit { width: 170px; }
+  .v3-step-box { font-size: 14px; }
+  .invitation-box { max-width: 320px; }
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 }

@@ -37,9 +37,13 @@
     <!-- ✅ 상단 헤더 -->
     <header class="top-header">
       <div class="left">
+<<<<<<< HEAD
 		<button class="icon-btn" aria-label="menu" onclick="openSideMenu()">
 		  <i data-lucide="menu"></i>
 		</button>
+=======
+        <button class="icon-btn" aria-label="menu">☰</button>
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
       </div>
 
       <div class="center">
@@ -168,7 +172,10 @@
         <span>신청절차 안내</span>
       </a>
     </nav>
+<<<<<<< HEAD
 	  <%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 
   </div>
   <!-- ✅ 모바일 화면 래퍼 끝 -->
@@ -176,6 +183,9 @@
   <script>
     lucide.createIcons();
   </script>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 </body>
 </html>

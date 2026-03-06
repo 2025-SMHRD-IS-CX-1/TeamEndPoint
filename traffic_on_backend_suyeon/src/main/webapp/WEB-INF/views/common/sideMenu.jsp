@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<<<<<<< HEAD
 <%@ page import="com.cx.web.entity.Member" %>
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     <!-- sideMenu.jsp -->
     <link rel="stylesheet" href="/css/SideMenu.css">
 
@@ -7,6 +10,7 @@
         <div class="sidemenu-content">
             <div class="sidemenu-header">
                 <div class="user-status-section">
+<<<<<<< HEAD
                     <!-- isLoggedIn value should be passed from the host page or session --> 
 					
 
@@ -14,12 +18,21 @@
 					Member loginMember = (Member) session.getAttribute("loginMember");
 					if (loginMember != null) {
 					%>
+=======
+                    <!-- isLoggedIn value should be passed from the host page or session -->
+                    <% Boolean isLoggedIn=(Boolean) session.getAttribute("isLoggedIn"); if (isLoggedIn !=null &&
+                        isLoggedIn) { %>
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                         <div class="user-logged-in">
                             <div class="user-avatar-small">
                                 <i data-lucide="user" size="20"></i>
                             </div>
                             <div class="user-info-text">
+<<<<<<< HEAD
                                 <span class="user-name">반가워요, <%= loginMember.getMemName() %>님!</span>
+=======
+                                <span class="user-name">반가워요, 회원님!</span>
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                                 <form action="/logout" method="post" id="logoutForm">
                                     <button type="submit" class="logout-btn">로그아웃</button>
                                 </form>
@@ -68,7 +81,11 @@
                     </div>
                 </a>
 
+<<<<<<< HEAD
                 <a href="/" class="menu-item">
+=======
+                <a href="/about" class="menu-item">
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                     <i data-lucide="info" size="20" class="menu-icon"></i>
                     <div class="menu-text">
                         <span class="menu-title">TRAFFIC:ON</span>
@@ -76,7 +93,11 @@
                     </div>
                 </a>
 
+<<<<<<< HEAD
                 <% if (loginMember != null) { %>
+=======
+                <% if (isLoggedIn !=null && isLoggedIn) { %>
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                     <a href="/mypage" class="menu-item">
                         <i data-lucide="user" size="20" class="menu-icon"></i>
                         <div class="menu-text">

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Header.css */
 .app-header {
     display: flex;
@@ -42,4 +43,86 @@
     /* Traffic orange */
     font-family: sans-serif;
     letter-spacing: -0.5px;
+=======
+/* =========================
+   Header
+========================= */
+
+.top-header{
+
+    width:100%;
+    height:64px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 14px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid #e5e7eb;
+
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+/* 아이콘 버튼 */
+
+.icon-btn{
+
+    width:40px;
+    height:40px;
+
+    border:none;
+    background:transparent;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+}
+
+/* 로고 */
+
+.logo-container{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+/* 로고 이미지 */
+
+.logo-img{
+
+    width:40px;
+    height:40px;
+
+    object-fit:contain;
+
+    transform:scaleX(-1);
+}
+
+/* 로고 텍스트 */
+
+.logo-text{
+
+    font-size:18px;
+    font-weight:900;
+
+    color:#ff6b35;
+}
+
+/* lucide 아이콘 크기 */
+
+.top-header svg{
+
+    width:24px;
+    height:24px;
+
+    stroke:#333;
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 }

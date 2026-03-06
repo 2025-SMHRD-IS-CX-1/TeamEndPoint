@@ -461,7 +461,10 @@
 
 <!-- ✅ 클릭 시 해당 유형만 보이게 -->
 <script>
+<<<<<<< HEAD
 document.addEventListener("DOMContentLoaded", () => {
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
   const items = document.querySelectorAll(".category-item");
   const sections = document.querySelectorAll(".guide-section");
 
@@ -480,9 +483,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+<<<<<<< HEAD
   // 처음엔 교통안전만 보이게
   showSection("sec-traffic-safety");
 });
+=======
+  // 처음엔 교통안전만
+  showSection("sec-traffic-safety");
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 </script>
 </div>
 <jsp:include page="/WEB-INF/views/common/bottomNav.jsp" />

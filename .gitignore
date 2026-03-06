@@ -3,4 +3,9 @@ bin/
 .classpath
 .project
 .settings/
+<<<<<<< HEAD
 *.log
+=======
+*.logtraffic_on_backend_suyeon.zip
+traffic_on_backend_suyeon.zip
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad

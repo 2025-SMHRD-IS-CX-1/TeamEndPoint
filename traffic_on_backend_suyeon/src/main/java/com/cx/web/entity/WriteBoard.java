@@ -35,24 +35,33 @@ public class WriteBoard {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+<<<<<<< HEAD
     public Integer getBoardId() { return boardId; }
     public void setBoardId(Integer boardId) { this.boardId = boardId; }
 
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
+<<<<<<< HEAD
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
 
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     public String getMemId() { return memId; }
     public void setMemId(String memId) { this.memId = memId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+<<<<<<< HEAD
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 }

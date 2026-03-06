@@ -68,10 +68,13 @@ public class Board {
     public void setContent(String content) {
         this.content = content;
     }
+<<<<<<< HEAD
 	public void setCreatedAt(LocalDateTime now) {
 		this.updatedAt = updatedAt;
 		
 	}
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 		
 	
 }

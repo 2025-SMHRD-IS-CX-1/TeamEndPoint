@@ -1,17 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<<<<<<< HEAD
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
     <!DOCTYPE html>
     <html>
 
     <head>
         <title>TRAFFIC:ON - 마이페이지</title>
         <%@ include file="common/head.jsp" %>
+<<<<<<< HEAD
             <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MyPage.css">
     </head>
 
     <body>
 		<div class="app-container">
 		  <div class="mypage-container">
+=======
+            <link rel="stylesheet" href="/css/MyPage.css">
+    </head>
+
+    <body>
+        <div class="mypage-container">
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
             <!-- 상단 헤더 -->
             <div class="mypage-header">
                 <button class="back-btn" onclick="history.back()">
@@ -26,7 +37,11 @@
             <div class="profile-card">
                 <div class="profile-image-container">
                     <div class="profile-avatar">
+<<<<<<< HEAD
                         <img src="${pageContext.request.contextPath}/images/character.png" alt="프로필" class="profile-character-img" />
+=======
+                        <img src="/images/character.png" alt="프로필" class="profile-character-img" />
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
                     </div>
                 </div>
                 <div class="profile-main-info">
@@ -68,6 +83,7 @@
                     </button>
                 </div>
             </div>
+<<<<<<< HEAD
 			
 			<!-- 내 게시글 -->
 			<div class="settings-section">
@@ -95,6 +111,8 @@
 			    </c:forEach>
 			  </div>
 			</div>
+=======
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 
             <!-- 하단 로그아웃 -->
             <div class="bottom-actions">
@@ -104,10 +122,16 @@
                 </button>
             </div>
         </div>
+<<<<<<< HEAD
         </div>
 		
         <!-- 하단 네비게이션 포함 -->
         <!--<%@ include file="common/bottomNav.jsp" %>-->
+=======
+
+        <!-- 하단 네비게이션 포함 -->
+        <%@ include file="common/bottomNav.jsp" %>
+>>>>>>> 0e086df37f3f3c6834bbb4a8b81fe813064b8dad
 
             <script>
                 lucide.createIcons();
