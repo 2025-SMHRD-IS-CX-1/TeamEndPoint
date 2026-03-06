@@ -204,6 +204,9 @@ body {
   color: #1f78ff;
 }
 
+.bottom-nav .nav-item.active svg {
+  stroke: currentColor;
+}
 
 .bottom-nav .nav-divider {
   width: 1px;
