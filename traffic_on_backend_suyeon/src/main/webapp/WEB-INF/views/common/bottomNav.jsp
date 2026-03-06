@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<!-- Event 수정중 -->
+
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <c:set var="uri" value="${requestScope['jakarta.servlet.forward.request_uri']}" />

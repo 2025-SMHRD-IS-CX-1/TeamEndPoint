@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.cx.web.entity.Member;
 import com.cx.web.entity.WriteBoard;
@@ -125,5 +126,41 @@ public class HomeController {
 
         model.addAttribute("posts", posts);
         return "my-posts";
+    }
+    
+    @GetMapping("/events/{id}")
+    public String eventDetailPage(@PathVariable("id") int id,
+                                  HttpSession session,
+                                  HttpServletRequest request,
+                                  Model model) {
+        tryAutoLogin(session, request);
+        model.addAttribute("isLoggedIn", isLoggedIn(session));
+
+        if (id == 1) {
+            model.addAttribute("eventTitle", "광주 추억의 충장축제");
+            model.addAttribute("eventDate", "2025.10.15 ~ 10.19");
+            model.addAttribute("eventCategory", "축제");
+            model.addAttribute("eventImage", "/images/1.jpg");
+            model.addAttribute("eventDesc",
+                    "7080 세대의 추억을 되살리는 광주 대표 거리축제! 옛 거리 재현, 추억의 전시관, 화려한 퍼레이드가 펼쳐지는 전 세대 공감 페스티벌입니다.");
+        } else if (id == 2) {
+            model.addAttribute("eventTitle", "광주 비엔날레");
+            model.addAttribute("eventDate", "2025.08.30 ~ 11.02");
+            model.addAttribute("eventCategory", "전시");
+            model.addAttribute("eventImage", "/images/2.jpg");
+            model.addAttribute("eventDesc",
+                    "현대 예술의 흐름을 보여주는 최고의 전시! 전 세계 아티스트들이 참여하여 실험적이고 창의적인 작품들을 선보이는 글로벌 문화 예술의 장입니다.");
+        } else if (id == 3) {
+            model.addAttribute("eventTitle", "광주 세계 김치 축제");
+            model.addAttribute("eventDate", "2024.10.18 ~ 10.20");
+            model.addAttribute("eventCategory", "음식");
+            model.addAttribute("eventImage", "/images/3.jpg");
+            model.addAttribute("eventDesc",
+                    "대한민국 김치의 맛을 세계에 알리는 풍성한 축제! 김치 담그기 체험부터 명인의 비법 전수까지, 김치의 모든 것을 직접 경험할 수 있습니다.");
+        } else {
+            return "redirect:/events";
+        }
+
+        return "event-detail";
     }
 }

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<!-- Event 수정중 -->
 <header class="top-header">
     <div class="left">
         <button class="icon-btn" type="button" aria-label="menu" onclick="openSideMenu()">

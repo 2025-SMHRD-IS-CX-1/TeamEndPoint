@@ -10,16 +10,16 @@
   <link rel="stylesheet" href="/css/Banner.css" />
   <link rel="stylesheet" href="/css/ChatbotSection.css" />
   <link rel="stylesheet" href="/css/QuickButton.css" />
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MainEventSection.css">
 </head>
 
 <body>
 
-  <!-- ✅ mobile-wrap와 같은 폭으로 가운데 고정되는 레이어 -->
   <div class="quick-btn-layer">
-    <button class="v3-quick-btn-icon-only" onclick="location.href='/chat'">
+    <button class="v3-quick-btn-icon-only" onclick="location.href='${pageContext.request.contextPath}/chat'">
       <div class="v3-quick-icon-inner">
         <img
-          src="/images/Pengrimi.png"
+          src="${pageContext.request.contextPath}/images/Pengrimi.png"
           alt="펭리미"
           class="v3-quick-char-img-large"
         />
@@ -35,11 +35,11 @@
     <div class="main-layout">
 
       <section class="chatbot-section">
-        <div class="chatbot-intro-wrapper" onclick="location.href='/chat'" style="cursor: pointer;">
+        <div class="chatbot-intro-wrapper" onclick="location.href='${pageContext.request.contextPath}/chat'" style="cursor: pointer;">
           <div class="chatbot-intro">
-			<div class="chatbot-avatar">
-			 <img src="/images/pon.png" alt="펭리미" class="chatbot-img" />
-			</div>
+            <div class="chatbot-avatar">
+              <img src="${pageContext.request.contextPath}/images/pon.png" alt="펭리미" class="chatbot-img" />
+            </div>
             <div class="chatbot-bubble">
               <p>안녕하세요~!</p>
               <p><strong>교통 길잡이 펭리미입니다 🐧</strong></p>
@@ -70,22 +70,63 @@
         </div>
       </section>
 
-      <section class="banner-section">
-        <div class="banner-scroll-container">
-          <div
-            class="banner-slide"
-            onclick="location.href='${pageContext.request.contextPath}/events'"
-            style="cursor: pointer;"
-          >
-            <div class="banner-image-wrapper">
-              <img src="/images/1.jpg" alt="충장축제" class="banner-img" />
-              <div class="banner-top-tag">축제</div>
-            </div>
-          </div>
+      <!-- 이벤트 슬라이드 섹션 -->
+      <section class="main-event-section">
+        <div class="main-event-header">
+          <h2 class="main-event-title">진행 중인 이벤트</h2>
+          <a class="main-event-more" href="${pageContext.request.contextPath}/events">전체보기 &gt;</a>
         </div>
 
-        <div class="banner-indicator">
-          <span>1 / 3</span>
+        <div class="main-event-slider-wrap">
+          <div class="main-event-count" id="eventCountBadge">1 / 3</div>
+
+          <button type="button" class="main-event-arrow left" onclick="moveEventSlide(-1)">
+            <i data-lucide="chevron-left"></i>
+          </button>
+
+          <div class="main-event-slider" id="mainEventSlider">
+
+            <a class="main-event-card" href="${pageContext.request.contextPath}/events/1">
+              <div class="main-event-image-wrap">
+                <img src="${pageContext.request.contextPath}/images/1.jpg" alt="광주 추억의 충장축제">
+                <span class="main-event-badge">축제</span>
+              </div>
+              <div class="main-event-info">
+                <span class="main-event-category">지역 축제</span>
+                <h3>광주 추억의 충장축제</h3>
+                <p class="main-event-date">2025.10.15 ~ 10.19</p>
+              </div>
+            </a>
+
+            <a class="main-event-card" href="${pageContext.request.contextPath}/events/2">
+              <div class="main-event-image-wrap">
+                <img src="${pageContext.request.contextPath}/images/2.jpg" alt="광주 비엔날레">
+                <span class="main-event-badge">전시</span>
+              </div>
+              <div class="main-event-info">
+                <span class="main-event-category">예술 전시</span>
+                <h3>광주 비엔날레</h3>
+                <p class="main-event-date">2025.08.30 ~ 11.02</p>
+              </div>
+            </a>
+
+            <a class="main-event-card" href="${pageContext.request.contextPath}/events/3">
+              <div class="main-event-image-wrap">
+                <img src="${pageContext.request.contextPath}/images/3.jpg" alt="광주 세계 김치 축제">
+                <span class="main-event-badge">음식</span>
+              </div>
+              <div class="main-event-info">
+                <span class="main-event-category">음식 축제</span>
+                <h3>광주 세계 김치 축제</h3>
+                <p class="main-event-date">2024.10.18 ~ 10.20</p>
+              </div>
+            </a>
+
+          </div>
+
+          <button type="button" class="main-event-arrow right" onclick="moveEventSlide(1)">
+            <i data-lucide="chevron-right"></i>
+          </button>
         </div>
       </section>
 
@@ -98,6 +139,33 @@
 
   <script>
     lucide.createIcons();
+
+    function moveEventSlide(direction) {
+      const slider = document.getElementById("mainEventSlider");
+      const card = slider.querySelector(".main-event-card");
+      if (!card) return;
+
+      const moveWidth = card.offsetWidth + 16;
+      slider.scrollBy({
+        left: moveWidth * direction,
+        behavior: "smooth"
+      });
+    }
+
+    const eventSlider = document.getElementById("mainEventSlider");
+    const eventCountBadge = document.getElementById("eventCountBadge");
+
+    if (eventSlider && eventCountBadge) {
+      eventSlider.addEventListener("scroll", function () {
+        const card = eventSlider.querySelector(".main-event-card");
+        if (!card) return;
+
+        const moveWidth = card.offsetWidth + 16;
+        const currentIndex = Math.round(eventSlider.scrollLeft / moveWidth) + 1;
+        const safeIndex = Math.max(1, Math.min(3, currentIndex));
+        eventCountBadge.textContent = safeIndex + " / 3";
+      });
+    }
   </script>
 </body>
 </html>

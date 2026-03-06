@@ -1,58 +1,205 @@
-/* EventPage.css */
-.event-page-container {
-    padding: 2.3rem 1.3rem 8.5rem 1.3rem;
-    /* 여유있는 하단 패딩 */
-    background-color: #f9f9f9;
+body {
+    margin: 0;
+    background: #dcdcdc;
+}
+
+.event-container {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 0 0 100px 0;
+    background: #fff;
     min-height: 100vh;
+    box-sizing: border-box;
+    position: relative;
 }
 
-.page-header {
+.event-content-wrap {
+    padding: 1rem 1.5rem 100px 1.5rem;
+    background: #fff;
+    min-height: calc(100vh - 74px);
+    box-sizing: border-box;
+}
+
+.event-title-section {
     display: flex;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 2rem;
+    margin: 0.6rem 0 1.2rem;
 }
 
-.event-card {
-    background: white;
-    border-radius: 20px;
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-}
-
-.event-tag {
-    padding: 5px 12px;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 800;
-}
-
-.badge-fest {
-    background-color: #f7ebff;
-    color: #a100ff;
-}
-
-.badge-info {
-    background-color: #e0f4ff;
-    color: #007bff;
-}
-
-.event-content {
-    flex: 1;
-}
-
-.event-content h3 {
-    font-size: 1rem;
-    margin-bottom: 3px;
+.event-title-section h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: #333;
 }
 
-.event-date {
-    font-size: 0.85rem;
-    color: #999;
+.festival-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.festival-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.festival-card {
+    background: #ffffff;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.festival-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    overflow: hidden;
+}
+
+.festival-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.festival-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(19, 32, 73, 0.92);
+}
+
+.festival-info {
+    padding: 18px 18px 20px;
+}
+
+.festival-category {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    border: 1px solid #b7d3ff;
+    background: #f4f9ff;
+    color: #2f80ed;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+}
+
+.festival-info h3 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.4;
+}
+
+.festival-info p {
     margin: 0;
+    font-size: 0.95rem;
+    color: #888;
+    font-weight: 500;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    height: 74px;
+    background: #fff;
+    border-top: 1px solid #e6e6e6;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 1000;
+}
+
+.nav-item {
+    flex: 1;
+    text-decoration: none;
+    color: #8b8b8b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.82rem;
+}
+
+.nav-item i {
+    width: 20px;
+    height: 20px;
+}
+
+.nav-divider {
+    width: 1px;
+    height: 28px;
+    background: #e5e5e5;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100%;
+    background: #fff;
+    z-index: 2000;
+    box-shadow: 4px 0 18px rgba(0, 0, 0, 0.12);
+    transition: left 0.3s ease;
+    padding: 20px 18px;
+    box-sizing: border-box;
+}
+
+.side-menu.open {
+    left: 0;
+}
+
+.side-menu-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.side-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.side-menu-list a {
+    text-decoration: none;
+    color: #222;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.side-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1500;
+    display: none;
+}
+
+.side-overlay.show {
+    display: block;
 }
