@@ -79,6 +79,10 @@ public class LoginController {
         }
 
         Member loginMember = opt.get();
+        
+     // ✅ 마지막 로그인 시간 저장
+        loginMember.setLastLoginAt(LocalDateTime.now());
+        memberRepository.save(loginMember);
 
         // ✅ 관리자로 들어가려면 DB에서 memType이 ADMIN이어야 함
         if ("admin".equals(activeTab)) {

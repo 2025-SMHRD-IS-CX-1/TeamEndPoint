@@ -13,6 +13,7 @@
 	    <div class="about-layout-content">
 
             <%@ include file="common/header.jsp" %>
+			<%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
             <main class="about-container">
                 <!-- 타이틀 -->

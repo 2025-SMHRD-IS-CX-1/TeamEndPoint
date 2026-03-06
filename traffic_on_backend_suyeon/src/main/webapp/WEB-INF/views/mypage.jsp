@@ -13,17 +13,13 @@
         <div class="mobile-layout-content mypage-page">
 
             <%@ include file="common/header.jsp" %>
+			<%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
             <main class="mypage-container">
                 <!-- 상단 -->
 				<div class="mypage-top">
-				    <button class="back-circle-btn" type="button" onclick="history.back()">
-				        <i data-lucide="chevron-left"></i>
-				    </button>
 
-				    <h1 class="mypage-title">마이페이지</h1>
-
-				    <div class="top-right-space"></div>
+				    <h1 class="mypage-title">마이페이지</h1>	    
 				</div>
 
                 <p class="header-subtext">내 정보와 활동 내역을 확인할 수 있어요.</p>
