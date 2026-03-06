@@ -48,20 +48,21 @@
         .board-table-refined {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
         .board-table-refined thead tr {
             background: #f7f9fc;
             border-bottom: 1px solid #eee;
         }
         .board-table-refined th {
-            padding: 12px 6px;
+            padding: 12px 4px;
             font-size: 12px;
             font-weight: 700;
             color: #888;
             text-align: center;
         }
         .board-table-refined td {
-            padding: 12px 6px;
+            padding: 12px 4px;
             font-size: 13px;
             color: #222;
             text-align: center;
@@ -76,6 +77,11 @@
         .board-table-refined tbody tr:hover {
             background: #f7f9fc;
         }
+        .col-no       { width: 30px; }
+        .col-category { width: 68px; }
+        .col-title    { width: 90px; }
+        .col-id       { width: 60px; }
+        .col-date     { width: 78px; }
         .empty-row {
             color: #aaa;
             font-size: 14px;
@@ -87,8 +93,20 @@
             font-size: 11px;
             font-weight: 700;
             border-radius: 20px;
-            padding: 2px 8px;
+            padding: 2px 6px;
             white-space: nowrap;
+        }
+        .title-cell {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+        .id-cell {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-size: 12px;
         }
         .date-text {
             font-size: 11px;
@@ -174,14 +192,16 @@
 <body>
 <div class="mobile-wrap">
 
-    <header class="top-header">
-        <div class="left"></div>
-        <div class="logo-container">
-            <span class="logo-text">TRAFFIC:ON</span>
-        </div>
-        <div class="right"></div>
-    </header>
-
+   <header class="top-header">
+    <div class="left"></div>
+    <div class="logo-container"
+         onclick="location.href='/'"
+         style="cursor:pointer;">
+        <img src="/images/mascot.png" alt="logo" class="header-logo">
+        <span class="logo-text">TRAFFIC:ON</span>
+    </div>
+    <div class="right"></div>
+</header>
     <div class="board-wrap">
         <div class="board-title-section">
             <h1>ON! 교통 정보</h1>
@@ -191,6 +211,13 @@
         <div style="position:relative;">
             <div class="board-table-wrapper" id="boardTableWrapper">
                 <table class="board-table-refined">
+                    <colgroup>
+                        <col class="col-no">
+                        <col class="col-category">
+                        <col class="col-title">
+                        <col class="col-id">
+                        <col class="col-date">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>No</th>
@@ -203,12 +230,12 @@
                     <tbody>
                         <c:forEach var="board" items="${boards}" varStatus="status">
                             <tr onclick="location.href='/board/${board.boardId}'" style="cursor:pointer;">
-                                <td>${status.count}</td>
+                                <td>${boards.size() - status.index}</td>
                                 <td><span class="category-badge">${board.category}</span></td>
-                                <td class="text-left">${board.title}</td>
-                                <td>${board.memId}</td>
+                                <td class="title-cell">${board.title}</td>
+                                <td class="id-cell">${board.memId}</td>
                                 <td class="date-text">
-                                    ${board.createdAt.toString().substring(0, 16).replace('T', ' ')}
+                                    ${board.createdAt.toString().substring(0, 10)}
                                 </td>
                             </tr>
                         </c:forEach>
