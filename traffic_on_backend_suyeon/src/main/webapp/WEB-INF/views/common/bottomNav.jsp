@@ -4,10 +4,13 @@
 
 <script src="https://unpkg.com/lucide@latest"></script>
 
-<c:set var="uri" value="${pageContext.request.requestURI}" />
+<c:set var="uri" value="${requestScope['jakarta.servlet.forward.request_uri']}" />
+<c:if test="${empty uri}">
+  <c:set var="uri" value="${pageContext.request.requestURI}" />
+</c:if>
 
 <nav class="bottom-nav">
-  <a class="nav-item ${uri == '/' or fn:endsWith(uri, '/index') or fn:endsWith(uri, '/index.jsp') ? 'active' : ''}"
+  <a class="nav-item ${uri eq '/' ? 'active' : ''}"
      href="${pageContext.request.contextPath}/">
     <i data-lucide="search"></i>
     <span>사전해결 가이드</span>
@@ -15,7 +18,7 @@
 
   <div class="nav-divider"></div>
 
-  <a class="nav-item ${fn:endsWith(uri, '/guide') ? 'active' : ''}"
+  <a class="nav-item ${uri eq '/guide' ? 'active' : ''}"
      href="${pageContext.request.contextPath}/guide">
     <i data-lucide="layout-grid"></i>
     <span>민원유형</span>
@@ -23,7 +26,7 @@
 
   <div class="nav-divider"></div>
 
-  <a class="nav-item ${fn:endsWith(uri, '/application-process') ? 'active' : ''}"
+  <a class="nav-item ${uri eq '/application-process' ? 'active' : ''}"
      href="${pageContext.request.contextPath}/application-process">
     <i data-lucide="file-check"></i>
     <span>신청절차 안내</span>
