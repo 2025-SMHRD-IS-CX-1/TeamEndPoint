@@ -18,9 +18,9 @@
                         </div>
                         <div class="user-info-text">
                             <span class="user-name">반가워요, <%= loginMember.getMemName() %>님!</span>
-                            <form action="/logout" method="post" id="logoutForm">
-                                <button type="submit" class="logout-btn">로그아웃</button>
-                            </form>
+							<form action="${pageContext.request.contextPath}/logout" method="get" id="logoutForm">
+							    <button type="button" class="logout-btn" onclick="confirmLogout()">로그아웃</button>
+							</form>
                         </div>
                     </div>
                 <% } else { %>
@@ -108,6 +108,12 @@
         setTimeout(() => {
             sidemenuOverlay.style.display = 'none';
         }, 300);
+    }
+
+    function confirmLogout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            document.getElementById('logoutForm').submit();
+        }
     }
 
     closeSideMenu.addEventListener('click', closeSideMenuFn);

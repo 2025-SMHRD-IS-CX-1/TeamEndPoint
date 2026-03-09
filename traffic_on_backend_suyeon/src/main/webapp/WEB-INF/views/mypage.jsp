@@ -169,7 +169,6 @@
                 </div>
             </main>
 
-           <!-- <%@ include file="common/bottomNav.jsp" %> -->
         </div>
     </div>
 
