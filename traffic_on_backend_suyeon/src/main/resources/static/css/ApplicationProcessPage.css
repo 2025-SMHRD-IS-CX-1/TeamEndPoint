@@ -261,14 +261,13 @@
 
 .arrow-down.right-side {
     margin-left: auto;
-    margin-right: 34px;
+    margin-right: 46px;
 }
 
 .arrow-down.left-side {
-    margin-left: 34px;
+    margin-left: 46px;
     margin-right: auto;
 }
-
 .process-login-box {
     margin-top: 22px;
     background: #fff;
@@ -309,11 +308,11 @@
 ========================= */
 
 .info-bubble {
-    width: 220px;
+    width: 190px;
     background: #fff7ef;
     border: 1px solid #f3d8bf;
     border-radius: 18px;
-    padding: 14px 16px;
+    padding: 10px 12px;
     margin: 8px 0 10px;
     position: relative;
     box-sizing: border-box;
@@ -337,7 +336,7 @@
     font-size: 13px;
     font-weight: 700;
     color: #444;
-    line-height: 1.7;
+    line-height: 1.5;
 }
 
 .left-bubble {
@@ -400,4 +399,23 @@
 
 .process-bottom-link.gwangju a {
     color: #f59e0b;
+}
+
+.report-select-row {
+    justify-content: flex-start !important;
+    margin-left: 160px;
+    margin-top: -20px;
+}
+
+.toggle-bubble {
+    display: none;
+}
+
+.clickable-step {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.clickable-step:active {
+    transform: scale(0.98);
 }

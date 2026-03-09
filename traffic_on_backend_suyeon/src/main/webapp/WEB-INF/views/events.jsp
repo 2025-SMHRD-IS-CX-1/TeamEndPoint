@@ -52,24 +52,8 @@
             </c:if>
         </div>
     </header>
-
-    <aside id="sideMenu" class="side-menu">
-        <div class="side-menu-header">
-            <button type="button" class="close-btn" onclick="closeSideMenu()">
-                <i data-lucide="x"></i>
-            </button>
-        </div>
-
-        <nav class="side-menu-list">
-            <a href="${pageContext.request.contextPath}/">홈</a>
-            <a href="${pageContext.request.contextPath}/guide">민원유형</a>
-            <a href="${pageContext.request.contextPath}/application-process">신청절차 안내</a>
-            <a href="${pageContext.request.contextPath}/events">이벤트 및 소식</a>
-            <a href="${pageContext.request.contextPath}/about">서비스 소개</a>
-        </nav>
-    </aside>
-
-    <div id="sideOverlay" class="side-overlay" onclick="closeSideMenu()"></div>
+	
+	<%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
     <main class="event-content-wrap">
         <section class="event-title-section">
@@ -149,17 +133,7 @@
 </div>
 
 <script>
-    lucide.createIcons();
-
-    function openSideMenu() {
-        document.getElementById("sideMenu").classList.add("open");
-        document.getElementById("sideOverlay").classList.add("show");
-    }
-
-    function closeSideMenu() {
-        document.getElementById("sideMenu").classList.remove("open");
-        document.getElementById("sideOverlay").classList.remove("show");
-    }
+	lucide.createIcons();
 </script>
 
 </body>

@@ -62,10 +62,10 @@
                 <p class="detail-date">${eventDate}</p>
                 <p class="detail-desc">${eventDesc}</p>
 
-                <button class="detail-confirm-btn" type="button"
-                        onclick="location.href='${pageContext.request.contextPath}/events'">
-                    확인
-                </button>
+				<button class="detail-confirm-btn" type="button"
+				        onclick="location.href='${pageContext.request.contextPath}/'">
+				    확인
+				</button>
             </div>
         </section>
     </main>
