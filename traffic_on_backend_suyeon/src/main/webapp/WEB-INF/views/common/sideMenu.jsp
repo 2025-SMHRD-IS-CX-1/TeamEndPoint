@@ -2,7 +2,7 @@
 <%@ page import="com.cx.web.entity.Member" %>
 <!-- sideMenu.jsp -->
 <link rel="stylesheet" href="/css/SideMenu.css">
-
+<!--김보광-->
 <div class="sidemenu-overlay" id="sidemenuOverlay">
     <div class="sidemenu-content">
         <div class="sidemenu-header">
