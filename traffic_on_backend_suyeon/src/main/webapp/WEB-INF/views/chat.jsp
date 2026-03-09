@@ -103,54 +103,51 @@
             background: #dfe7ee;
             border: 1px solid #cfd8e3;
         }
-		
-		/* ✅ 펭리미 로딩 애니메이션 */
-		.typing-loading-wrap {
-		    display: flex;
-		    flex-direction: column;
-		    align-items: flex-start;
-		    gap: 4px;
-		}
 
-		.typing-pengrimi-road {
-		    position: relative;
-		    width: 54px;
-		    height: 34px;
-		    margin-left: 2px;
-		    overflow: visible;
-		}
+        /* ✅ 로딩 중 말풍선 위 펭리미 */
+        .typing-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
 
-		.typing-pengrimi {
-		    position: absolute;
-		    left: 0;
-		    bottom: 0;
-		    width: 34px;
-		    height: 34px;
-		    object-fit: contain;
-		    animation: pengrimiDrive 1.2s ease-in-out infinite alternate;
-		    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.14));
-		}
+        .typing-pengrimi-top {
+            position: relative;
+            width: var(--run-width, 70px);
+            height: 38px;
+            margin-left: 2px;
+            margin-bottom: -2px;
+            overflow: visible;
+            pointer-events: none;
+        }
 
-		@keyframes pengrimiDrive {
-		    0% {
-		        transform: translateX(0) translateY(0) rotate(-2deg);
-		    }
-		    20% {
-		        transform: translateX(4px) translateY(-1px) rotate(0deg);
-		    }
-		    40% {
-		        transform: translateX(8px) translateY(0) rotate(2deg);
-		    }
-		    60% {
-		        transform: translateX(12px) translateY(-1px) rotate(0deg);
-		    }
-		    80% {
-		        transform: translateX(16px) translateY(0) rotate(-1deg);
-		    }
-		    100% {
-		        transform: translateX(20px) translateY(-1px) rotate(1deg);
-		    }
-		}
+        .typing-pengrimi {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.14));
+            transform-origin: center center;
+            animation: pengrimiRun 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pengrimiRun {
+            0% {
+                transform: translateX(0) translateY(0) scaleX(1) rotate(-2deg);
+            }
+            49% {
+                transform: translateX(calc(var(--run-width, 70px) - 34px)) translateY(-1px) scaleX(1) rotate(1deg);
+            }
+            50% {
+                transform: translateX(calc(var(--run-width, 70px) - 34px)) translateY(-1px) scaleX(-1) rotate(1deg);
+            }
+            100% {
+                transform: translateX(0) translateY(0) scaleX(-1) rotate(-2deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -805,39 +802,60 @@
         return bubble;
     }
 
-	function showTyping() {
-	    const messagesArea = document.getElementById('messagesArea');
+    function showTyping() {
+        const messagesArea = document.getElementById('messagesArea');
 
-	    const wrapper = document.createElement('div');
-	    wrapper.className = "bot-wrapper";
+        const wrapper = document.createElement('div');
+        wrapper.className = "bot-wrapper";
 
-	    const content = document.createElement('div');
-	    content.className = "bot-content";
+        const stack = document.createElement('div');
+        stack.className = "typing-stack";
 
-	    const bubble = document.createElement('div');
-	    bubble.className = "message-bubble bot";
-	    bubble.innerHTML = `
-	        <div class="typing-loading-wrap">
-	            <div class="typing-pengrimi-road">
-	                <img src="/images/Pengrimi.png" alt="펭리미" class="typing-pengrimi">
-	            </div>
-	            <div class="typing-indicator">
-	                <div class="typing-dot"></div>
-	                <div class="typing-dot"></div>
-	                <div class="typing-dot"></div>
-	            </div>
-	        </div>
-	    `;
+        const pengrimiTop = document.createElement('div');
+        pengrimiTop.className = "typing-pengrimi-top";
+        pengrimiTop.innerHTML = `
+            <img src="/images/Pengrimi.png" alt="펭리미" class="typing-pengrimi">
+        `;
 
-	    content.appendChild(bubble);
-	    wrapper.appendChild(content);
+        const content = document.createElement('div');
+        content.className = "bot-content";
 
-	    messagesArea.appendChild(wrapper);
-	    return bubble;
-	}
+        const bubble = document.createElement('div');
+        bubble.className = "message-bubble bot";
+        bubble.innerHTML = `
+            <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        `;
+
+        content.appendChild(bubble);
+        stack.appendChild(pengrimiTop);
+        stack.appendChild(content);
+        wrapper.appendChild(stack);
+        messagesArea.appendChild(wrapper);
+
+        requestAnimationFrame(() => {
+            const baseWidth = content.offsetWidth || bubble.offsetWidth || 70;
+            const runWidth = Math.max(70, Math.min(baseWidth, 180));
+            pengrimiTop.style.setProperty('--run-width', runWidth + 'px');
+        });
+
+        return bubble;
+    }
 
     function replaceMessage(el, newText, sender) {
         if (!el) return;
+
+        const typingStack = el.closest('.typing-stack');
+        if (typingStack) {
+            const pengrimiTop = typingStack.querySelector('.typing-pengrimi-top');
+            if (pengrimiTop) {
+                pengrimiTop.remove();
+            }
+        }
+
         el.className = `message-bubble ${sender}`;
         if (sender === "bot") el.innerHTML = renderBotHtml(newText);
         else el.innerText = newText;
