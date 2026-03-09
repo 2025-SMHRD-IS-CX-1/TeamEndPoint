@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,8 +50,19 @@
 
                 <div class="write-form-row">
                     <label for="content">내용</label>
-                    <textarea id="content" name="content"
-                        class="write-textarea" placeholder="내용을 입력하세요"></textarea>
+                    <%-- ✅ 관리자 여부에 따라 placeholder 변경 --%>
+                    <c:choose>
+                        <c:when test="${sessionScope.loginMember.memType == 'ADMIN'}">
+                            <textarea id="content" name="content"
+                                class="write-textarea"
+                                placeholder="공지사항을 작성하실 경우 제목에 '공지사항' 이라고 작성해 주세요"></textarea>
+                        </c:when>
+                        <c:otherwise>
+                            <textarea id="content" name="content"
+                                class="write-textarea"
+                                placeholder="내용을 입력하세요"></textarea>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
             </div>
@@ -67,11 +79,6 @@
 <script>
     lucide.createIcons();
 
-    // 욕설 사전 + 정규식 기반 필터링
-  <script>
-    lucide.createIcons();
-
-    // 한글 욕설 사전 (예시 30개)
     const badWords = [
       "시발","씨발","씹","좆","병신","개새끼","꺼져","죽어","닥쳐","지랄",
       "미친놈","또라이","정신병자","쓰레기","멍청이","바보","등신","후레자식",
@@ -79,7 +86,6 @@
       "개망신","개똥","개판","개돼지"
     ];
 
-    // 정규식 패턴 변환 (특수문자/띄어쓰기 허용)
     const badPatterns = badWords.map(word => {
         const regex = word.split("").map(ch => ch + "[\\W_]*").join("");
         return new RegExp(regex, "i");

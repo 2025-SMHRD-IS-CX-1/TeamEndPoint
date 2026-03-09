@@ -185,8 +185,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255,87,34,0.25);
         }
-
-        /* ✅ 관리자 행 스타일 */
+        /* 관리자 행 스타일 */
         .admin-row {
             background-color: #fff8e1 !important;
             font-weight: 700;
@@ -208,6 +207,44 @@
             margin-right: 3px;
             vertical-align: middle;
         }
+        /* 공지 고정 행 스타일 */
+        .pinned-row {
+            background-color: #fff3ee !important;
+            border-left: 3px solid #FF5722;
+            font-weight: 700;
+        }
+        .pinned-row:hover {
+            background-color: #ffe0d0 !important;
+        }
+        .pin-badge {
+            display: inline-block;
+            background: #FF5722;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 1px 6px;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
+        /* 크롤링 버튼 */
+        .crawl-btn {
+            width: 100%;
+            margin-bottom: 12px;
+            background: #FF5722;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255,87,34,0.25);
+        }
+        .crawl-btn:disabled {
+            background: #ffab91;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -221,6 +258,13 @@
             <h1>ON! 교통 정보</h1>
             <span class="post-count">${boards.size()}</span>
         </div>
+
+        <%-- 관리자만 보이는 크롤링 버튼 --%>
+        <c:if test="${isAdmin}">
+            <button id="crawlBtn" class="crawl-btn" onclick="crawlAndPost()">
+                🌐 광주시 최신글 가져오기
+            </button>
+        </c:if>
 
         <div style="position:relative;">
             <div class="board-table-wrapper" id="boardTableWrapper">
@@ -243,29 +287,37 @@
                     </thead>
                     <tbody>
                         <c:forEach var="board" items="${boards}" varStatus="status">
-                           <c:set var="isAdmin" value="${adminIds.contains(board.memId)}" />
-                            <tr onclick="location.href='/board/${board.boardId}'"
-                                style="cursor:pointer;"
-                                class="${isAdmin ? 'admin-row' : ''}">
-                                <td>${boards.size() - status.index}</td>
-                                <td><span class="category-badge">${board.category}</span></td>
-                                <td class="title-cell">
-                                    <c:if test="${isAdmin}">
-                                        <span class="admin-badge">공지</span>
-                                    </c:if>
-                                    ${board.title}
-                                </td>
-                                <td class="id-cell">
-                                    <c:choose>
-                                        <c:when test="${isAdmin}">관리자</c:when>
-                                        <c:otherwise>${board.memId}</c:otherwise>
-                                    </c:choose>
-                                </td>
-                                <td class="date-text">
-                                    ${board.createdAt.toString().substring(0, 10)}
-                                </td>
-                            </tr>
-                        </c:forEach>
+    <c:set var="isAdminRow" value="${adminIds.contains(board.memId)}" />
+    <c:set var="isPinned" value="${isAdminRow and fn:contains(board.title, '공지사항')}" />
+    <tr onclick="location.href='/board/${board.boardId}'"
+        style="cursor:pointer;"
+        class="${isPinned ? 'pinned-row' : (isAdminRow ? 'admin-row' : '')}">
+        <td>
+            <c:choose>
+                <%-- ✅ 1. 공지 고정글은 번호 빈칸 --%>
+                <c:when test="${isPinned}"></c:when>
+                <c:otherwise>${status.index - pinnedCount + 1}</c:otherwise>
+            </c:choose>
+        </td>
+        <td><span class="category-badge">${board.category}</span></td>
+        <td class="title-cell">
+            <%-- ✅ 2. 공지사항 제목 포함된 경우만 공지 뱃지 표시 --%>
+            <c:if test="${isPinned}">
+                <span class="pin-badge">공지</span>
+            </c:if>
+            ${board.title}
+        </td>
+        <td class="id-cell">
+            <c:choose>
+                <c:when test="${isAdminRow}">관리자</c:when>
+                <c:otherwise>${board.memId}</c:otherwise>
+            </c:choose>
+        </td>
+        <td class="date-text">
+            ${board.createdAt.toString().substring(0, 10)}
+        </td>
+    </tr>
+</c:forEach>
                         <c:if test="${boards.size() == 0}">
                             <tr>
                                 <td colspan="5" class="empty-row">등록된 게시물이 없습니다.</td>
@@ -311,6 +363,27 @@
         document.getElementById('boardTableWrapper').classList.remove('is-blurred');
     } else {
         document.getElementById('boardTableWrapper').classList.add('is-blurred');
+    }
+
+    function crawlAndPost() {
+        const btn = document.getElementById('crawlBtn');
+        btn.disabled = true;
+        btn.textContent = '가져오는 중...';
+
+        fetch('/board/crawl', { method: 'POST' })
+            .then(res => res.text())
+            .then(result => {
+                if (result === 'SUCCESS') {
+                    alert('게시글이 등록되었습니다!');
+                    location.reload();
+                } else if (result === 'UNAUTHORIZED') {
+                    alert('관리자만 사용할 수 있습니다.');
+                } else {
+                    alert('가져오기에 실패했습니다.');
+                }
+                btn.disabled = false;
+                btn.textContent = '🌐 광주시 최신글 가져오기';
+            });
     }
 </script>
 </body>
