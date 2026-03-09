@@ -6,6 +6,19 @@
     <title>TRAFFIC:ON - 마이페이지</title>
     <%@ include file="common/head.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MyPage.css">
+    <style>
+        /* ✅ 라디오 버튼 완전 숨김 */
+        .checkbox-item input[type="radio"] {
+            display: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+        }
+        .checkbox-item input[type="radio"]:checked + span {
+            background: #eaf2ff !important;
+            border-color: #4a8cff !important;
+            color: #2d6fe8 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,25 +26,22 @@
         <div class="mobile-layout-content mypage-page">
 
             <%@ include file="common/header.jsp" %>
-			<%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
+            <%@ include file="/WEB-INF/views/common/sideMenu.jsp" %>
 
             <main class="mypage-container">
-                <!-- 상단 -->
-				<div class="mypage-top">
-
-				    <h1 class="mypage-title">마이페이지</h1>	    
-				</div>
+                <div class="mypage-top">
+                    <h1 class="mypage-title">마이페이지</h1>
+                </div>
 
                 <p class="header-subtext">내 정보와 활동 내역을 확인할 수 있어요.</p>
 
                 <!-- 프로필 카드 -->
                 <section class="profile-card">
                     <div class="profile-avatar">
-						<img src="${pageContext.request.contextPath}/images/mascot.png" 
-						     alt="프로필" 
-						     class="profile-character-img" />
+                        <img src="${pageContext.request.contextPath}/images/mascot.png"
+                             alt="프로필"
+                             class="profile-character-img" />
                     </div>
-
                     <div class="profile-main-info">
                         <div class="profile-name-row">
                             <span class="profile-name">${member.memName}</span>
@@ -46,18 +56,15 @@
                         <i data-lucide="user-round" class="section-icon"></i>
                         <h3>기본 정보</h3>
                     </div>
-
                     <div class="settings-card info-card">
                         <div class="info-row">
                             <span class="info-label">이름</span>
                             <span class="info-value">${member.memName} (${member.memID})</span>
                         </div>
-
                         <div class="info-row">
                             <span class="info-label">전화번호</span>
                             <span class="info-value">${member.memPhone}</span>
                         </div>
-
                         <button type="button" class="outline-action-btn">
                             기본 정보 수정
                         </button>
@@ -70,44 +77,41 @@
                         <i data-lucide="settings" class="section-icon"></i>
                         <h3>개인 설정</h3>
                     </div>
-
                     <div class="settings-card">
                         <form action="${pageContext.request.contextPath}/mypage/update-preferences" method="post" class="preferences-form">
-                            <!-- 거주 지역 -->
                             <div class="form-group">
                                 <label class="group-label">거주 지역</label>
                                 <div class="checkbox-grid">
                                     <label class="checkbox-item">
-                                        <input type="checkbox" name="regions" value="동구">
+                                        <input type="radio" name="regions" value="동구"
+                                            ${member.memAddr != null && member.memAddr.contains('동구') ? 'checked' : ''}>
                                         <span>동구</span>
                                     </label>
-
                                     <label class="checkbox-item">
-                                        <input type="checkbox" name="regions" value="서구">
+                                        <input type="radio" name="regions" value="서구"
+                                            ${member.memAddr != null && member.memAddr.contains('서구') ? 'checked' : ''}>
                                         <span>서구</span>
                                     </label>
-
                                     <label class="checkbox-item">
-                                        <input type="checkbox" name="regions" value="남구">
+                                        <input type="radio" name="regions" value="남구"
+                                            ${member.memAddr != null && member.memAddr.contains('남구') ? 'checked' : ''}>
                                         <span>남구</span>
                                     </label>
-
                                     <label class="checkbox-item">
-                                        <input type="checkbox" name="regions" value="북구">
+                                        <input type="radio" name="regions" value="북구"
+                                            ${member.memAddr != null && member.memAddr.contains('북구') ? 'checked' : ''}>
                                         <span>북구</span>
                                     </label>
-
                                     <label class="checkbox-item">
-                                        <input type="checkbox" name="regions" value="광산구">
+                                        <input type="radio" name="regions" value="광산구"
+                                            ${member.memAddr != null && member.memAddr.contains('광산구') ? 'checked' : ''}>
                                         <span>광산구</span>
                                     </label>
                                 </div>
-
                                 <div class="region-guide-box">
                                     선택한 지역 기준으로 정보를 더 정확히 안내해요.
                                 </div>
                             </div>
-
                             <button type="submit" class="save-btn">변경사항 저장</button>
                         </form>
                     </div>
@@ -119,7 +123,6 @@
                         <i data-lucide="lock" class="section-icon"></i>
                         <h3>보안</h3>
                     </div>
-
                     <div class="settings-card password-card">
                         <button class="password-change-btn" type="button">
                             <span>비밀번호 변경하기</span>
@@ -128,37 +131,33 @@
                     </div>
                 </section>
 
-				<!-- 내 게시글 -->
-				<section class="settings-section">
-				    <div class="section-header posts-header">
-				        <div class="posts-title-wrap">
-				            <i data-lucide="file-text" class="section-icon"></i>
-				            <h3>내 게시글</h3>
-				        </div>
-
-				        <a class="view-all" href="${pageContext.request.contextPath}/my-posts">
-				            전체 보기 &gt;
-				        </a>
-				    </div>
-
-				    <div class="posts-card">
-				        <div class="posts-table-head">
-				            <span>제목</span>
-				            <span>작성일</span>
-				        </div>
-
-				        <c:if test="${empty myPostsPreview}">
-				            <div class="posts-empty">작성한 게시글이 없습니다.</div>
-				        </c:if>
-
-				        <c:forEach var="p" items="${myPostsPreview}">
-				            <div class="posts-table-row" onclick="location.href='${pageContext.request.contextPath}/my-posts'">
-				                <span class="title">${p.title}</span>
-				                <span class="date">${p.createdAt.toString().substring(0,10)}</span>
-				            </div>
-				        </c:forEach>
-				    </div>
-				</section>
+                <!-- 내 게시글 -->
+                <section class="settings-section">
+                    <div class="section-header posts-header">
+                        <div class="posts-title-wrap">
+                            <i data-lucide="file-text" class="section-icon"></i>
+                            <h3>내 게시글</h3>
+                        </div>
+                        <a class="view-all" href="${pageContext.request.contextPath}/my-posts">
+                            전체 보기 &gt;
+                        </a>
+                    </div>
+                    <div class="posts-card">
+                        <div class="posts-table-head">
+                            <span>제목</span>
+                            <span>작성일</span>
+                        </div>
+                        <c:if test="${empty myPostsPreview}">
+                            <div class="posts-empty">작성한 게시글이 없습니다.</div>
+                        </c:if>
+                        <c:forEach var="p" items="${myPostsPreview}">
+                            <div class="posts-table-row" onclick="location.href='${pageContext.request.contextPath}/my-posts'">
+                                <span class="title">${p.title}</span>
+                                <span class="date">${p.createdAt.toString().substring(0,10)}</span>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </section>
 
                 <!-- 하단 로그아웃 -->
                 <div class="bottom-actions">
