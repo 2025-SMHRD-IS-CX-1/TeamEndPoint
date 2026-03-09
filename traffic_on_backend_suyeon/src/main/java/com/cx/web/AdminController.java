@@ -3,9 +3,11 @@ package com.cx.web;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,12 +41,12 @@ public class AdminController {
     private final BoardRepository boardRepository;
     private final DashboardKeywordService dashboardKeywordService;
 
-    public AdminController(MemberRepository memberRepository, 
-    					   AdminRepository adminRepository,
-    					   BoardRepository boardRepository,
-    					   DashboardKeywordService dashboardKeywordService) {
-        
-    	this.memberRepository = memberRepository;
+    public AdminController(MemberRepository memberRepository,
+                           AdminRepository adminRepository,
+                           BoardRepository boardRepository,
+                           DashboardKeywordService dashboardKeywordService) {
+
+        this.memberRepository = memberRepository;
         this.adminRepository = adminRepository;
         this.boardRepository = boardRepository;
         this.dashboardKeywordService = dashboardKeywordService;
@@ -53,17 +56,16 @@ public class AdminController {
     public String dashboard() {
         return "admin/dashboard";
     }
-    
+
     @GetMapping("/boards")
     public String boards(
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "1") int page,
             Model model
     ) {
-    	Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Board> boardPage;
-
         if (keyword.trim().isEmpty()) {
             boardPage = boardRepository.findAll(pageable);
         } else {
@@ -72,10 +74,44 @@ public class AdminController {
             );
         }
 
+        // ✅ 관리자 ID 목록
+        List<String> adminIds = memberRepository.findAll().stream()
+            .filter(m -> "ADMIN".equals(m.getMemType()))
+            .map(Member::getMemID)
+            .collect(Collectors.toList());
+
+        // ✅ 공지사항 상단 고정 정렬
+        List<Board> allBoards = boardPage.getContent();
+        List<Board> pinned = allBoards.stream()
+            .filter(b -> adminIds.contains(b.getMemId()) && b.getTitle().contains("공지사항"))
+            .collect(Collectors.toList());
+        List<Board> normal = allBoards.stream()
+            .filter(b -> !(adminIds.contains(b.getMemId()) && b.getTitle().contains("공지사항")))
+            .collect(Collectors.toList());
+        List<Board> sortedBoards = new ArrayList<>();
+        sortedBoards.addAll(pinned);
+        sortedBoards.addAll(normal);
+
         model.addAttribute("page", boardPage);
+        model.addAttribute("sortedBoards", sortedBoards); // ✅ 추가
+        model.addAttribute("adminIds", adminIds);          // ✅ 추가
         model.addAttribute("keyword", keyword);
 
         return "admin/boards";
+    }
+
+    // ✅ 일괄 삭제
+    @PostMapping("/boards/delete")
+    @ResponseBody
+    @Transactional
+    public String deleteBoards(@RequestBody List<Integer> ids) {
+        try {
+            boardRepository.deleteAllById(ids);
+            return "SUCCESS";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "FAIL";
+        }
     }
 
     // =========================
@@ -91,10 +127,8 @@ public class AdminController {
     ) {
         int size = 10;
 
-        // 1) 검색/페이징 + DTO 변환까지 한 번에
         UsersPageResult result = fetchUsersPage(page, size, keyword, district, ageGroup);
 
-        // 2) 페이징/선택값 유지
         model.addAttribute("page", result.page);
         model.addAttribute("totalPages", result.totalPages);
         model.addAttribute("startNo", (result.page - 1) * size);
@@ -103,10 +137,8 @@ public class AdminController {
         model.addAttribute("district", result.district);
         model.addAttribute("ageGroup", result.ageGroup);
 
-        // 3) 테이블 데이터
         model.addAttribute("members", result.members);
 
-        // 4) 통계 (기존 로직 유지)
         applyStats(model);
 
         return "admin/users";
@@ -128,7 +160,7 @@ public class AdminController {
         UsersPageResult result = fetchUsersPage(page, size, keyword, district, ageGroup);
 
         Map<String, Object> res = new HashMap<>();
-        res.put("members", result.members);     // ✅ DTO 그대로 JSON으로 내려감
+        res.put("members", result.members);
         res.put("page", result.page);
         res.put("totalPages", result.totalPages);
 
@@ -186,13 +218,6 @@ public class AdminController {
     // ====================== 아래는 내부 로직 ======================
     // ============================================================
 
-    /**
-     * ✅ users 화면/데이터 공용 로직
-     * - 파라미터 정리
-     * - 나이대 -> 생년월일 범위
-     * - repository 조회(Page)
-     * - Member -> AdminUserRowDto 변환
-     */
     private UsersPageResult fetchUsersPage(
             int page,
             int size,
@@ -244,7 +269,6 @@ public class AdminController {
 
         long totalUsers = memberRepository.countByMemType("USER");
 
-        // 이번달 가입 (전월 대비 %)
         LocalDateTime thisMonthStart = today.withDayOfMonth(1).atStartOfDay();
         LocalDateTime nextMonthStart = today.plusMonths(1).withDayOfMonth(1).atStartOfDay();
         LocalDateTime lastMonthStart = today.minusMonths(1).withDayOfMonth(1).atStartOfDay();
@@ -263,7 +287,6 @@ public class AdminController {
             monthJoinUp = monthJoinRate >= 0;
         }
 
-        // 오늘 접속 (어제 대비 %)
         LocalDateTime todayStart = today.atStartOfDay();
         LocalDateTime tomorrowStart = today.plusDays(1).atStartOfDay();
         LocalDateTime yesterdayStart = today.minusDays(1).atStartOfDay();
@@ -282,15 +305,12 @@ public class AdminController {
             todayLoginUp = todayLoginRate >= 0;
         }
 
-        // 총 사용자 (전월 대비 +명)
         long totalDelta = thisMonthUsers - lastMonthUsers;
         boolean totalDeltaUp = totalDelta >= 0;
 
-        // 경고 대상 + 비율
         long warnUsers = memberRepository.countWarnUsers("USER");
         double warnRate = totalUsers == 0 ? 0 : (warnUsers * 100.0 / totalUsers);
 
-        // model 담기
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalDelta", Math.abs(totalDelta));
         model.addAttribute("totalDeltaUp", totalDeltaUp);
@@ -311,10 +331,6 @@ public class AdminController {
         return (s == null) ? "" : s.trim();
     }
 
-    /**
-     * ageGroup: "20", "30" 같은 값
-     * -> startBirth(포함), endBirth(포함) 반환
-     */
     private LocalDate[] birthRangeFromAgeGroup(String ag, LocalDate today) {
         if (ag == null || ag.trim().isEmpty()) return new LocalDate[]{null, null};
 
@@ -356,10 +372,6 @@ public class AdminController {
         return dto;
     }
 
-    /**
-     * "서울특별시 강남구 역삼동 ..." -> "강남구"
-     * 없으면 "-"
-     */
     private String extractDistrict(String addr) {
         if (addr == null || addr.isBlank() || "-".equals(addr)) return "-";
 
@@ -369,7 +381,6 @@ public class AdminController {
         return "-";
     }
 
-    // ✅ users 페이지 공용 결과 묶음 클래스 (컨트롤러 내부용)
     private static class UsersPageResult {
         int page;
         int totalPages;
@@ -378,14 +389,13 @@ public class AdminController {
         String ageGroup;
         List<AdminUserRowDto> members;
     }
-    
+
     @GetMapping("/dashboard/stats")
     @ResponseBody
     public Map<String, Object> dashboardStats(@RequestParam String district) {
 
-    	List<Member> members = memberRepository.findByMemTypeAndMemAddrContaining("USER", district);
+        List<Member> members = memberRepository.findByMemTypeAndMemAddrContaining("USER", district);
 
-     // 성별 퍼센트
         long maleCnt = members.stream().filter(m -> "M".equals(m.getMemGender())).count();
         long femaleCnt = members.stream().filter(m -> "F".equals(m.getMemGender())).count();
         long genderTotal = maleCnt + femaleCnt;
@@ -395,14 +405,13 @@ public class AdminController {
 
         if (genderTotal > 0) {
             malePct = (int) Math.round(maleCnt * 100.0 / genderTotal);
-            femalePct = 100 - malePct; // 합 100 보정
+            femalePct = 100 - malePct;
         }
 
         Map<String, Object> gender = new HashMap<>();
         gender.put("male", malePct);
         gender.put("female", femalePct);
 
-        // 연령대 퍼센트
         LocalDate today = LocalDate.now();
 
         List<Member> withBirth = members.stream()
@@ -421,11 +430,11 @@ public class AdminController {
             else if (age >= 50) fiftyPlus++;
         }
 
-        int pTeen = total == 0 ? 0 : (int) Math.round(teen * 100.0 / total);
-        int pTwenty = total == 0 ? 0 : (int) Math.round(twenty * 100.0 / total);
-        int pThirty = total == 0 ? 0 : (int) Math.round(thirty * 100.0 / total);
-        int pForty = total == 0 ? 0 : (int) Math.round(forty * 100.0 / total);
-        int pFifty = total == 0 ? 0 : Math.max(0, 100 - (pTeen + pTwenty + pThirty + pForty)); // 남은값
+        int pTeen    = total == 0 ? 0 : (int) Math.round(teen * 100.0 / total);
+        int pTwenty  = total == 0 ? 0 : (int) Math.round(twenty * 100.0 / total);
+        int pThirty  = total == 0 ? 0 : (int) Math.round(thirty * 100.0 / total);
+        int pForty   = total == 0 ? 0 : (int) Math.round(forty * 100.0 / total);
+        int pFifty   = total == 0 ? 0 : Math.max(0, 100 - (pTeen + pTwenty + pThirty + pForty));
 
         List<Map<String, Object>> age = List.of(
                 new HashMap<>(Map.of("label", "10대", "value", pTeen)),
@@ -445,7 +454,7 @@ public class AdminController {
         result.put("age", age);
         return result;
     }
-    
+
     @GetMapping("/dashboard/keywords")
     @ResponseBody
     public List<Map<String, Object>> dashboardKeywords(
@@ -453,5 +462,4 @@ public class AdminController {
 
         return dashboardKeywordService.getKeywordsByDistrict(district);
     }
-    
-   }
+}
