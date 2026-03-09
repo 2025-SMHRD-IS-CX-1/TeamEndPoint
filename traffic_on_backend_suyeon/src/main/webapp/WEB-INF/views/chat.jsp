@@ -397,7 +397,7 @@
         if (!el) return;
 
         const inputBar = el.closest('.chat-input-bar');
-        el.style.height = "24px";
+        el.style.height = "28px";
         el.style.height = Math.min(el.scrollHeight, 96) + "px";
 
         if (inputBar) {
@@ -413,7 +413,7 @@
         if (!el) return;
 
         const inputBar = el.closest('.chat-input-bar');
-        el.style.height = "24px";
+        el.style.height = "28px";
 
         if (inputBar) {
             inputBar.classList.remove("expanded");
