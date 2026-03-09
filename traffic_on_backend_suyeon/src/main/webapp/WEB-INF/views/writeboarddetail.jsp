@@ -39,7 +39,13 @@
             <div class="divider"></div>
             <div class="write-form-row">
                 <label>작성자</label>
-                <div class="write-input">${board.memId}</div>
+                <div class="write-input">
+                    <%-- ✅ 관리자가 쓴 글이면 '관리자'로 표시 --%>
+                    <c:choose>
+                        <c:when test="${isAdminPost}">관리자</c:when>
+                        <c:otherwise>${board.memId}</c:otherwise>
+                    </c:choose>
+                </div>
             </div>
             <div class="divider"></div>
             <div class="write-form-row">
