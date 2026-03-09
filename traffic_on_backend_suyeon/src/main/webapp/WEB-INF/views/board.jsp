@@ -382,7 +382,7 @@
                     alert('가져오기에 실패했습니다.');
                 }
                 btn.disabled = false;
-                btn.textContent = '🌐 광주시 최신글 가져오기';
+                btn.textContent = '🌐 광주광역시 최신글 가져오기';
             });
     }
 </script>
