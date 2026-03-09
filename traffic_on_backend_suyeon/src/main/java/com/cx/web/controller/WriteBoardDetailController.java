@@ -3,6 +3,7 @@ package com.cx.web.controller;
 import com.cx.web.entity.Board;
 import com.cx.web.entity.Member;
 import com.cx.web.repository.BoardRepository;
+import com.cx.web.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 public class WriteBoardDetailController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private MemberRepository memberRepository; // ✅ 추가
 
     @GetMapping("/board/{id}")
     public String boardDetail(@PathVariable("id") Integer id, Model model, HttpSession session) {
@@ -36,9 +43,18 @@ public class WriteBoardDetailController {
             canEdit = isAdmin || isWriter;
         }
 
+        // ✅ 작성자가 관리자인지 확인
+        List<String> adminIds = memberRepository.findAll().stream()
+            .filter(m -> "ADMIN".equals(m.getMemType()))
+            .map(Member::getMemID)
+            .collect(Collectors.toList());
+        boolean isAdminPost = adminIds.contains(board.getMemId());
+
         model.addAttribute("board", board);
         model.addAttribute("canDelete", canDelete);
         model.addAttribute("canEdit", canEdit);
+        model.addAttribute("isAdminPost", isAdminPost); // ✅ 추가
+
         return "writeboarddetail";
     }
 
@@ -52,7 +68,6 @@ public class WriteBoardDetailController {
 
         boolean isAdmin = "ADMIN".equals(loginMember.getMemType());
         boolean isWriter = loginMember.getMemID().equals(board.getMemId());
-
         if (!isAdmin && !isWriter) return "redirect:/board";
 
         model.addAttribute("board", board);
@@ -64,7 +79,6 @@ public class WriteBoardDetailController {
                              @RequestParam("title") String title,
                              @RequestParam("content") String content,
                              HttpSession session) {
-
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/login";
 
