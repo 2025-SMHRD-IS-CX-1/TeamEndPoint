@@ -346,10 +346,18 @@
   min-height: 50px;
   border-radius: 999px;
   display: flex;
-  align-items: center;
+  align-items: center;   /* 기본은 가운데 */
   padding: 0 6px 0 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
   border: 1px solid rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+/* 여러 줄일 때만 아래 기준 정렬 */
+.chat-input-bar.expanded {
+  align-items: flex-end;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .chat-plus-btn {
@@ -358,6 +366,10 @@
   margin-right: 8px;
   cursor: pointer;
   flex-shrink: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chat-main-input {
@@ -379,6 +391,7 @@
   white-space: pre-wrap;
   word-break: break-word;
   display: block;
+  box-sizing: border-box;
 }
 
 .chat-main-input::-webkit-scrollbar {

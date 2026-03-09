@@ -84,7 +84,6 @@
         .user-image-bubble.sent .img-remove-btn { display: none; }
         .user-image-bubble.sending { opacity: 0.78; }
 
-        /* ✅ 비로그인 답변 아래에 붙는 키워드 박스 */
         .guest-keyword-inline-wrap {
             width: 100%;
             display: flex;
@@ -104,6 +103,54 @@
             background: #dfe7ee;
             border: 1px solid #cfd8e3;
         }
+		
+		/* ✅ 펭리미 로딩 애니메이션 */
+		.typing-loading-wrap {
+		    display: flex;
+		    flex-direction: column;
+		    align-items: flex-start;
+		    gap: 4px;
+		}
+
+		.typing-pengrimi-road {
+		    position: relative;
+		    width: 54px;
+		    height: 34px;
+		    margin-left: 2px;
+		    overflow: visible;
+		}
+
+		.typing-pengrimi {
+		    position: absolute;
+		    left: 0;
+		    bottom: 0;
+		    width: 34px;
+		    height: 34px;
+		    object-fit: contain;
+		    animation: pengrimiDrive 1.2s ease-in-out infinite alternate;
+		    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.14));
+		}
+
+		@keyframes pengrimiDrive {
+		    0% {
+		        transform: translateX(0) translateY(0) rotate(-2deg);
+		    }
+		    20% {
+		        transform: translateX(4px) translateY(-1px) rotate(0deg);
+		    }
+		    40% {
+		        transform: translateX(8px) translateY(0) rotate(2deg);
+		    }
+		    60% {
+		        transform: translateX(12px) translateY(-1px) rotate(0deg);
+		    }
+		    80% {
+		        transform: translateX(16px) translateY(0) rotate(-1deg);
+		    }
+		    100% {
+		        transform: translateX(20px) translateY(-1px) rotate(1deg);
+		    }
+		}
     </style>
 </head>
 <body>
@@ -298,31 +345,29 @@
         `.trim()
     };
 
-	function renderGuestKeywordButtons() {
-	    const messagesArea = document.getElementById('messagesArea');
+    function renderGuestKeywordButtons() {
+        const messagesArea = document.getElementById('messagesArea');
+        const oldKeywordWraps = messagesArea.querySelectorAll('.guest-keyword-inline-wrap');
+        oldKeywordWraps.forEach(el => el.remove());
 
-	    // ✅ 기존에 생성된 키워드 박스 전부 제거
-	    const oldKeywordWraps = messagesArea.querySelectorAll('.guest-keyword-inline-wrap');
-	    oldKeywordWraps.forEach(el => el.remove());
+        const wrap = document.createElement('div');
+        wrap.className = 'guest-keyword-inline-wrap';
 
-	    const wrap = document.createElement('div');
-	    wrap.className = 'guest-keyword-inline-wrap';
+        const box = document.createElement('div');
+        box.className = 'guest-keyword-inline-box';
 
-	    const box = document.createElement('div');
-	    box.className = 'guest-keyword-inline-box';
+        GUEST_KEYWORDS.forEach(keyword => {
+            const btn = document.createElement('button');
+            btn.className = 'chat-keyword-btn';
+            btn.textContent = keyword;
+            btn.type = 'button';
+            btn.onclick = () => handleKeywordClick(keyword);
+            box.appendChild(btn);
+        });
 
-	    GUEST_KEYWORDS.forEach(keyword => {
-	        const btn = document.createElement('button');
-	        btn.className = 'chat-keyword-btn';
-	        btn.textContent = keyword;
-	        btn.type = 'button';
-	        btn.onclick = () => handleKeywordClick(keyword);
-	        box.appendChild(btn);
-	    });
-
-	    wrap.appendChild(box);
-	    messagesArea.appendChild(wrap);
-	}
+        wrap.appendChild(box);
+        messagesArea.appendChild(wrap);
+    }
 
     function getSafeErrorMessage(err, fallback = "알 수 없는 오류가 발생했어요.") {
         if (!err) return fallback;
@@ -349,6 +394,33 @@
             (typeof data === "string" ? data : JSON.stringify(data));
 
         return { data, answer };
+    }
+
+    function autoResizeTextarea(el) {
+        if (!el) return;
+
+        const inputBar = el.closest('.chat-input-bar');
+        el.style.height = "24px";
+        el.style.height = Math.min(el.scrollHeight, 96) + "px";
+
+        if (inputBar) {
+            if (el.scrollHeight > 28) {
+                inputBar.classList.add("expanded");
+            } else {
+                inputBar.classList.remove("expanded");
+            }
+        }
+    }
+
+    function resetTextareaHeight(el) {
+        if (!el) return;
+
+        const inputBar = el.closest('.chat-input-bar');
+        el.style.height = "24px";
+
+        if (inputBar) {
+            inputBar.classList.remove("expanded");
+        }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -416,6 +488,8 @@
             input.placeholder = "교통 민원 내용을 입력해 주세요.";
             sendBtn.disabled = false;
 
+            resetTextareaHeight(input);
+
             input.addEventListener("focus", () => {
                 input.dataset.ph = input.placeholder || "";
                 input.placeholder = "";
@@ -427,20 +501,24 @@
                 }
             });
 
-			input.addEventListener('keydown', (e) => {
-			    if (e.isComposing) return;
+            input.addEventListener("input", () => {
+                autoResizeTextarea(input);
+            });
 
-			    // Shift + Enter → 줄바꿈
-			    if (e.key === 'Enter' && e.shiftKey) {
-			        return;
-			    }
+            sendBtn.addEventListener('click', () => sendMessage());
 
-			    // Enter → 메시지 전송
-			    if (e.key === 'Enter') {
-			        e.preventDefault();
-			        sendMessage();
-			    }
-			});
+            input.addEventListener('keydown', (e) => {
+                if (e.isComposing) return;
+
+                if (e.key === 'Enter' && e.shiftKey) {
+                    return;
+                }
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
         }
 
         window.addEventListener('resize', () => updateLoginNudgePosition());
@@ -451,7 +529,6 @@
         if (!isLoggedIn) {
             const keywordSection = document.getElementById('keywordSection');
 
-            // 처음 상단 키워드 영역만 숨김
             if (keywordSection) {
                 keywordSection.style.display = 'none';
             }
@@ -462,10 +539,7 @@
             setTimeout(() => {
                 const answer = GUEST_KEYWORD_ANSWERS[keyword] || "안내 정보를 준비 중입니다.";
                 addMessage(answer, 'bot');
-
-                // ✅ 항상 3개 전부 다시 출력
                 renderGuestKeywordButtons();
-
                 showLoginNudgeOnce();
                 scrollToBottom();
             }, 150);
@@ -499,9 +573,13 @@
         if (keywordSection) keywordSection.style.display = 'none';
 
         const fixed = matchFixedResponse(text);
+
         if (fixed) {
             if (text) addMessage(text, "user");
-            if (!forcedText) input.value = "";
+            if (!forcedText) {
+                input.value = "";
+                resetTextareaHeight(input);
+            }
             const t = showTyping();
             replaceMessage(t, fixed, "bot");
             scrollToBottom();
@@ -509,7 +587,10 @@
         }
 
         if (text) addMessage(text, 'user');
-        if (!forcedText) input.value = "";
+        if (!forcedText) {
+            input.value = "";
+            resetTextareaHeight(input);
+        }
         scrollToBottom();
 
         if (pendingImages.length > 0) {
@@ -724,31 +805,36 @@
         return bubble;
     }
 
-    function showTyping() {
-        const messagesArea = document.getElementById('messagesArea');
+	function showTyping() {
+	    const messagesArea = document.getElementById('messagesArea');
 
-        const wrapper = document.createElement('div');
-        wrapper.className = "bot-wrapper";
+	    const wrapper = document.createElement('div');
+	    wrapper.className = "bot-wrapper";
 
-        const content = document.createElement('div');
-        content.className = "bot-content";
+	    const content = document.createElement('div');
+	    content.className = "bot-content";
 
-        const bubble = document.createElement('div');
-        bubble.className = "message-bubble bot";
-        bubble.innerHTML = `
-            <div class="typing-indicator">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            </div>
-        `;
+	    const bubble = document.createElement('div');
+	    bubble.className = "message-bubble bot";
+	    bubble.innerHTML = `
+	        <div class="typing-loading-wrap">
+	            <div class="typing-pengrimi-road">
+	                <img src="/images/Pengrimi.png" alt="펭리미" class="typing-pengrimi">
+	            </div>
+	            <div class="typing-indicator">
+	                <div class="typing-dot"></div>
+	                <div class="typing-dot"></div>
+	                <div class="typing-dot"></div>
+	            </div>
+	        </div>
+	    `;
 
-        content.appendChild(bubble);
-        wrapper.appendChild(content);
+	    content.appendChild(bubble);
+	    wrapper.appendChild(content);
 
-        messagesArea.appendChild(wrapper);
-        return bubble;
-    }
+	    messagesArea.appendChild(wrapper);
+	    return bubble;
+	}
 
     function replaceMessage(el, newText, sender) {
         if (!el) return;
