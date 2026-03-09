@@ -75,11 +75,11 @@
         .board-table-refined tbody tr:hover {
             background: #f7f9fc;
         }
-        .col-no       { width: 30px; }
-        .col-category { width: 68px; }
-        .col-title    { width: 90px; }
-        .col-id       { width: 60px; }
-        .col-date     { width: 78px; }
+       .col-no       { width: 8%; }
+.col-category { width: 22%; }
+.col-title    { width: 35%; }
+.col-id       { width: 18%; }
+.col-date     { width: 17%; }
         .empty-row {
             color: #aaa;
             font-size: 14px;

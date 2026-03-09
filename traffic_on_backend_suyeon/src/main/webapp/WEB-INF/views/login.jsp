@@ -4,6 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/Login.css" />
@@ -50,22 +51,22 @@
             <input type="text" name="username" id="id" placeholder="아이디" required />
           </div>
 
-		  <div class="input-group">
-		    <div class="pw-wrap">
-		      <input type="password"
-		             name="password"
-		             id="password"
-		             placeholder="비밀번호"
-		             required />
+          <div class="input-group">
+            <div class="pw-wrap">
+              <input type="password"
+                     name="password"
+                     id="password"
+                     placeholder="비밀번호"
+                     required />
 
-		      <button type="button"
-		              class="pw-toggle-btn"
-		              onclick="togglePw('password', this)">
-		        👁
-		      </button>
-		    </div>
-		  </div>
-		  
+              <button type="button"
+                      class="pw-toggle-btn"
+                      onclick="togglePw('password', this)">
+                👁
+              </button>
+            </div>
+          </div>
+
           <!-- user 탭에서만 -->
           <div class="checkbox-group" id="keepBox">
             <label>
@@ -93,7 +94,6 @@
     </main>
   </div>
 
-  <!-- 🔥 JS 정리본 -->
   <script>
 
     function setTab(tab) {
@@ -119,9 +119,9 @@
       }
 
       activeTabInput.value = tab;
-	  
-	  document.getElementById("id").value = "";
-	  document.getElementById("password").value = "";
+
+      document.getElementById("id").value = "";
+      document.getElementById("password").value = "";
     }
 
     function showToast(message){
@@ -134,17 +134,14 @@
         setTimeout(() => t.classList.remove("show"), 2000);
     }
 
-    // 🔥 서버 파라미터로 토스트 + 탭 유지
     window.addEventListener("DOMContentLoaded", () => {
 
       const error = "${param.error}";
       const tab = "${param.tab}";
 
-      // 탭 유지
       if (tab === "admin") setTab("admin");
       else setTab("user");
 
-      // 토스트
       if (error === "notAdmin") {
         showToast("관리자 계정이 아닙니다.");
         setTab("admin");
@@ -153,21 +150,21 @@
       }
 
     });
-	
-	const signup = "${param.signup}";
 
-	if (signup === "success") {
-	  alert("회원가입이 완료되었습니다! 로그인 해주세요 😊");
-	} else if (signup === "admin_success") {
-	  alert("관리자 회원가입이 완료되었습니다! 로그인 해주세요 😊");
-	}
-	
-	function togglePw(inputId, btn) {
-	  const input = document.getElementById(inputId);
-	  const isPw = input.type === "password";
-	  input.type = isPw ? "text" : "password";
-	  btn.textContent = isPw ? "🙈" : "👁";
-	}
+    const signup = "${param.signup}";
+
+    if (signup === "success") {
+      alert("회원가입이 완료되었습니다! 로그인 해주세요 😊");
+    } else if (signup === "admin_success") {
+      alert("관리자 회원가입이 완료되었습니다! 로그인 해주세요 😊");
+    }
+
+    function togglePw(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isPw = input.type === "password";
+      input.type = isPw ? "text" : "password";
+      btn.textContent = isPw ? "🙈" : "👁";
+    }
 
   </script>
 

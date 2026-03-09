@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cx.web.entity.Board;
 import com.cx.web.entity.Member;
@@ -135,6 +137,21 @@ public class HomeController {
 
         return "mypage";
     }
+
+    // ✅ 여기에 추가
+    @PostMapping("/mypage/update-preferences")
+    public String updatePreferences(@RequestParam(required = false) String regions,
+                                     HttpSession session) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if (loginMember == null) return "redirect:/login";
+
+        loginMember.setMemAddr(regions);
+        memberRepository.save(loginMember);
+        session.setAttribute("loginMember", loginMember);
+
+        return "redirect:/mypage";
+    }
+    
 
     @GetMapping("/my-posts")
     public String myPosts(HttpSession session, Model model) {
