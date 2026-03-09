@@ -13,15 +13,16 @@ public class LogoutController {
     @GetMapping("/logout")
     public String logout(HttpSession session, HttpServletResponse response) {
 
-        // ✅ 세션 삭제
+        // 세션 삭제
         session.invalidate();
 
-        // ✅ 자동로그인 쿠키 삭제
+        // 자동로그인 쿠키 삭제
         Cookie c = new Cookie("keepLoginId", "");
-        c.setMaxAge(0);   // 삭제
+        c.setMaxAge(0);
         c.setPath("/");
         response.addCookie(c);
 
-        return "redirect:/login";
+        // 메인페이지로 이동
+        return "redirect:/";
     }
 }

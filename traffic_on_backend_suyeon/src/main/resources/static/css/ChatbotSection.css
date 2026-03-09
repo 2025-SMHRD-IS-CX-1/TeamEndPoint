@@ -2,7 +2,7 @@
 /* ChatbotSection.css */
 .chatbot-section {
     background-color: #f0f7ff;
-    padding: 0 0 3rem 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,7 +10,7 @@
 
 .chatbot-intro-wrapper {
     width: 100%;
-    padding: 2.5rem 1.5rem 0 1.5rem;
+    padding: 1.5rem 1.5rem 0 1.5rem;
     display: flex;
     justify-content: center;
 }

@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
+    padding: 0 16px;   /* 추가 */
 }
 
 .main-event-title {
@@ -26,12 +27,14 @@
 
 .main-event-slider-wrap {
     position: relative;
+    padding: 0 16px;   /* 추가 */
+    box-sizing: border-box;   /* 추가 */
 }
 
 .main-event-count {
     position: absolute;
     top: -10px;
-    right: 0;
+    right: 16px;   /* 수정 */
     z-index: 5;
     background: #a7a7a7;
     color: #fff;
@@ -46,7 +49,7 @@
     gap: 16px;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 12px 4px 8px;
+    padding: 12px 0 8px;   /* 수정 */
     scrollbar-width: none;
 }
 
@@ -55,7 +58,7 @@
 }
 
 .main-event-card {
-    flex: 0 0 86%;
+    flex: 0 0 82%;   /* 86% -> 82% */
     background: #fff;
     border-radius: 24px;
     overflow: hidden;
@@ -137,11 +140,11 @@
 }
 
 .main-event-arrow.left {
-    left: -4px;
+    left: 8px;   /* 수정 */
 }
 
 .main-event-arrow.right {
-    right: -4px;
+    right: 8px;   /* 수정 */
 }
 
 .main-event-arrow i {
