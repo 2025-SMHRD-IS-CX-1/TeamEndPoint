@@ -87,7 +87,7 @@
   flex: 1;
   padding: 0 12px;
   overflow-y: auto;
-  padding-bottom: 210px;
+  min-height: 0;
 }
 
 /* =======================
@@ -545,4 +545,16 @@
 #messagesArea .user-image-bubble.sending {
   opacity: 0.78;
   /* pointer-events: none; */
+  
+  /* 펭리미 고개 끄덕 */
+.pengrimi-nod {
+  animation: pengrimiNod 0.8s ease;
+}
+
+@keyframes pengrimiNod {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  100% { transform: rotate(0deg); }
+}
 }
