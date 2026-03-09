@@ -2,6 +2,7 @@ package com.cx.web;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.cx.web.entity.Board;
 import com.cx.web.entity.Member;
 import com.cx.web.entity.WriteBoard;
+import com.cx.web.repository.BoardRepository;
 import com.cx.web.repository.MemberRepository;
 import com.cx.web.repository.WriteBoardRepository;
 
@@ -22,13 +25,16 @@ public class HomeController {
 
     private final MemberRepository memberRepository;
     private final WriteBoardRepository writeBoardRepository;
+    private final BoardRepository boardRepository;
 
-    public HomeController(MemberRepository memberRepository, WriteBoardRepository writeBoardRepository) {
+    public HomeController(MemberRepository memberRepository,
+                          WriteBoardRepository writeBoardRepository,
+                          BoardRepository boardRepository) {
         this.memberRepository = memberRepository;
         this.writeBoardRepository = writeBoardRepository;
+        this.boardRepository = boardRepository;
     }
 
-    // 쿠키 자동로그인
     private void tryAutoLogin(HttpSession session, HttpServletRequest request) {
         if (session.getAttribute("loginMember") != null) return;
 
@@ -63,7 +69,24 @@ public class HomeController {
     public String index(HttpSession session, HttpServletRequest request, Model model) {
         tryAutoLogin(session, request);
         model.addAttribute("isLoggedIn", isLoggedIn(session));
+
+        // 관리자 ID 목록
+        List<String> adminIds = memberRepository.findAll().stream()
+            .filter(m -> "ADMIN".equals(m.getMemType()))
+            .map(Member::getMemID)
+            .collect(Collectors.toList());
+
+        // ✅ 관리자가 쓴 글 중 제목에 '공지사항' 포함된 것만 최신 5개
+        List<Board> allBoards = boardRepository.findAllByOrderByBoardIdDesc();
+        List<Board> adminBoards = allBoards.stream()
+            .filter(b -> adminIds.contains(b.getMemId()) && b.getTitle().contains("공지사항"))
+            .limit(5)
+            .collect(Collectors.toList());
+
+        model.addAttribute("recentBoards", adminBoards);
+
         return "index";
+    
     }
 
     @GetMapping("/chat")
@@ -101,7 +124,6 @@ public class HomeController {
 
     @GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
-
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/login";
 
@@ -109,7 +131,6 @@ public class HomeController {
 
         List<WriteBoard> all =
                 writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
-
         model.addAttribute("myPostsPreview", all.size() > 3 ? all.subList(0, 3) : all);
 
         return "mypage";
@@ -117,17 +138,15 @@ public class HomeController {
 
     @GetMapping("/my-posts")
     public String myPosts(HttpSession session, Model model) {
-
         Member loginMember = (Member) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/login";
 
         List<WriteBoard> posts =
                 writeBoardRepository.findByMemIdOrderByCreatedAtDesc(loginMember.getMemID());
-
         model.addAttribute("posts", posts);
         return "my-posts";
     }
-    
+
     @GetMapping("/events/{id}")
     public String eventDetailPage(@PathVariable("id") int id,
                                   HttpSession session,
