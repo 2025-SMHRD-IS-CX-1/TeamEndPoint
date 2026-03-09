@@ -26,8 +26,8 @@ public class ChatApiController {
     /**
      * ✅ FastAPI 서버 Base URL
      */
-    private static final String FASTAPI_BASE_URL =
-            System.getenv().getOrDefault("FASTAPI_BASE_URL", "http://192.168.219.49:8000");
+	private static final String FASTAPI_BASE_URL =
+	        System.getenv().getOrDefault("FASTAPI_BASE_URL", "http://127.0.0.1:8000");
 
     private static final String FASTAPI_CHAT_URL = FASTAPI_BASE_URL + "/api/chat";
     private static final String FASTAPI_IMAGE_URL = FASTAPI_BASE_URL + "/api/media/image";
