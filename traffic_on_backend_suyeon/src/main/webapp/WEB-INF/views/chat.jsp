@@ -166,7 +166,7 @@
                 style="display:none"
             />
 
-            <input type="text" id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input">
+            <textarea id="chatInput" placeholder="로그인 후 이용 가능합니다." disabled class="chat-main-input" rows="1"></textarea>
 
             <button class="chat-send-btn" disabled id="sendBtn" type="button">
                 <i data-lucide="arrow-up" size="24" color="#ccc"></i>
@@ -427,15 +427,20 @@
                 }
             });
 
-            sendBtn.addEventListener('click', () => sendMessage());
+			input.addEventListener('keydown', (e) => {
+			    if (e.isComposing) return;
 
-            input.addEventListener('keydown', (e) => {
-                if (e.isComposing) return;
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
+			    // Shift + Enter → 줄바꿈
+			    if (e.key === 'Enter' && e.shiftKey) {
+			        return;
+			    }
+
+			    // Enter → 메시지 전송
+			    if (e.key === 'Enter') {
+			        e.preventDefault();
+			        sendMessage();
+			    }
+			});
         }
 
         window.addEventListener('resize', () => updateLoginNudgePosition());

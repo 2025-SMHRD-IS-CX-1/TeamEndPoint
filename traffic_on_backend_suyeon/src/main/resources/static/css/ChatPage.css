@@ -142,7 +142,7 @@
   max-width: 75%;
 }
 
-/* 유저 말풍선. */
+/* 유저 말풍선 */
 #messagesArea .message-bubble.user {
   align-self: flex-end;
   padding: 7px 10px;
@@ -343,7 +343,7 @@
 
 .chat-input-bar {
   background-color: #fff;
-  height: 50px;
+  min-height: 50px;
   border-radius: 999px;
   display: flex;
   align-items: center;
@@ -357,20 +357,43 @@
   border: none;
   margin-right: 8px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .chat-main-input {
   flex: 1;
+  min-width: 0;
   border: none;
   outline: none;
   font-size: 14px;
+  line-height: 20px;
   background: transparent;
+  resize: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 96px;
+  height: 24px;
+  padding: 2px 0;
+  margin: 0;
+  font-family: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: block;
+}
+
+.chat-main-input::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-main-input::placeholder {
+  color: #9a9a9a;
 }
 
 .chat-send-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* =======================
