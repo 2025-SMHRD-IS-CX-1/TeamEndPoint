@@ -1,7 +1,5 @@
 package com.cx.web.entity;
-
 import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,35 +39,24 @@ public class Board {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Integer getBoardId() {
-        return boardId;
-    }
+    public Integer getBoardId() { return boardId; }
+    public void setBoardId(Integer boardId) { this.boardId = boardId; }
 
-    public void setBoardId(Integer boardId) {
-        this.boardId = boardId;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getMemId() { return memId; }
+    public void setMemId(String memId) { this.memId = memId; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public String getMemId() {
-        return memId;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; } // ✅ 채움
 
-    public void setMemId(String memId) {
-        this.memId = memId;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; } // ✅ 채움
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

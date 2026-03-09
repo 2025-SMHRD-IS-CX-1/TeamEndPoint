@@ -11,6 +11,52 @@
   <link rel="stylesheet" href="/css/ChatbotSection.css" />
   <link rel="stylesheet" href="/css/QuickButton.css" />
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/MainEventSection.css">
+
+  <style>
+    .board-preview-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 12px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+    }
+    .board-preview-item:last-child {
+        border-bottom: none;
+    }
+    .board-preview-item:hover {
+        background: #f7f9fc;
+    }
+    .board-preview-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .preview-category {
+        background: #fff3ee;
+        color: #FF5722;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 20px;
+        padding: 2px 8px;
+        white-space: nowrap;
+    }
+    .preview-title {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: #222;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .preview-date {
+        font-size: 11px;
+        color: #aaa;
+        white-space: nowrap;
+        padding-left: 4px;
+    }
+  </style>
 </head>
 
 <body>
@@ -47,15 +93,34 @@
           </div>
         </div>
 
-        <div class="board-preview-container not-logged-in">
+        <div class="board-preview-container">
           <div class="board-preview-header">
             <h3>ON! 교통 정보</h3>
-            <span class="more-text">전체보기 &gt;</span>
+            <span class="more-text"
+                  onclick="location.href='${pageContext.request.contextPath}/board'"
+                  style="cursor:pointer;">전체보기 &gt;</span>
           </div>
 
           <div class="board-content-wrapper">
             <ul class="board-preview-list ${isLoggedIn ? '' : 'is-blurred'}">
-              <li class="board-preview-empty">등록된 게시물이 없습니다.</li>
+              <c:choose>
+                <c:when test="${empty recentBoards}">
+                  <li class="board-preview-empty">등록된 게시물이 없습니다.</li>
+                </c:when>
+                <c:otherwise>
+                  <c:forEach var="b" items="${recentBoards}">
+                    <li class="board-preview-item"
+                        onclick="location.href='${pageContext.request.contextPath}/board/${b.boardId}'"
+                        style="cursor:pointer;">
+                      <div class="board-preview-top">
+                        <span class="preview-category">${b.category}</span>
+                        <span class="preview-title">${b.title}</span>
+                      </div>
+                      <span class="preview-date">${b.createdAt.toString().substring(0, 10)}</span>
+                    </li>
+                  </c:forEach>
+                </c:otherwise>
+              </c:choose>
             </ul>
 
             <c:if test="${!isLoggedIn}">
