@@ -25,12 +25,12 @@
             </button>
         </div>
 
-        <div class="center">
-            <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
-                 alt="logo"
-                 class="header-logo">
-            <span class="logo-text">TRAFFIC:ON</span>
-        </div>
+        <div class="center" onclick="location.href='${pageContext.request.contextPath}/'" style="cursor:pointer;">
+    <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
+         alt="logo"
+         class="header-logo">
+    <span class="logo-text">TRAFFIC:ON</span>
+</div>
 
         <div class="right">
             <c:if test="${!isLoggedIn}">
