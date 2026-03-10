@@ -466,3 +466,140 @@ input:focus {
   width: 38px;
   height: 38px;
 }
+
+.basic-edit-card {
+    padding-top: 18px;
+}
+
+.basic-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.basic-form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.basic-form-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d9e2f1;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 15px;
+    color: #111827;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.basic-form-input:focus {
+    border-color: #4a8cff;
+    box-shadow: 0 0 0 3px rgba(74, 140, 255, 0.12);
+}
+
+.readonly-input {
+    background: #f3f6fb;
+    color: #7b8794;
+    cursor: not-allowed;
+}
+
+.basic-form-guide {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #8a94a6;
+}
+
+.basic-form-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.basic-form-btns button {
+    flex: 1;
+}
+
+.basic-submit-btn {
+    margin-top: 0 !important;
+}
+
+.basic-cancel-btn {
+    margin-top: 0 !important;
+}
+
+.password-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.password-change-btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.password-form-area {
+    border-top: 1px solid #eef2f7;
+    padding: 18px 20px 20px;
+    background: #fff;
+}
+
+.password-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.password-form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+}
+
+.password-form-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d9e2f1;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 15px;
+    color: #111827;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.password-form-input:focus {
+    border-color: #4a8cff;
+    box-shadow: 0 0 0 3px rgba(74, 140, 255, 0.12);
+}
+
+.password-form-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.password-form-btns button {
+    flex: 1;
+}
+
+.password-submit-btn,
+.password-cancel-btn {
+    margin-top: 0 !important;
+}

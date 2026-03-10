@@ -51,25 +51,60 @@
                 </section>
 
                 <!-- 기본 정보 -->
-                <section class="settings-section">
-                    <div class="section-header">
-                        <i data-lucide="user-round" class="section-icon"></i>
-                        <h3>기본 정보</h3>
-                    </div>
-                    <div class="settings-card info-card">
-                        <div class="info-row">
-                            <span class="info-label">이름</span>
-                            <span class="info-value">${member.memName} (${member.memID})</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">전화번호</span>
-                            <span class="info-value">${member.memPhone}</span>
-                        </div>
-                        <button type="button" class="outline-action-btn">
-                            기본 정보 수정
-                        </button>
-                    </div>
-                </section>
+				<!-- 기본 정보 -->
+				<section class="settings-section">
+				    <div class="section-header">
+				        <i data-lucide="user-round" class="section-icon"></i>
+				        <h3>기본 정보</h3>
+				    </div>
+
+				    <!-- 조회 카드 -->
+				    <div class="settings-card info-card" id="basicInfoView">
+				        <div class="info-row">
+				            <span class="info-label">이름</span>
+				            <span class="info-value">${member.memName}</span>
+				        </div>
+				        <div class="info-row">
+				            <span class="info-label">아이디</span>
+				            <span class="info-value">${member.memID}</span>
+				        </div>
+				        <div class="info-row">
+				            <span class="info-label">전화번호</span>
+				            <span class="info-value">${member.memPhone}</span>
+				        </div>
+				        <button type="button" class="outline-action-btn" onclick="toggleBasicInfoEdit(true)">
+				            기본 정보 수정
+				        </button>
+				    </div>
+
+				    <!-- 수정 카드 -->
+				    <div class="settings-card info-card basic-edit-card" id="basicInfoEdit" style="display: none;">
+				        <form action="${pageContext.request.contextPath}/mypage/update-basic" method="post">
+				            <div class="form-group basic-form-group">
+				                <label class="basic-form-label">이름</label>
+				                <input type="text" name="memName" class="basic-form-input" value="${member.memName}" required>
+				            </div>
+
+				            <div class="form-group basic-form-group">
+				                <label class="basic-form-label">아이디</label>
+				                <input type="text" class="basic-form-input readonly-input" value="${member.memID}" readonly>
+				                <small class="basic-form-guide">아이디는 변경할 수 없습니다.</small>
+				            </div>
+
+				            <div class="form-group basic-form-group">
+				                <label class="basic-form-label">전화번호</label>
+				                <input type="text" name="memPhone" class="basic-form-input" value="${member.memPhone}" required>
+				            </div>
+
+				            <div class="basic-form-btns">
+				                <button type="submit" class="save-btn basic-submit-btn">저장</button>
+				                <button type="button" class="outline-action-btn basic-cancel-btn" onclick="toggleBasicInfoEdit(false)">
+				                    취소
+				                </button>
+				            </div>
+				        </form>
+				    </div>
+				</section>
 
                 <!-- 개인 설정 -->
                 <section class="settings-section">
@@ -117,19 +152,46 @@
                     </div>
                 </section>
 
-                <!-- 보안 -->
-                <section class="settings-section">
-                    <div class="section-header">
-                        <i data-lucide="lock" class="section-icon"></i>
-                        <h3>보안</h3>
-                    </div>
-                    <div class="settings-card password-card">
-                        <button class="password-change-btn" type="button">
-                            <span>비밀번호 변경하기</span>
-                            <i data-lucide="chevron-right"></i>
-                        </button>
-                    </div>
-                </section>
+				<!-- 보안 -->
+				<section class="settings-section">
+				    <div class="section-header">
+				        <i data-lucide="lock" class="section-icon"></i>
+				        <h3>보안</h3>
+				    </div>
+
+				    <div class="settings-card password-card">
+				        <button class="password-change-btn" type="button" onclick="togglePasswordForm()">
+				            <span>비밀번호 변경하기</span>
+				            <i data-lucide="chevron-down" id="passwordChevron"></i>
+				        </button>
+
+				        <div id="passwordChangeForm" class="password-form-area" style="display: none;">
+				            <form action="${pageContext.request.contextPath}/mypage/update-password" method="post">
+				                <div class="form-group password-form-group">
+				                    <label class="password-form-label">기존 비밀번호</label>
+				                    <input type="password" name="currentPassword" class="password-form-input" required>
+				                </div>
+
+				                <div class="form-group password-form-group">
+				                    <label class="password-form-label">새 비밀번호</label>
+				                    <input type="password" name="newPassword" class="password-form-input" required>
+				                </div>
+
+				                <div class="form-group password-form-group">
+				                    <label class="password-form-label">비밀번호 재확인</label>
+				                    <input type="password" name="confirmPassword" class="password-form-input" required>
+				                </div>
+
+				                <div class="password-form-btns">
+				                    <button type="submit" class="save-btn password-submit-btn">변경하기</button>
+				                    <button type="button" class="outline-action-btn password-cancel-btn" onclick="togglePasswordForm(false)">
+				                        취소
+				                    </button>
+				                </div>
+				            </form>
+				        </div>
+				    </div>
+				</section>
 
                 <!-- 내 게시글 -->
                 <section class="settings-section">
@@ -171,14 +233,44 @@
         </div>
     </div>
 
-    <script>
-        lucide.createIcons();
+	<script>
+	    lucide.createIcons();
 
-        function handleLogout() {
-            if (confirm('로그아웃 하시겠습니까?')) {
-                location.href = '${pageContext.request.contextPath}/logout';
-            }
-        }
-    </script>
+	    function handleLogout() {
+	        if (confirm('로그아웃 하시겠습니까?')) {
+	            location.href = '${pageContext.request.contextPath}/logout';
+	        }
+	    }
+
+	    function toggleBasicInfoEdit(isEdit) {
+	        const viewBox = document.getElementById('basicInfoView');
+	        const editBox = document.getElementById('basicInfoEdit');
+
+	        if (isEdit) {
+	            viewBox.style.display = 'none';
+	            editBox.style.display = 'block';
+	        } else {
+	            viewBox.style.display = 'block';
+	            editBox.style.display = 'none';
+	        }
+	    }
+
+	    function togglePasswordForm(forceClose) {
+	        const form = document.getElementById('passwordChangeForm');
+	        const chevron = document.getElementById('passwordChevron');
+
+	        const isOpen = form.style.display === 'block';
+
+	        if (forceClose === false || isOpen) {
+	            form.style.display = 'none';
+	            chevron.setAttribute('data-lucide', 'chevron-down');
+	        } else {
+	            form.style.display = 'block';
+	            chevron.setAttribute('data-lucide', 'chevron-up');
+	        }
+
+	        lucide.createIcons();
+	    }
+	</script>
 </body>
 </html>

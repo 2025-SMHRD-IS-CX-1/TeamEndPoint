@@ -246,4 +246,76 @@ public class LoginController {
         // TODO: DB 조회해서 아이디 찾기
         return "findIdResult";
     }
+    
+    @PostMapping("/mypage/update-basic")
+    public String updateBasicInfo(@RequestParam String memName,
+                                  @RequestParam String memPhone,
+                                  HttpSession session,
+                                  RedirectAttributes ra) {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Member> opt = memberRepository.findById(loginMember.getMemID());
+
+        if (opt.isEmpty()) {
+            ra.addFlashAttribute("msg", "회원 정보를 찾을 수 없습니다.");
+            return "redirect:/mypage";
+        }
+
+        Member member = opt.get();
+        member.setMemName(memName);
+        member.setMemPhone(memPhone);
+
+        memberRepository.save(member);
+
+        // 세션도 최신 정보로 갱신
+        session.setAttribute("loginMember", member);
+
+        ra.addFlashAttribute("msg", "기본 정보가 수정되었습니다.");
+        return "redirect:/mypage";
+    }
+    
+    @PostMapping("/mypage/update-password")
+    public String updatePassword(@RequestParam String currentPassword,
+                                 @RequestParam String newPassword,
+                                 @RequestParam String confirmPassword,
+                                 HttpSession session,
+                                 RedirectAttributes ra) {
+
+        Member loginMember = (Member) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Member> opt = memberRepository.findById(loginMember.getMemID());
+
+        if (opt.isEmpty()) {
+            ra.addFlashAttribute("msg", "회원 정보를 찾을 수 없습니다.");
+            return "redirect:/mypage";
+        }
+
+        Member member = opt.get();
+
+        if (!member.getMemPW().equals(currentPassword)) {
+            ra.addFlashAttribute("msg", "기존 비밀번호가 일치하지 않습니다.");
+            return "redirect:/mypage";
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            ra.addFlashAttribute("msg", "새 비밀번호가 서로 일치하지 않습니다.");
+            return "redirect:/mypage";
+        }
+
+        member.setMemPW(newPassword);
+        memberRepository.save(member);
+
+        session.invalidate();
+
+        return "redirect:/login?pwChanged=true";
+    }
 }
