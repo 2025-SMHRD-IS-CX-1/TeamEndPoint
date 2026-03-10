@@ -33,13 +33,11 @@ public class BoardController {
     public String boardPage(Model model, HttpSession session) {
         List<Board> boards = boardRepository.findAllByOrderByBoardIdDesc();
 
-        // 관리자 ID 목록 추출
         List<String> adminIds = memberRepository.findAll().stream()
             .filter(m -> "ADMIN".equals(m.getMemType()))
             .map(Member::getMemID)
             .collect(Collectors.toList());
 
-        // ✅ 공지사항 상단 고정 정렬
         List<Board> pinned = boards.stream()
             .filter(b -> adminIds.contains(b.getMemId()) && b.getTitle().contains("공지사항"))
             .collect(Collectors.toList());
@@ -55,7 +53,6 @@ public class BoardController {
         model.addAttribute("adminIds", adminIds);
 
         Member loginMember = (Member) session.getAttribute("loginMember");
-        System.out.println("로그인 사용자: " + loginMember);
         boolean isLoggedIn = loginMember != null;
         boolean isAdmin = isLoggedIn && "ADMIN".equals(loginMember.getMemType());
 
@@ -65,7 +62,6 @@ public class BoardController {
         return "board";
     }
 
-    // ✅ 크롤링 후 게시글 자동 등록
     @PostMapping("/board/crawl")
     @ResponseBody
     public String crawlAndPost(HttpSession session) {
@@ -87,6 +83,12 @@ public class BoardController {
             String title = firstLink.text().trim();
             String href = "https://www.gwangju.go.kr" + firstLink.attr("href");
 
+            // ✅ 중복 체크 - 같은 제목이 이미 있으면 등록 안 함
+            String fullTitle = "[공지사항] " + title;
+            if (boardRepository.existsByTitle(fullTitle)) {
+                return "ALREADY_EXISTS";
+            }
+
             Document detailDoc = Jsoup.connect(href)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                 .get();
@@ -107,7 +109,7 @@ public class BoardController {
 
             Board board = new Board();
             board.setMemId(loginMember.getMemID());
-            board.setTitle("[공지사항] " + title); // ✅ 공지사항 prefix 추가
+            board.setTitle(fullTitle);
             board.setContent(content);
             board.setCategory("정보/가이드");
             board.setCreatedAt(LocalDateTime.now());

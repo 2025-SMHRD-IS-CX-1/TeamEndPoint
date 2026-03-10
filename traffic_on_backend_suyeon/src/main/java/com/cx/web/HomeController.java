@@ -120,7 +120,8 @@ public class HomeController {
     }
 
     @GetMapping("/guide")
-    public String guide() {
+    public String guide(HttpSession session, Model model) {
+        model.addAttribute("isLoggedIn", isLoggedIn(session));
         return "guide";
     }
 

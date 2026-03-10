@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/WriteBoard.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* ✅ 줄바꿈 자동 적용 */
+        .write-textarea {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
 </head>
 <body>
 <div class="mobile-wrap">
@@ -40,7 +47,6 @@
             <div class="write-form-row">
                 <label>작성자</label>
                 <div class="write-input">
-                    <%-- ✅ 관리자가 쓴 글이면 '관리자'로 표시 --%>
                     <c:choose>
                         <c:when test="${isAdminPost}">관리자</c:when>
                         <c:otherwise>${board.memId}</c:otherwise>
@@ -57,6 +63,7 @@
             <div class="divider"></div>
             <div class="write-form-row">
                 <label>내용</label>
+                <%-- ✅ pre-wrap으로 \n을 줄바꿈으로 표시 --%>
                 <div class="write-textarea">${board.content}</div>
             </div>
         </div>

@@ -363,14 +363,16 @@
         fetch('/board/crawl', { method: 'POST' })
             .then(res => res.text())
             .then(result => {
-                if (result === 'SUCCESS') {
-                    alert('게시글이 등록되었습니다!');
-                    location.reload();
-                } else if (result === 'UNAUTHORIZED') {
-                    alert('관리자만 사용할 수 있습니다.');
-                } else {
-                    alert('가져오기에 실패했습니다.');
-                }
+            	if (result === 'SUCCESS') {
+            	    alert('게시글이 등록되었습니다!');
+            	    location.reload();
+            	} else if (result === 'ALREADY_EXISTS') {
+            	    alert('이미 등록된 공지사항입니다.');
+            	} else if (result === 'UNAUTHORIZED') {
+            	    alert('관리자만 사용할 수 있습니다.');
+            	} else {
+            	    alert('가져오기에 실패했습니다.');
+            	}
                 btn.disabled = false;
                 btn.textContent = '🌐 광주광역시 최신글 가져오기';
             });

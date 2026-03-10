@@ -24,15 +24,15 @@
         <p style="text-align:center; padding:20px;">작성한 게시글이 없습니다.</p>
       </c:if>
 
-      <c:forEach var="post" items="${posts}">
-        <div class="post-item-card">
-          <div class="post-info">
+     <c:forEach var="post" items="${posts}">
+    <div class="post-item-card" onclick="location.href='${pageContext.request.contextPath}/board/${post.boardId}'" style="cursor:pointer;">
+        <div class="post-info">
             <h3>${post.title}</h3>
-            <p class="post-meta">${post.createdAt}</p>
-          </div>
-          <i data-lucide="chevron-right"></i>
+            <p class="post-meta">${post.createdAt.toString().substring(0,10)}</p>
         </div>
-      </c:forEach>
+        <i data-lucide="chevron-right"></i>
+    </div>
+</c:forEach>
 
     </div>
   </div>
