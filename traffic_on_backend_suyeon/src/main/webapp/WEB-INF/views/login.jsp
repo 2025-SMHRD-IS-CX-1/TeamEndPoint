@@ -149,15 +149,18 @@
         showToast("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
 
+      const signup = "${param.signup}";
+      if (signup === "success") {
+        alert("회원가입이 완료되었습니다! 로그인 해주세요 😊");
+      } else if (signup === "admin_success") {
+        alert("관리자 회원가입이 완료되었습니다! 로그인 해주세요 😊");
+      }
+
+      const pwChanged = "${param.pwChanged}";
+      if (pwChanged === "true") {
+        alert("비밀번호가 변경되었습니다. 다시 로그인해 주세요.");
+      }
     });
-
-    const signup = "${param.signup}";
-
-    if (signup === "success") {
-      alert("회원가입이 완료되었습니다! 로그인 해주세요 😊");
-    } else if (signup === "admin_success") {
-      alert("관리자 회원가입이 완료되었습니다! 로그인 해주세요 😊");
-    }
 
     function togglePw(inputId, btn) {
       const input = document.getElementById(inputId);
