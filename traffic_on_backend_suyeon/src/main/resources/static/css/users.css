@@ -552,3 +552,15 @@ body { outline: 5px solid red !important; }
 .user-management{
   padding-bottom: 90px;
 }
+
+/* 관리자 -> 메인페이지 이동 버튼 */
+.trafficon-link {
+  margin-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 10px;
+}
+
+.trafficon-link .nav-text {
+  color: #ff6b3d;
+  font-weight: 700;
+}

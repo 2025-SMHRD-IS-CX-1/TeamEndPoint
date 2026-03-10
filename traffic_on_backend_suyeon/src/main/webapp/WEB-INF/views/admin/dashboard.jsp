@@ -137,26 +137,35 @@
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <ul>
-        <li class="nav-item active" onclick="alert('지금은 대시보드부터! 사용자/게시판은 다음 단계에서 URL 연결하자 😎')">
-          <span class="nav-icon">⊞</span>
-          <span class="nav-text">대시보드</span>
-        </li>
-		<li class="nav-item">
-		    <a href="${pageContext.request.contextPath}/admin/users">
-		        <span class="nav-icon">👥</span>
-		        <span class="nav-text">사용자 관리</span>
-		    </a>
-		</li>
-		<li class="nav-item">
-		    <a href="${pageContext.request.contextPath}/admin/boards">
-		        <span class="nav-icon">📝</span>
-		        <span class="nav-text">게시판 관리</span>
-		    </a>
-		</li>
-      </ul>
-    </nav>
+	<nav class="sidebar-nav">
+	  <ul>
+	    <li class="nav-item active" onclick="alert('지금은 대시보드부터! 사용자/게시판은 다음 단계에서 URL 연결하자 😎')">
+	      <span class="nav-icon">⊞</span>
+	      <span class="nav-text">대시보드</span>
+	    </li>
+
+	    <li class="nav-item">
+	      <a href="${pageContext.request.contextPath}/admin/users">
+	        <span class="nav-icon">👥</span>
+	        <span class="nav-text">사용자 관리</span>
+	      </a>
+	    </li>
+
+	    <li class="nav-item">
+	      <a href="${pageContext.request.contextPath}/admin/boards">
+	        <span class="nav-icon">📝</span>
+	        <span class="nav-text">게시판 관리</span>
+	      </a>
+	    </li>
+
+	    <li class="nav-item trafficon-link">
+	      <a href="${pageContext.request.contextPath}/">
+	        <span class="nav-icon">🚦</span>
+	        <span class="nav-text">TRAFFIC:ON</span>
+	      </a>
+	    </li>
+	  </ul>
+	</nav>
 
     <div class="sidebar-footer">
       <span class="globe-icon">🌐</span>

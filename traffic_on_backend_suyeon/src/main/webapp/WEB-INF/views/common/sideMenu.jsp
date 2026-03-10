@@ -16,12 +16,14 @@
                         <div class="user-avatar-small">
                             <i data-lucide="user" size="20"></i>
                         </div>
-                        <div class="user-info-text">
-                            <span class="user-name">반가워요, <%= loginMember.getMemName() %>님!</span>
-							<form action="${pageContext.request.contextPath}/logout" method="get" id="logoutForm">
-							    <button type="button" class="logout-btn" onclick="confirmLogout()">로그아웃</button>
-							</form>
-                        </div>
+						<div class="user-info-text">
+							<span class="user-name">
+							    반가워요, <%= loginMember.getMemName() %><%= "ADMIN".equalsIgnoreCase(loginMember.getMemType()) ? " 관리자님!" : "님!" %>
+							</span>
+						    <form action="${pageContext.request.contextPath}/logout" method="get" id="logoutForm">
+						        <button type="button" class="logout-btn" onclick="confirmLogout()">로그아웃</button>
+						    </form>
+						</div>
                     </div>
                 <% } else { %>
                     <div class="user-logged-out" onclick="location.href='/login'">
@@ -84,6 +86,16 @@
                     </div>
                 </a>
             <% } %>
+			
+			<% if (loginMember != null && "ADMIN".equalsIgnoreCase(loginMember.getMemType())) { %>
+			    <a href="/admin/dashboard" class="menu-item admin-menu">
+			        <i data-lucide="layout-dashboard" size="20" class="menu-icon"></i>
+			        <div class="menu-text">
+			            <span class="menu-title">관리자 페이지</span>
+			            <span class="menu-subtext">관리자 대시보드</span>
+			        </div>
+			    </a>
+			<% } %>
         </div>
 
         <div class="sidemenu-footer">
