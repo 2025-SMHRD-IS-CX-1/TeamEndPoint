@@ -8,12 +8,12 @@
         </button>
     </div>
 
-    <div class="center">
+    <a href="${pageContext.request.contextPath}/" class="center header-home-link" aria-label="메인페이지로 이동">
         <img src="${pageContext.request.contextPath}/images/Pengrimi.png"
              alt="logo"
              class="header-logo">
         <span class="logo-text">TRAFFIC:ON</span>
-    </div>
+    </a>
 
     <div class="right">
         <c:if test="${!isLoggedIn}">

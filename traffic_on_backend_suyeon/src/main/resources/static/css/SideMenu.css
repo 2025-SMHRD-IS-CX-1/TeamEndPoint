@@ -164,3 +164,21 @@
     color: #ccc;
     text-align: center;
 }
+
+.admin-menu {
+    border-left: 4px solid #ff7a45; /* 강조 라인 */
+    background: #fff7f2;            /* 아주 연한 강조 배경 */
+}
+
+.admin-menu .menu-title {
+    color: #ff7a45;
+    font-weight: 700;
+}
+
+.admin-menu .menu-icon {
+    color: #ff7a45;
+}
+
+.admin-menu:hover {
+    background: #ffe9dd;
+}
