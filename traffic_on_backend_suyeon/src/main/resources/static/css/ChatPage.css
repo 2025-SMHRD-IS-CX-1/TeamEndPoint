@@ -87,7 +87,7 @@
   flex: 1;
   padding: 0 12px;
   overflow-y: auto;
-   min-height: 0;
+  padding-bottom: 210px;
 }
 
 /* =======================
@@ -291,7 +291,7 @@
 }
 
 /* =======================
-   추천질문(키워드).
+   추천질문(키워드)
 ======================= */
 .keyword-dock {
   position: sticky;
@@ -337,12 +337,14 @@
    Bottom Input
 ======================= */
 .chat-input-wrapper {
-  padding: 10px 10px 22px 10px;
+  padding: 8px 10px 12px 10px;
   flex-shrink: 0;
+  background: #ebf3f9;
 }
 
 .chat-input-bar {
   background-color: #fff;
+  height: 56px;
   min-height: 56px;
   border-radius: 999px;
   display: flex;
@@ -355,6 +357,8 @@
 
 /* 여러 줄일 때 */
 .chat-input-bar.expanded {
+  height: auto;
+  min-height: 56px;
   align-items: flex-end;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -378,22 +382,24 @@
   min-width: 0;
   border: none;
   outline: none;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   background: transparent;
   resize: none;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   max-height: 96px;
 
-  height: 32px;
-  padding: 6px 0;
-
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
   margin: 0;
+
   font-family: inherit;
   white-space: pre-wrap;
   word-break: break-word;
-  display: block;
+  display: flex;
+  align-items: center;
   box-sizing: border-box;
 }
 
@@ -403,6 +409,7 @@
 
 .chat-main-input::placeholder {
   color: #9a9a9a;
+  line-height: 24px;
 }
 
 .chat-send-btn {

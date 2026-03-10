@@ -698,33 +698,41 @@
         return answer;
     }
 
-    function normalizeBotText(text) {
-        let t = (text || "");
+	function normalizeBotText(text) {
+	    let t = (text || "");
 
-        t = t.replace(/\r\n/g, "\n");
-        t = t.replace(/(\S)~(\S)/g, "$1 ~ $2");
+	    t = t.replace(/\r\n/g, "\n");
+	    t = t.replace(/(\S)~(\S)/g, "$1 ~ $2");
 
-        t = t.replace(
-            /(^|\n)\s*또한,\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
-            "\n"
-        );
-        t = t.replace(
-            /(^|\n)\s*광주도시철도\s*2\s*호선\s*차량기지\s*건설공사[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
-            "\n"
-        );
+	    /* 차량기지 관련 꼬리문장 제거 */
+	    t = t.replace(
+	        /(^|\n)\s*또한,\s*차량기지\s*건설공사(?:는|가)?[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
+	        "\n"
+	    );
 
-        t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
-        t = t.replace(/,\s*,+/g, ", ");
-        t = t.replace(/\s+,/g, ",");
-        t = t.replace(/,\s*\n/g, "\n");
-        t = t.replace(/,\s*$/g, "");
-        t = t.replace(/[ \t]{2,}/g, " ");
-        t = t.replace(/\n{3,}/g, "\n\n");
-        t = t.replace(/:\n\n(?=[-*\+])/g, ":\n");
-        t = t.replace(/\n[ \t]+([-*+])[ \t]+/g, "\n$1 ");
+	    t = t.replace(
+	        /(^|\n)\s*차량기지\s*건설공사(?:는|가)?[\s\S]*?(?=\n{2,}|\n\s*[-*+]\s|\n\s*\d+\.|\n\s*※|$)/g,
+	        "\n"
+	    );
 
-        return t.trim();
-    }
+	    /* "모든 공사는 ~ 진행됩니다." 제거 */
+	    t = t.replace(
+	        /(^|\n)\s*모든\s*공사(?:는|가)?\s*[\d\s년월일.~\-부터까지]*진행됩니다\.?\s*(?=\n|$)/g,
+	        "\n"
+	    );
+
+	    t = t.replace(/\s*,?\s*\(id=\d+,\s*row_no=\d+\)/g, "");
+	    t = t.replace(/,\s*,+/g, ", ");
+	    t = t.replace(/\s+,/g, ",");
+	    t = t.replace(/,\s*\n/g, "\n");
+	    t = t.replace(/,\s*$/g, "");
+	    t = t.replace(/[ \t]{2,}/g, " ");
+	    t = t.replace(/\n{3,}/g, "\n\n");
+	    t = t.replace(/:\n\n(?=[-*+])/g, ":\n");
+	    t = t.replace(/\n[ \t]+([-*+])[ \t]+/g, "\n$1 ");
+
+	    return t.trim();
+	}
 
     function renderBotHtml(text) {
         const normalized = normalizeBotText(text);
