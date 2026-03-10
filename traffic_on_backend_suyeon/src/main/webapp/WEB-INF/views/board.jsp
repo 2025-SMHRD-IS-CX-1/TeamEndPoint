@@ -37,6 +37,7 @@
             border-radius: 16px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.06);
             overflow: hidden;
+            width: 100%;
         }
         .board-table-wrapper.is-blurred {
             filter: blur(4px);
@@ -53,21 +54,18 @@
             border-bottom: 1px solid #eee;
         }
         .board-table-refined th {
-            padding: 12px 4px;
-            font-size: 12px;
+            padding: 10px 2px;
+            font-size: clamp(9px, 2.2vw, 12px);
             font-weight: 700;
             color: #888;
             text-align: center;
         }
         .board-table-refined td {
-            padding: 12px 4px;
-            font-size: 13px;
+            padding: 10px 2px;
+            font-size: clamp(9px, 2.2vw, 13px);
             color: #222;
             text-align: center;
             border-bottom: 1px solid #f0f0f0;
-        }
-        .board-table-refined .text-left {
-            text-align: left;
         }
         .board-table-refined tbody tr:last-child td {
             border-bottom: none;
@@ -75,11 +73,10 @@
         .board-table-refined tbody tr:hover {
             background: #f7f9fc;
         }
-       .col-no       { width: 8%; }
-.col-category { width: 22%; }
-.col-title    { width: 35%; }
-.col-id       { width: 18%; }
-.col-date     { width: 17%; }
+        .col-category { width: 18%; }
+        .col-title    { width: 44%; }
+        .col-id       { width: 18%; }
+        .col-date     { width: 20%; }
         .empty-row {
             color: #aaa;
             font-size: 14px;
@@ -88,10 +85,11 @@
         .category-badge {
             background: #fff3ee;
             color: #FF5722;
-            font-size: 11px;
+            font-size: clamp(8px, 2vw, 11px);
             font-weight: 700;
             border-radius: 20px;
-            padding: 2px 6px;
+            padding: 2px 5px;
+            display: inline-block;
             white-space: nowrap;
         }
         .title-cell {
@@ -99,15 +97,16 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             text-align: left;
+            max-width: 0;
         }
         .id-cell {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            font-size: 12px;
+            font-size: clamp(8px, 2vw, 12px);
         }
         .date-text {
-            font-size: 11px;
+            font-size: clamp(8px, 2vw, 11px);
             color: #aaa;
             white-space: nowrap;
         }
@@ -185,7 +184,6 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255,87,34,0.25);
         }
-        /* 관리자 행 스타일 */
         .admin-row {
             background-color: #fff8e1 !important;
             font-weight: 700;
@@ -207,7 +205,6 @@
             margin-right: 3px;
             vertical-align: middle;
         }
-        /* 공지 고정 행 스타일 */
         .pinned-row {
             background-color: #fff3ee !important;
             border-left: 3px solid #FF5722;
@@ -220,14 +217,13 @@
             display: inline-block;
             background: #FF5722;
             color: #fff;
-            font-size: 10px;
+            font-size: clamp(8px, 2vw, 10px);
             font-weight: 700;
             border-radius: 20px;
-            padding: 1px 6px;
-            margin-right: 3px;
+            padding: 1px 4px;
+            margin-right: 2px;
             vertical-align: middle;
         }
-        /* 크롤링 버튼 */
         .crawl-btn {
             width: 100%;
             margin-bottom: 12px;
@@ -262,7 +258,7 @@
         <%-- 관리자만 보이는 크롤링 버튼 --%>
         <c:if test="${isAdmin}">
             <button id="crawlBtn" class="crawl-btn" onclick="crawlAndPost()">
-                🌐 광주시 최신글 가져오기
+                🌐 광주광역시 최신글 가져오기
             </button>
         </c:if>
 
@@ -270,7 +266,6 @@
             <div class="board-table-wrapper" id="boardTableWrapper">
                 <table class="board-table-refined">
                     <colgroup>
-                        <col class="col-no">
                         <col class="col-category">
                         <col class="col-title">
                         <col class="col-id">
@@ -278,7 +273,6 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>No</th>
                             <th>카테고리</th>
                             <th>제목</th>
                             <th>아이디</th>
@@ -293,15 +287,11 @@
         style="cursor:pointer;"
         class="${isPinned ? 'pinned-row' : (isAdminRow ? 'admin-row' : '')}">
         <td>
-            <c:choose>
-                <%-- ✅ 1. 공지 고정글은 번호 빈칸 --%>
-                <c:when test="${isPinned}"></c:when>
-                <c:otherwise>${status.index - pinnedCount + 1}</c:otherwise>
-            </c:choose>
+            <span class="category-badge">
+                ${fn:substring(board.category, 0, 2)}
+            </span>
         </td>
-        <td><span class="category-badge">${board.category}</span></td>
         <td class="title-cell">
-            <%-- ✅ 2. 공지사항 제목 포함된 경우만 공지 뱃지 표시 --%>
             <c:if test="${isPinned}">
                 <span class="pin-badge">공지</span>
             </c:if>
@@ -320,7 +310,7 @@
 </c:forEach>
                         <c:if test="${boards.size() == 0}">
                             <tr>
-                                <td colspan="5" class="empty-row">등록된 게시물이 없습니다.</td>
+                                <td colspan="4" class="empty-row">등록된 게시물이 없습니다.</td>
                             </tr>
                         </c:if>
                     </tbody>

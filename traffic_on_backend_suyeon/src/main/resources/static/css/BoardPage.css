@@ -1,7 +1,7 @@
 .board-container {
     width: 100%;
-    max-width: 420px;   /* 모바일 폭 제한 */
-    margin: 0 auto;     /* 중앙 정렬 */
+    max-width: 420px;
+    margin: 0 auto;
     padding: 1.5rem 1.5rem 100px 1.5rem;
     background: #fff;
     min-height: 100vh;
@@ -238,7 +238,7 @@
     box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
 }
 
-/* ===== 모바일 최적화 ===== */
+/* ✅ 모바일 최적화 - 테이블 숨김 제거 */
 @media (max-width: 480px) {
     .col-author {
         width: 80px;
@@ -250,39 +250,6 @@
 
     .board-invitation-box {
         padding: 2rem 1rem;
-    }
-
-    /* 테이블 숨기고 카드형 레이아웃 */
-    .board-table-refined {
-        display: none;
-    }
-
-    .board-card-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .board-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 12px;
-        background: #fff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .board-card-title {
-        font-size: 1rem;
-        font-weight: 700;
-        margin-bottom: 6px;
-        color: #333;
-    }
-
-    .board-card-meta {
-        font-size: 0.8rem;
-        color: #666;
-        display: flex;
-        justify-content: space-between;
     }
 
     .board-login-btn-process {
