@@ -14,6 +14,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer>{
 			String title,
 			String memId,
 			Pageable pageable);
-
+	boolean existsByTitle(String title);
 	List<Board> findAllByOrderByBoardIdDesc();
 }
